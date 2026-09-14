@@ -25,6 +25,7 @@
     <script>
       // The style document declares data sources and the ordered layers that render them.
       const BASEMAP_STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty';
+      const EARTHQUAKE_LAYER_ID = 'earthquake-points';
       const EARTHQUAKE_SOURCE_ID = 'earthquakes';
       const INITIAL_CENTER = [-70.6693, -33.4489];
       const INITIAL_ZOOM = 3;
@@ -53,6 +54,12 @@
         map.addSource(EARTHQUAKE_SOURCE_ID, {
           type: 'geojson',
           data: earthquakeData,
+        });
+
+        map.addLayer({
+          id: EARTHQUAKE_LAYER_ID,
+          type: 'circle',
+          source: EARTHQUAKE_SOURCE_ID,
         });
       });
     </script>
