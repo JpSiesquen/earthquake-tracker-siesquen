@@ -18,6 +18,12 @@ magnitud y profundidad, con datos USGS atraves de un BFF propio.
 
 Pendiente de URL publica (proyecto Vercel + `vercel.json` ya en el repo).
 
+## Estado del proyecto
+
+Andamiaje y sandbox MapLibre listos. **Capa 1 (mapa 2D de producto) en construccion.**
+Aun no hay BFF ni escena 3D en la app React.
+
+
 ## Desarrollo
 
 ```bash
