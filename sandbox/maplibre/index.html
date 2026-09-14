@@ -23,9 +23,16 @@
     <div id="map"></div>
 
     <script>
-      document.documentElement.dataset.maplibreLoaded = String(
-        typeof maplibregl !== 'undefined',
-      );
+      const BASEMAP_STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty';
+      const INITIAL_CENTER = [-70.6693, -33.4489];
+      const INITIAL_ZOOM = 3;
+
+      new maplibregl.Map({
+        container: 'map',
+        style: BASEMAP_STYLE_URL,
+        center: INITIAL_CENTER,
+        zoom: INITIAL_ZOOM,
+      });
     </script>
   </body>
 </html>
