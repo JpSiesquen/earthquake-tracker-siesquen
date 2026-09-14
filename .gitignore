@@ -1,0 +1,23 @@
+# Dependencias e install
+node_modules/
+
+# Build
+dist/
+.vercel/
+
+# Entorno y secretos
+.env
+.env.*
+!.env.example
+*.local.*
+
+# Plan y notas internas (no públicas)
+PLAN.md
+Notas/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+.claude/settings.local.json
+.claude/CLAUDE.local.md
