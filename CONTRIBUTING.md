@@ -45,6 +45,14 @@ ignore-scripts=true
 save-exact=true
 ```
 
+`ignore-scripts=true` evita que `npm ci` / `npm install` ejecuten scripts de
+paquetes (`postinstall`, etc.). Eso corta el vector tipico de worms npm como
+Shai-Hulud (2025): payload en install, robo de tokens y abuso de repos en
+GitHub. El costo es activar Husky a mano con `npm run hooks` tras clonar.
+
+`save-exact=true` fija versiones exactas en el lockfile al anadir dependencias.
+No sustituye revisar el changelog o el diff del lock antes de mergear.
+
 ## Labels
 
 | Familia | Ejemplos |
