@@ -21,3 +21,10 @@ Thumbs.db
 *.log
 .claude/settings.local.json
 .claude/CLAUDE.local.md
+
+dist-ssr/
+logs/
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
