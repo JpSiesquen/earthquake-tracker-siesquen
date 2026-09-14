@@ -3,7 +3,7 @@
 Visualizacion sismica 2D/3D: catalogo USGS via BFF, mapa MapLibre multicapa y escena
 local (R3F) con profundidad al seleccionar un evento.
 
-**Demo:** pendiente de URL Vercel (conectar el proyecto en el dashboard).
+**Demo:** https://earthquake-tracker-siesquen.vercel.app
 
 ## Fuente de verdad para agentes
 
@@ -23,7 +23,7 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 ## Estado
 
 Fase 0 (sandbox MapLibre) y Fase 1 (andamiaje) cerradas: Vite app, CI
-`verificar`, hooks, docs de proceso, proxy `/api`, README.
+`verificar`, hooks, docs de proceso, proxy `/api`, README, deploy Vercel.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -40,7 +40,7 @@ Fase 0 (sandbox MapLibre) y Fase 1 (andamiaje) cerradas: Vite app, CI
 - Front: Vite, React 19, TypeScript, MapLibre (producto), R3F (Capa 2)
 - Datos: BFF serverless, Zod, TanStack Query, Zustand
 - Calidad: oxlint, Prettier, Husky, GitHub Actions (`verificar`)
-- Hosting: Vercel (`vercel.json` presente)
+- Hosting: Vercel (Production + Preview en PRs)
 
 ## Comandos
 

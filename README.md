@@ -16,7 +16,7 @@ magnitud y profundidad, con datos USGS atraves de un BFF propio.
 
 ## Demo
 
-Pendiente de URL publica (proyecto Vercel + `vercel.json` ya en el repo).
+https://earthquake-tracker-siesquen.vercel.app
 
 ## Estado del proyecto
 
