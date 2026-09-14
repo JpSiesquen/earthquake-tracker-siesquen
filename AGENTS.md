@@ -22,18 +22,18 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 
 ## Estado
 
-Fase 0 (sandbox MapLibre) cerrada. Fase 1 (andamiaje) en curso: Vite app, CI `verificar`,
-hooks, docs de proceso.
+Fase 0 (sandbox MapLibre) y Fase 1 (andamiaje) cerradas: Vite app, CI
+`verificar`, hooks, docs de proceso, proxy `/api`, README.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
 | 0 | Sandbox MapLibre | Hecha |
-| 1 | Andamiaje + README semilla | En curso |
+| 1 | Andamiaje + README semilla | Hecha |
 | 2 | BFF + catalogo vivo | Pendiente |
 | 3 | Mapa 2D producto (Capa 1, corte natural) | Pendiente |
 | 4-7 | Detail/FDSN/DEM, 3D, productos USGS, cierre | Pendiente |
 
-**Siguiente:** terminar issues abiertas de Fase 1; luego Fase 2 (`#29+`).
+**Siguiente:** Fase 2 (`#29+`), BFF + catalogo USGS vivo.
 
 ## Stack
 
@@ -53,6 +53,9 @@ npm run lint
 npm run format:check
 ```
 
+Tras clonar: `npm ci` + `npm run hooks`. Sin el segundo, no hay Husky
+(`ignore-scripts=true`).
+
 Sandbox Fase 0: `python -m http.server 4173` y abrir `/sandbox/maplibre/`.
 
 ## Convenciones
@@ -60,4 +63,5 @@ Sandbox Fase 0: `python -m http.server 4173` y abrir `/sandbox/maplibre/`.
 - Flujo: issue → rama → PR → CI verde → merge (`Closes #N`)
 - Sin DB/auth/prediccion/Cesium/MUI en el alcance acordado
 - Look laboratorio; no clonar visualmente el ISS Tracker
-- `ignore-scripts=true` y `save-exact=true` en `.npmrc`
+- `.npmrc`: `ignore-scripts=true` (mitiga worms tipo Shai-Hulud) y
+  `save-exact=true`; ver CONTRIBUTING

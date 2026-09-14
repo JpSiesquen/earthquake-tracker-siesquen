@@ -32,6 +32,13 @@ npm run hooks
 npm run dev
 ```
 
+Usa `npm ci` (no `npm install` para clonar). Luego `npm run hooks`: el repo
+tiene `ignore-scripts=true` en `.npmrc`, asi que Husky no se activa solo.
+
+Eso es deliberado. Bloquea scripts de paquetes en install (vector de worms npm
+como Shai-Hulud, 2025: robo de tokens y repos en GitHub). Detalle en
+[`CONTRIBUTING.md`](./CONTRIBUTING.md#seguridad-de-dependencias).
+
 Sandbox MapLibre (Fase 0):
 
 ```bash
