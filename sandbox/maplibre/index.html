@@ -27,6 +27,8 @@
       const BASEMAP_STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty';
       const EARTHQUAKE_LAYER_ID = 'earthquake-points';
       const EARTHQUAKE_SOURCE_ID = 'earthquakes';
+      const SIGNIFICANT_EARTHQUAKE_LAYER_ID = 'significant-earthquake-points';
+      const SIGNIFICANT_MAGNITUDE = 6;
       const INITIAL_CENTER = [-70.6693, -33.4489];
       const INITIAL_ZOOM = 3;
       const earthquakeData = {
@@ -34,10 +36,35 @@
         features: [
           {
             type: 'Feature',
-            properties: {},
+            properties: {
+              mag: 4.2,
+              place: 'Santiago, Chile',
+            },
             geometry: {
               type: 'Point',
               coordinates: [-70.6693, -33.4489],
+            },
+          },
+          {
+            type: 'Feature',
+            properties: {
+              mag: 5.1,
+              place: 'Concepción, Chile',
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [-73.0498, -36.827],
+            },
+          },
+          {
+            type: 'Feature',
+            properties: {
+              mag: 6.4,
+              place: 'Antofagasta, Chile',
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [-70.4006, -23.65],
             },
           },
         ],
@@ -63,6 +90,17 @@
           paint: {
             'circle-color': '#e11d48',
             'circle-radius': 8,
+          },
+        });
+
+        map.addLayer({
+          id: SIGNIFICANT_EARTHQUAKE_LAYER_ID,
+          type: 'circle',
+          source: EARTHQUAKE_SOURCE_ID,
+          filter: ['>=', ['get', 'mag'], SIGNIFICANT_MAGNITUDE],
+          paint: {
+            'circle-color': '#f59e0b',
+            'circle-radius': 12,
           },
         });
       });
