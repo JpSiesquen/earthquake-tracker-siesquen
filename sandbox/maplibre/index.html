@@ -25,14 +25,35 @@
     <script>
       // The style document declares data sources and the ordered layers that render them.
       const BASEMAP_STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty';
+      const EARTHQUAKE_SOURCE_ID = 'earthquakes';
       const INITIAL_CENTER = [-70.6693, -33.4489];
       const INITIAL_ZOOM = 3;
+      const earthquakeData = {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Point',
+              coordinates: [-70.6693, -33.4489],
+            },
+          },
+        ],
+      };
 
-      new maplibregl.Map({
+      const map = new maplibregl.Map({
         container: 'map',
         style: BASEMAP_STYLE_URL,
         center: INITIAL_CENTER,
         zoom: INITIAL_ZOOM,
+      });
+
+      map.once('load', () => {
+        map.addSource(EARTHQUAKE_SOURCE_ID, {
+          type: 'geojson',
+          data: earthquakeData,
+        });
       });
     </script>
   </body>
