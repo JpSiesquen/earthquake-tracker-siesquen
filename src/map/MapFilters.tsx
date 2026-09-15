@@ -1,3 +1,5 @@
+import { isCatalogWindow, type CatalogWindow } from '../../shared/window.ts'
+
 export const DEFAULT_MIN_MAGNITUDE = -2
 export const DEFAULT_MAX_DEPTH_KM = 750
 
@@ -6,8 +8,14 @@ type MapFiltersProps = {
   maxDepthKm: number
   visibleCount: number
   totalCount: number
+  window: CatalogWindow
+  isCatalogLoading: boolean
+  isCatalogFetching: boolean
+  isCatalogStale: boolean
+  catalogError: string | null
   onMinMagnitudeChange: (value: number) => void
   onMaxDepthChange: (value: number) => void
+  onWindowChange: (window: CatalogWindow) => void
   onReset: () => void
 }
 
@@ -21,14 +29,29 @@ export function MapFilters({
   maxDepthKm,
   visibleCount,
   totalCount,
+  window,
+  isCatalogLoading,
+  isCatalogFetching,
+  isCatalogStale,
+  catalogError,
   onMinMagnitudeChange,
   onMaxDepthChange,
+  onWindowChange,
   onReset,
 }: MapFiltersProps) {
   const formattedMagnitude = minMagnitude.toFixed(1)
   const hasActiveFilters =
     minMagnitude !== DEFAULT_MIN_MAGNITUDE ||
     maxDepthKm !== DEFAULT_MAX_DEPTH_KM
+  const catalogStatus = catalogError
+    ? `Error al cargar: ${catalogError}`
+    : isCatalogLoading
+      ? 'Cargando catálogo…'
+      : isCatalogStale
+        ? 'Datos de respaldo (stale)'
+        : isCatalogFetching
+          ? 'Actualizando catálogo…'
+          : 'Catálogo actualizado'
 
   return (
     <section className="map-filters" aria-labelledby="map-filters-title">
@@ -40,6 +63,30 @@ export function MapFilters({
       </div>
 
       <div className="map-filters__controls">
+        <div className="map-filter map-filter--window">
+          <label htmlFor="catalog-window">Ventana del catálogo</label>
+          <select
+            id="catalog-window"
+            value={window}
+            onKeyDown={(event) => event.stopPropagation()}
+            onChange={(event) => {
+              if (isCatalogWindow(event.target.value)) {
+                onWindowChange(event.target.value)
+              }
+            }}
+          >
+            <option value="day">Últimas 24 horas</option>
+            <option value="week">Últimos 7 días</option>
+          </select>
+          <p
+            className="map-filter__status"
+            data-status={catalogError ? 'error' : 'ok'}
+            role={catalogError ? 'alert' : 'status'}
+          >
+            {catalogStatus}
+          </p>
+        </div>
+
         <div className="map-filter">
           <div className="map-filter__heading">
             <label htmlFor="min-magnitude">Magnitud mínima</label>

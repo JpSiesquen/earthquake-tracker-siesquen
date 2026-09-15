@@ -9,6 +9,7 @@ import './App.css'
 function App() {
   const [window, setWindow] = useState<CatalogWindow>('day')
   const { data, error, isLoading, isFetching } = useEarthquakes(window)
+  const currentCatalog = data?.window === window ? data : undefined
 
   return (
     <main className="app">
@@ -18,42 +19,30 @@ function App() {
         issues siguientes.
       </p>
 
-      <MapView earthquakes={data?.earthquakes} />
+      <MapView
+        earthquakes={currentCatalog?.earthquakes}
+        window={window}
+        isCatalogLoading={isLoading}
+        isCatalogFetching={isFetching}
+        isCatalogStale={currentCatalog?.stale ?? false}
+        catalogError={error?.message ?? null}
+        onWindowChange={setWindow}
+      />
 
-      <div className="toolbar">
-        <label>
-          Ventana{' '}
-          <select
-            value={window}
-            onChange={(e) => setWindow(e.target.value as CatalogWindow)}
-          >
-            <option value="day">day</option>
-            <option value="week">week</option>
-          </select>
-        </label>
-      </div>
-
-      {isLoading ? <p>Cargando catalogo...</p> : null}
-      {error ? (
-        <p className="error" role="alert">
-          Error: {error.message}
-        </p>
-      ) : null}
-
-      {data ? (
+      {currentCatalog ? (
         <section className="catalog" aria-live="polite">
           <p>
-            <strong>{data.count}</strong> eventos ({data.window})
-            {data.stale ? ' · stale' : ''}
+            <strong>{currentCatalog.count}</strong> eventos (
+            {currentCatalog.window}){currentCatalog.stale ? ' · stale' : ''}
             {isFetching && !isLoading ? ' · actualizando...' : ''}
           </p>
           <p className="meta">
-            fetchedAt {new Date(data.fetchedAt).toISOString()}
+            fetchedAt {new Date(currentCatalog.fetchedAt).toISOString()}
           </p>
           <pre className="json">
-            {JSON.stringify(data.earthquakes.slice(0, 5), null, 2)}
-            {data.earthquakes.length > 5
-              ? `\n... +${data.earthquakes.length - 5} mas`
+            {JSON.stringify(currentCatalog.earthquakes.slice(0, 5), null, 2)}
+            {currentCatalog.earthquakes.length > 5
+              ? `\n... +${currentCatalog.earthquakes.length - 5} mas`
               : ''}
           </pre>
         </section>
