@@ -20,8 +20,8 @@ https://earthquake-tracker-siesquen.vercel.app
 
 ## Estado del proyecto
 
-Andamiaje y sandbox MapLibre listos. **Capa 1 (mapa 2D de producto) en construccion.**
-Aun no hay BFF ni escena 3D en la app React.
+Fase 2 lista: BFF `/api/health` y `/api/earthquakes`, UI smoke del catalogo.
+**Capa 1 (mapa 2D de producto) es el siguiente foco.** Sin escena 3D aun.
 
 
 ## Desarrollo

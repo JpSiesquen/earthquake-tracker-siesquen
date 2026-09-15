@@ -32,5 +32,8 @@ jobs:
       - name: Formato
         run: npm run format:check
 
+      - name: Schema USGS
+        run: npm run test:usgs-schema
+
       - name: Compilar
         run: npm run build

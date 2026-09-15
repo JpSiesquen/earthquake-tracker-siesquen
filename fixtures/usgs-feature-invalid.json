@@ -1,0 +1,6 @@
+{
+  "type": "Feature",
+  "id": "",
+  "geometry": { "type": "Point", "coordinates": [1] },
+  "properties": { "mag": "nope", "place": null, "time": "x" }
+}
