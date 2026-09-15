@@ -44,3 +44,28 @@ export const usgsFeatureCollectionSchema = z
   })
 
 export type UsgsFeatureCollection = z.infer<typeof usgsFeatureCollectionSchema>
+
+/**
+ * Feature de detail USGS (feed `/detail/{id}.geojson`).
+ * Extiende el summary: url de event page + mapa `products` (existencia tipada;
+ * flags concretas en #69).
+ */
+export const usgsDetailFeatureSchema = z.object({
+  type: z.literal('Feature'),
+  id: z.string().min(1),
+  geometry: z.object({
+    type: z.literal('Point'),
+    /** [longitud, latitud, profundidadKm] */
+    coordinates: z.tuple([z.number(), z.number(), z.number()]),
+  }),
+  properties: z.object({
+    mag: z.number().nullable(),
+    place: z.string().nullable(),
+    time: z.number(),
+    url: z.string().nullable().optional(),
+    /** productType → versiones; no se exige el arbol interno completo */
+    products: z.record(z.string(), z.array(z.unknown())).optional(),
+  }),
+})
+
+export type UsgsDetailFeature = z.infer<typeof usgsDetailFeatureSchema>

@@ -8,6 +8,8 @@ export type { BffErrorBody, BffErrorCode } from './errors.js'
 export {
   usgsFeatureSchema,
   usgsFeatureCollectionSchema,
+  usgsDetailFeatureSchema,
   type UsgsFeature,
   type UsgsFeatureCollection,
+  type UsgsDetailFeature,
 } from './usgs.js'
