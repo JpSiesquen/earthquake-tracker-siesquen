@@ -455,6 +455,18 @@ export function MapView({
     const reducedMotion = globalThis.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches
+    const duration = reducedMotion ? 0 : 800
+
+    if (preset.bounds) {
+      map.fitBounds(preset.bounds, {
+        padding: 48,
+        maxZoom: preset.fitMaxZoom ?? 5,
+        duration,
+      })
+      return
+    }
+
+    if (preset.center === undefined || preset.zoom === undefined) return
 
     if (reducedMotion) {
       map.jumpTo({ center: preset.center, zoom: preset.zoom })
@@ -464,7 +476,7 @@ export function MapView({
     map.easeTo({
       center: preset.center,
       zoom: preset.zoom,
-      duration: 800,
+      duration,
     })
   }
 
