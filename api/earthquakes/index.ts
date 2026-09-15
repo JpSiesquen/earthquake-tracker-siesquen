@@ -2,11 +2,12 @@
  * Catalogo sismico: `GET /api/earthquakes?window=day|week`.
  *
  * Orquesta fetch USGS (servidor), Zod, DTO, cache TTL y errores tipados.
+ * Vive en `api/earthquakes/index.ts` para coexistir con `GET .../:id`.
  */
-import { isCatalogWindow } from '../shared/window.js'
+import { isCatalogWindow } from '../../shared/window.js'
 
-import { getCatalog } from './_catalog.js'
-import { BffError, jsonError } from './_errors.js'
+import { getCatalog } from '../_catalog.js'
+import { BffError, jsonError } from '../_errors.js'
 
 const CACHE_CONTROL = 'public, s-maxage=60, stale-while-revalidate=300'
 

@@ -42,7 +42,8 @@ filtros, lista, presets, deep link `?event=`, CTA 3D honesto.
 
 - Front: Vite, React 19, TypeScript, MapLibre 6 (`MapView`, ESM, WebGL2,
   worker Vite explicito); R3F en Capa 2
-- Datos (hoy): BFF serverless, Zod, TanStack Query
+- Datos (hoy): BFF serverless (`/api/earthquakes`, `/api/earthquakes/:id`), Zod,
+  TanStack Query
 - Estado UI: Zustand (`selectedId` + deep link `?event=`; catalogo en TanStack Query)
 - Calidad: oxlint, Prettier, Husky, GitHub Actions (`verificar`)
 - Hosting: Vercel (Production + Preview en PRs)

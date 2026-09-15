@@ -1,5 +1,7 @@
 import {
   usgsFeatureCollectionSchema,
+  usgsFeatureSchema,
+  type UsgsFeature,
   type UsgsFeatureCollection,
 } from '../shared/usgs.js'
 import type { CatalogWindow } from '../shared/window.js'
@@ -11,6 +13,9 @@ const FEED_URL: Record<CatalogWindow, string> = {
   week: 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson',
 }
 
+const DETAIL_URL_PREFIX =
+  'https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/'
+
 const USER_AGENT =
   'earthquake-tracker-siesquen/0.0.0 (+https://earthquake-tracker-siesquen.vercel.app)'
 
@@ -18,13 +23,14 @@ const USER_AGENT =
 const TIMEOUT_MS = 10_000
 
 /**
- * Descarga el feed USGS en el servidor (nunca desde el navegador).
- * Valida el FeatureCollection con Zod antes de devolverlo.
+ * Ids USGS tipicos: `us7000pn9s`, `ci39818991`.
+ * Rechaza vacio, path traversal y caracteres raros antes de pegar la URL.
  */
-export async function fetchUsgsCollection(
-  window: CatalogWindow,
-): Promise<UsgsFeatureCollection> {
-  const url = FEED_URL[window]
+export function isUsgsEventId(raw: string): boolean {
+  return /^[a-z0-9][a-z0-9._-]{0,63}$/i.test(raw)
+}
+
+async function fetchUsgsJson(url: string, label: string): Promise<unknown> {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
 
@@ -44,30 +50,43 @@ export async function fetchUsgsCollection(
     throw new BffError(
       503,
       'upstream_unavailable',
-      aborted ? 'USGS feed timed out' : 'USGS feed network error',
+      aborted ? `${label} timed out` : `${label} network error`,
     )
   } finally {
     clearTimeout(timer)
+  }
+
+  if (response.status === 404) {
+    throw new BffError(404, 'not_found', `${label} not found`)
   }
 
   if (!response.ok) {
     throw new BffError(
       502,
       'upstream_bad_response',
-      `USGS feed HTTP ${response.status}`,
+      `${label} HTTP ${response.status}`,
     )
   }
 
-  let json: unknown
   try {
-    json = await response.json()
+    return await response.json()
   } catch {
     throw new BffError(
       502,
       'upstream_bad_response',
-      'USGS feed returned non-JSON body',
+      `${label} returned non-JSON body`,
     )
   }
+}
+
+/**
+ * Descarga el feed USGS en el servidor (nunca desde el navegador).
+ * Valida el FeatureCollection con Zod antes de devolverlo.
+ */
+export async function fetchUsgsCollection(
+  window: CatalogWindow,
+): Promise<UsgsFeatureCollection> {
+  const json = await fetchUsgsJson(FEED_URL[window], 'USGS feed')
 
   const parsed = usgsFeatureCollectionSchema.safeParse(json)
   if (!parsed.success) {
@@ -79,4 +98,42 @@ export async function fetchUsgsCollection(
   }
 
   return parsed.data
+}
+
+/**
+ * Detail USGS por event id (Feature GeoJSON). Validacion provisional con el
+ * mismo schema de Feature del summary; #68 endurecera el schema de detail.
+ */
+export async function fetchUsgsDetailFeature(id: string): Promise<{
+  feature: UsgsFeature
+  usgsUrl: string | null
+}> {
+  if (!isUsgsEventId(id)) {
+    throw new BffError(400, 'bad_request', 'Invalid earthquake id')
+  }
+
+  const json = await fetchUsgsJson(
+    `${DETAIL_URL_PREFIX}${encodeURIComponent(id)}.geojson`,
+    'USGS detail',
+  )
+
+  const parsed = usgsFeatureSchema.safeParse(json)
+  if (!parsed.success) {
+    throw new BffError(
+      502,
+      'upstream_bad_response',
+      'USGS detail failed schema validation',
+    )
+  }
+
+  return { feature: parsed.data, usgsUrl: readUsgsEventUrl(json) }
+}
+
+/** Lee `properties.url` del JSON crudo sin exigirla en el schema provisional. */
+export function readUsgsEventUrl(json: unknown): string | null {
+  if (!json || typeof json !== 'object') return null
+  const properties = (json as { properties?: unknown }).properties
+  if (!properties || typeof properties !== 'object') return null
+  const url = (properties as { url?: unknown }).url
+  return typeof url === 'string' && url.trim() ? url : null
 }
