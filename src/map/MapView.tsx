@@ -18,6 +18,7 @@ const INITIAL_CENTER: [number, number] = [-70.6693, -33.4489]
 const INITIAL_ZOOM = 3
 const EARTHQUAKES_SOURCE_ID = 'earthquakes'
 const EARTHQUAKES_LAYER_ID = 'earthquakes-circles'
+const EARTHQUAKES_HEATMAP_LAYER_ID = 'earthquakes-heatmap'
 const TECTONIC_PLATES_SOURCE_ID = 'tectonic-plates'
 const TECTONIC_PLATES_LAYER_ID = 'tectonic-plates-lines'
 const TECTONIC_PLATES_DATA_URL =
@@ -95,9 +96,11 @@ export function MapView({ earthquakes }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const platesVisibleRef = useRef(true)
+  const heatmapVisibleRef = useRef(false)
   const earthquakesGeoJSONRef = useRef(summariesToGeoJSON([]))
   const selectedIdRef = useRef<string | null>(null)
   const [platesVisible, setPlatesVisible] = useState(true)
+  const [heatmapVisible, setHeatmapVisible] = useState(false)
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
   const select = useEarthquakeSelection((state) => state.select)
   const clear = useEarthquakeSelection((state) => state.clear)
@@ -114,6 +117,19 @@ export function MapView({ earthquakes }: MapViewProps) {
       )
     }
   }, [platesVisible])
+
+  useEffect(() => {
+    heatmapVisibleRef.current = heatmapVisible
+
+    const map = mapRef.current
+    if (map?.getLayer(EARTHQUAKES_HEATMAP_LAYER_ID)) {
+      map.setLayoutProperty(
+        EARTHQUAKES_HEATMAP_LAYER_ID,
+        'visibility',
+        heatmapVisible ? 'visible' : 'none',
+      )
+    }
+  }, [heatmapVisible])
 
   useEffect(() => {
     if (!earthquakes) return
@@ -215,6 +231,56 @@ export function MapView({ earthquakes }: MapViewProps) {
       map.addSource(EARTHQUAKES_SOURCE_ID, {
         type: 'geojson',
         data: earthquakesGeoJSONRef.current,
+      })
+
+      map.addLayer({
+        id: EARTHQUAKES_HEATMAP_LAYER_ID,
+        type: 'heatmap',
+        source: EARTHQUAKES_SOURCE_ID,
+        layout: {
+          visibility: heatmapVisibleRef.current ? 'visible' : 'none',
+        },
+        paint: {
+          'heatmap-weight': [
+            'interpolate',
+            ['linear'],
+            ['coalesce', ['get', 'magnitude'], 0],
+            0,
+            0.1,
+            2,
+            0.4,
+            4,
+            0.8,
+            6,
+            1,
+          ],
+          'heatmap-intensity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            1,
+            1,
+            8,
+            2,
+          ],
+          'heatmap-color': [
+            'interpolate',
+            ['linear'],
+            ['heatmap-density'],
+            0,
+            'rgba(40, 122, 120, 0)',
+            0.1,
+            'rgba(40, 122, 120, 0.58)',
+            0.4,
+            'rgba(184, 107, 37, 0.72)',
+            0.7,
+            'rgba(190, 63, 44, 0.82)',
+            1,
+            'rgba(109, 40, 63, 0.9)',
+          ],
+          'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 1, 8, 8, 36],
+          'heatmap-opacity': 0.78,
+        },
       })
 
       map.addLayer({
@@ -331,6 +397,15 @@ export function MapView({ earthquakes }: MapViewProps) {
       >
         <span className="plates-toggle__line" aria-hidden="true" />
         Límites de placas
+      </button>
+      <button
+        className="heatmap-toggle"
+        type="button"
+        aria-pressed={heatmapVisible}
+        onClick={() => setHeatmapVisible((visible) => !visible)}
+      >
+        <span className="heatmap-toggle__swatch" aria-hidden="true" />
+        Densidad sísmica
       </button>
       <aside className="depth-legend" aria-label="Leyenda de profundidad">
         <p className="depth-legend__title">Profundidad</p>
