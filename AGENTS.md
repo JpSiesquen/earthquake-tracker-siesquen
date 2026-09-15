@@ -22,17 +22,18 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 
 ## Estado
 
-Fase 0 y Fase 1 cerradas. Fase 2 en curso: BFF serverless + catalogo USGS.
+Fase 0 y 1 cerradas. Fase 2 (BFF + catalogo USGS) cerrada: health, Zod, DTO,
+cache TTL, `/api/earthquakes`, TanStack Query y UI smoke.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
 | 0 | Sandbox MapLibre | Hecha |
 | 1 | Andamiaje + README semilla | Hecha |
-| 2 | BFF + catalogo vivo | En curso |
+| 2 | BFF + catalogo vivo | Hecha |
 | 3 | Mapa 2D producto (Capa 1, corte natural) | Pendiente |
 | 4-7 | Detail/FDSN/DEM, 3D, productos USGS, cierre | Pendiente |
 
-**Siguiente:** feed USGS en servidor (`#31+`), luego Zod y DTO.
+**Siguiente:** Fase 3 (`#43+`), mapa 2D de producto (Capa 1).
 
 ## Stack
 

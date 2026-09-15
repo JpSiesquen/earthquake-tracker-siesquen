@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "metadata": { "count": 99 },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "test1",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-70.67, -33.45, 10.2]
+      },
+      "properties": {
+        "mag": 4.1,
+        "place": "Santiago, Chile",
+        "time": 1700000000000
+      }
+    }
+  ]
+}

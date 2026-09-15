@@ -31,10 +31,17 @@ npm run dev
 | `npm run format:check` | Prettier (solo comprueba; lo usa el CI) |
 | `npm run preview` | Sirve el build local |
 | `npm run hooks` | Instala hooks de git |
+| `npm run test:usgs-schema` | Fixtures Zod del feed USGS |
 
 ### `npm ci`, no `npm install`
 
 Para instalar lo existente: `npm ci`. Respeta el lockfile. `npm install` solo al anadir un paquete nuevo.
+
+### BFF / cache USGS
+
+`GET /api/earthquakes?window=day|week`. TTL en memoria: env `USGS_CACHE_TTL_MS`
+(default 300000). En local sin funciones: proxy Vite al origen Vercel, o
+`vercel dev`.
 
 ## Seguridad de dependencias
 
