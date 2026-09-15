@@ -18,7 +18,7 @@ function App() {
         issues siguientes.
       </p>
 
-      <MapView />
+      <MapView earthquakes={data?.earthquakes ?? []} />
 
       <div className="toolbar">
         <label>
