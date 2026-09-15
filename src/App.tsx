@@ -14,7 +14,7 @@ function App() {
     <main className="app">
       <h1>Earthquake Tracker</h1>
       <p>
-        Fase 3: MapView montado (ciclo de vida MapLibre). Basemap y capas en
+        Fase 3: mapa de producto con basemap OpenFreeMap. Capas de sismos en
         issues siguientes.
       </p>
 

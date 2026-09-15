@@ -3,21 +3,12 @@ import maplibregl from 'maplibre-gl'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
 
+import { BASEMAP_STYLE_URL } from './basemap.ts'
 import './MapView.css'
 
 /** Centro inicial alineado al sandbox Fase 0 (Santiago / LATAM). */
 const INITIAL_CENTER: [number, number] = [-70.6693, -33.4489]
 const INITIAL_ZOOM = 3
-
-/**
- * Style minimo (sin basemap). El basemap free es #44.
- * MapLibre exige un style v8 valido para crear el mapa.
- */
-const EMPTY_STYLE: maplibregl.StyleSpecification = {
-  version: 8,
-  sources: {},
-  layers: [],
-}
 
 /**
  * Contenedor MapLibre con ciclo de vida seguro bajo React Strict Mode:
@@ -33,7 +24,7 @@ export function MapView() {
 
     const map = new maplibregl.Map({
       container,
-      style: EMPTY_STYLE,
+      style: BASEMAP_STYLE_URL,
       center: INITIAL_CENTER,
       zoom: INITIAL_ZOOM,
     })
