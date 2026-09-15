@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
-import maplibregl from 'maplibre-gl'
+import * as maplibregl from 'maplibre-gl'
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 
 import type { EarthquakeSummary } from '../../shared/earthquake.ts'
 import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
@@ -9,6 +10,8 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { BASEMAP_STYLE_URL } from './basemap.ts'
 import { summariesToGeoJSON } from './earthquakesGeoJSON.ts'
 import './MapView.css'
+
+maplibregl.setWorkerUrl(maplibreWorkerUrl)
 
 /** Centro inicial alineado al sandbox Fase 0 (Santiago / LATAM). */
 const INITIAL_CENTER: [number, number] = [-70.6693, -33.4489]
