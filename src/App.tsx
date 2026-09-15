@@ -3,6 +3,7 @@ import { useState } from 'react'
 import type { CatalogWindow } from '../shared/window.ts'
 
 import { useEarthquakes } from './api/useEarthquakes.ts'
+import { MapView } from './map/MapView.tsx'
 import './App.css'
 
 function App() {
@@ -12,7 +13,12 @@ function App() {
   return (
     <main className="app">
       <h1>Earthquake Tracker</h1>
-      <p>Smoke Fase 2: catalogo USGS via BFF (antes del mapa de producto).</p>
+      <p>
+        Fase 3: MapView montado (ciclo de vida MapLibre). Basemap y capas en
+        issues siguientes.
+      </p>
+
+      <MapView />
 
       <div className="toolbar">
         <label>
