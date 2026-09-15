@@ -408,7 +408,13 @@ export function MapView({
     map.on('movestart', clearHover)
     map.on('zoomstart', clearHover)
 
+    const handleWindowResize = () => {
+      map.resize()
+    }
+    globalThis.addEventListener('resize', handleWindowResize)
+
     return () => {
+      globalThis.removeEventListener('resize', handleWindowResize)
       popup.remove()
       map.remove()
       mapRef.current = null
@@ -481,54 +487,58 @@ export function MapView({
   }
 
   return (
-    <div className="map-frame">
-      <div className="map-stage">
-        <div
-          ref={containerRef}
-          className="map-view"
-          role="region"
-          aria-label="Mapa sismico"
-        />
-        <LayerControl
-          visibility={layerVisibility}
-          onVisibilityChange={handleLayerVisibilityChange}
-        />
-        <aside className="depth-legend" aria-label="Leyenda de profundidad">
-          <p className="depth-legend__title">Profundidad</p>
-          <ul className="depth-legend__list">
-            {DEPTH_LEGEND_ITEMS.map((item) => (
-              <li key={item.label}>
-                <span
-                  className="depth-legend__swatch"
-                  style={{ backgroundColor: item.color }}
-                  aria-hidden="true"
-                />
-                {item.label}
-              </li>
-            ))}
-          </ul>
-        </aside>
+    <div className="map-shell">
+      <div className="map-shell__map">
+        <div className="map-stage">
+          <div
+            ref={containerRef}
+            className="map-view"
+            role="region"
+            aria-label="Mapa sismico"
+          />
+          <LayerControl
+            visibility={layerVisibility}
+            onVisibilityChange={handleLayerVisibilityChange}
+          />
+          <aside className="depth-legend" aria-label="Leyenda de profundidad">
+            <p className="depth-legend__title">Profundidad</p>
+            <ul className="depth-legend__list">
+              {DEPTH_LEGEND_ITEMS.map((item) => (
+                <li key={item.label}>
+                  <span
+                    className="depth-legend__swatch"
+                    style={{ backgroundColor: item.color }}
+                    aria-hidden="true"
+                  />
+                  {item.label}
+                </li>
+              ))}
+            </ul>
+          </aside>
+        </div>
       </div>
-      <MapPresets onApplyPreset={applyCameraPreset} />
-      <MapFilters
-        minMagnitude={minMagnitude}
-        maxDepthKm={maxDepthKm}
-        visibleCount={visibleEarthquakes.length}
-        totalCount={earthquakes?.length ?? 0}
-        window={window}
-        isCatalogLoading={isCatalogLoading}
-        isCatalogFetching={isCatalogFetching}
-        isCatalogStale={isCatalogStale}
-        catalogError={catalogError}
-        onMinMagnitudeChange={setMinMagnitude}
-        onMaxDepthChange={setMaxDepthKm}
-        onWindowChange={onWindowChange}
-        onReset={resetFilters}
-      />
-      <EarthquakeList
-        earthquakes={visibleEarthquakes}
-        onSelectEarthquake={handleSelectFromList}
-      />
+      <aside className="map-shell__panel" aria-label="Panel de control">
+        <MapPresets onApplyPreset={applyCameraPreset} />
+        <MapFilters
+          minMagnitude={minMagnitude}
+          maxDepthKm={maxDepthKm}
+          visibleCount={visibleEarthquakes.length}
+          totalCount={earthquakes?.length ?? 0}
+          window={window}
+          isCatalogLoading={isCatalogLoading}
+          isCatalogFetching={isCatalogFetching}
+          isCatalogStale={isCatalogStale}
+          catalogError={catalogError}
+          onMinMagnitudeChange={setMinMagnitude}
+          onMaxDepthChange={setMaxDepthKm}
+          onWindowChange={onWindowChange}
+          onReset={resetFilters}
+        />
+        <EarthquakeList
+          earthquakes={visibleEarthquakes}
+          onSelectEarthquake={handleSelectFromList}
+        />
+      </aside>
     </div>
   )
 }
