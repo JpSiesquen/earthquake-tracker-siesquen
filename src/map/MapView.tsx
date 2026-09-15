@@ -9,6 +9,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 
 import { BASEMAP_STYLE_URL } from './basemap.ts'
 import { summariesToGeoJSON } from './earthquakesGeoJSON.ts'
+import { LayerControl, type MapLayerVisibility } from './LayerControl.tsx'
 import './MapView.css'
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl)
@@ -23,6 +24,11 @@ const TECTONIC_PLATES_SOURCE_ID = 'tectonic-plates'
 const TECTONIC_PLATES_LAYER_ID = 'tectonic-plates-lines'
 const TECTONIC_PLATES_DATA_URL =
   '/data/tectonic-plates/PB2002_boundaries.geojson'
+const DEFAULT_LAYER_VISIBILITY: MapLayerVisibility = {
+  earthquakes: true,
+  plates: true,
+  heatmap: false,
+}
 const SHALLOW_MAX_DEPTH_KM = 70
 const INTERMEDIATE_MAX_DEPTH_KM = 300
 const DEPTH_COLORS = {
@@ -95,41 +101,38 @@ type MapViewProps = {
 export function MapView({ earthquakes }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
-  const platesVisibleRef = useRef(true)
-  const heatmapVisibleRef = useRef(false)
+  const layerVisibilityRef = useRef(DEFAULT_LAYER_VISIBILITY)
   const earthquakesGeoJSONRef = useRef(summariesToGeoJSON([]))
   const selectedIdRef = useRef<string | null>(null)
-  const [platesVisible, setPlatesVisible] = useState(true)
-  const [heatmapVisible, setHeatmapVisible] = useState(false)
+  const [layerVisibility, setLayerVisibility] = useState(
+    DEFAULT_LAYER_VISIBILITY,
+  )
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
   const select = useEarthquakeSelection((state) => state.select)
   const clear = useEarthquakeSelection((state) => state.clear)
 
   useEffect(() => {
-    platesVisibleRef.current = platesVisible
+    layerVisibilityRef.current = layerVisibility
 
     const map = mapRef.current
-    if (map?.getLayer(TECTONIC_PLATES_LAYER_ID)) {
-      map.setLayoutProperty(
-        TECTONIC_PLATES_LAYER_ID,
-        'visibility',
-        platesVisible ? 'visible' : 'none',
-      )
-    }
-  }, [platesVisible])
+    if (!map) return
 
-  useEffect(() => {
-    heatmapVisibleRef.current = heatmapVisible
+    const mapLayers: [string, boolean][] = [
+      [EARTHQUAKES_LAYER_ID, layerVisibility.earthquakes],
+      [TECTONIC_PLATES_LAYER_ID, layerVisibility.plates],
+      [EARTHQUAKES_HEATMAP_LAYER_ID, layerVisibility.heatmap],
+    ]
 
-    const map = mapRef.current
-    if (map?.getLayer(EARTHQUAKES_HEATMAP_LAYER_ID)) {
-      map.setLayoutProperty(
-        EARTHQUAKES_HEATMAP_LAYER_ID,
-        'visibility',
-        heatmapVisible ? 'visible' : 'none',
-      )
+    for (const [layerId, visible] of mapLayers) {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(
+          layerId,
+          'visibility',
+          visible ? 'visible' : 'none',
+        )
+      }
     }
-  }, [heatmapVisible])
+  }, [layerVisibility])
 
   useEffect(() => {
     if (!earthquakes) return
@@ -209,7 +212,7 @@ export function MapView({ earthquakes }: MapViewProps) {
         type: 'line',
         source: TECTONIC_PLATES_SOURCE_ID,
         layout: {
-          visibility: platesVisibleRef.current ? 'visible' : 'none',
+          visibility: layerVisibilityRef.current.plates ? 'visible' : 'none',
         },
         paint: {
           'line-color': '#536577',
@@ -238,7 +241,7 @@ export function MapView({ earthquakes }: MapViewProps) {
         type: 'heatmap',
         source: EARTHQUAKES_SOURCE_ID,
         layout: {
-          visibility: heatmapVisibleRef.current ? 'visible' : 'none',
+          visibility: layerVisibilityRef.current.heatmap ? 'visible' : 'none',
         },
         paint: {
           'heatmap-weight': [
@@ -287,6 +290,11 @@ export function MapView({ earthquakes }: MapViewProps) {
         id: EARTHQUAKES_LAYER_ID,
         type: 'circle',
         source: EARTHQUAKES_SOURCE_ID,
+        layout: {
+          visibility: layerVisibilityRef.current.earthquakes
+            ? 'visible'
+            : 'none',
+        },
         paint: {
           'circle-color': [
             'case',
@@ -381,6 +389,13 @@ export function MapView({ earthquakes }: MapViewProps) {
     }
   }, [select])
 
+  const handleLayerVisibilityChange = (
+    layer: keyof MapLayerVisibility,
+    visible: boolean,
+  ) => {
+    setLayerVisibility((current) => ({ ...current, [layer]: visible }))
+  }
+
   return (
     <div className="map-frame">
       <div
@@ -389,24 +404,10 @@ export function MapView({ earthquakes }: MapViewProps) {
         role="region"
         aria-label="Mapa sismico"
       />
-      <button
-        className="plates-toggle"
-        type="button"
-        aria-pressed={platesVisible}
-        onClick={() => setPlatesVisible((visible) => !visible)}
-      >
-        <span className="plates-toggle__line" aria-hidden="true" />
-        Límites de placas
-      </button>
-      <button
-        className="heatmap-toggle"
-        type="button"
-        aria-pressed={heatmapVisible}
-        onClick={() => setHeatmapVisible((visible) => !visible)}
-      >
-        <span className="heatmap-toggle__swatch" aria-hidden="true" />
-        Densidad sísmica
-      </button>
+      <LayerControl
+        visibility={layerVisibility}
+        onVisibilityChange={handleLayerVisibilityChange}
+      />
       <aside className="depth-legend" aria-label="Leyenda de profundidad">
         <p className="depth-legend__title">Profundidad</p>
         <ul className="depth-legend__list">
