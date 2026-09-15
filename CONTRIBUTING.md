@@ -8,7 +8,9 @@ Convenciones de desarrollo del proyecto.
 issue → rama → PR → CI verde (check verificar) → merge
 ```
 
-- Una issue por PR. En el cuerpo del PR: `Closes #N` (en ingles).
+- **Una issue por PR.** En el cuerpo del PR: `Closes #N` (en ingles).
+- No agrupar una fase o un lote de issues en un solo PR, aunque el corte tecnico
+  sea vertical. Si el trabajo es grande, partirlo en issues mas chicas.
 - No push directo a `main` (branch protection exige `verificar`).
 - No cerrar issues a mano con un comentario "Hecho".
 

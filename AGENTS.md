@@ -37,8 +37,8 @@ cache TTL, `/api/earthquakes`, TanStack Query y UI smoke.
 
 ## Stack
 
-- Front: Vite, React 19, TypeScript, MapLibre (producto), R3F (Capa 2)
-- Datos: BFF serverless, Zod, TanStack Query, Zustand
+- Front: Vite, React 19, TypeScript; MapLibre y R3F entran en fases de mapa/3D
+- Datos (hoy): BFF serverless, Zod, TanStack Query
 - Calidad: oxlint, Prettier, Husky, GitHub Actions (`verificar`)
 - Hosting: Vercel (Production + Preview en PRs)
 
@@ -51,6 +51,7 @@ npm run dev
 npm run build
 npm run lint
 npm run format:check
+npm run test:usgs-schema
 ```
 
 Tras clonar: `npm ci` + `npm run hooks`. Sin el segundo, no hay Husky
@@ -60,7 +61,8 @@ Sandbox Fase 0: `python -m http.server 4173` y abrir `/sandbox/maplibre/`.
 
 ## Convenciones
 
-- Flujo: issue → rama → PR → CI verde → merge (`Closes #N`)
+- Flujo duro: **una issue → una rama → un PR → CI verde → merge** (`Closes #N`)
+- No agrupar una fase completa en un solo PR
 - Sin DB/auth/prediccion/Cesium/MUI en el alcance acordado
 - Look laboratorio; no clonar visualmente el ISS Tracker
 - `.npmrc`: `ignore-scripts=true` (mitiga worms tipo Shai-Hulud) y

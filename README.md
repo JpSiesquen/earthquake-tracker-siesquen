@@ -10,7 +10,7 @@ magnitud y profundidad, con datos USGS atraves de un BFF propio.
 
 - Vite, React 19, TypeScript
 - MapLibre (mapa 2D), React Three Fiber (escena 3D en fases posteriores)
-- BFF serverless, Zod, TanStack Query, Zustand (Fase 2+)
+- BFF serverless, Zod, TanStack Query
 - oxlint, Prettier, Husky, GitHub Actions (`verificar`)
 - Vercel
 
@@ -20,8 +20,8 @@ https://earthquake-tracker-siesquen.vercel.app
 
 ## Estado del proyecto
 
-Fase 2 lista: BFF `/api/health` y `/api/earthquakes`, UI smoke del catalogo.
-**Capa 1 (mapa 2D de producto) es el siguiente foco.** Sin escena 3D aun.
+Fase 2 cerrada: BFF (`/api/health`, `/api/earthquakes`) y UI smoke del catalogo.
+Siguiente: Capa 1 (mapa 2D de producto). Sin escena 3D aun.
 
 
 ## Desarrollo
