@@ -1,0 +1,44 @@
+.open-3d-cta {
+  display: grid;
+  gap: var(--space-2);
+  padding: 0.7rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface-raised);
+  text-align: left;
+}
+
+.open-3d-cta h2 {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.open-3d-cta p {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: 0.8rem;
+}
+
+.open-3d-cta button {
+  justify-self: start;
+  min-height: 2.2rem;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius);
+  background: var(--color-accent);
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.open-3d-cta button:disabled {
+  border-color: var(--color-border-strong);
+  background: var(--color-border);
+  color: var(--color-ink-soft);
+  cursor: not-allowed;
+}
