@@ -60,6 +60,8 @@ Tras clonar: `npm ci` + `npm run hooks`. Sin el segundo, no hay Husky
 (`ignore-scripts=true`).
 
 Sandbox Fase 0: `python -m http.server 4173` y abrir `/sandbox/maplibre/`.
+Su CDN MapLibre debe permanecer en una version parcheada (`>=6.4.1`) y alineada
+con la version exacta del producto cuando sea posible.
 
 ## Convenciones
 
