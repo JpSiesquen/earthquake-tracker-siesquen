@@ -20,6 +20,7 @@ import {
 } from './MapFilters.tsx'
 import { MapPresets } from './MapPresets.tsx'
 import { GLOBAL_PRESET, type MapCameraPreset } from './mapPresets.ts'
+import { Open3DCta } from './Open3DCta.tsx'
 import './MapView.css'
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl)
@@ -538,6 +539,7 @@ export function MapView({
           earthquakes={visibleEarthquakes}
           onSelectEarthquake={handleSelectFromList}
         />
+        <Open3DCta />
       </aside>
     </div>
   )
