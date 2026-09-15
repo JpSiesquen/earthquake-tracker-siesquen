@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 
@@ -18,6 +18,10 @@ const INITIAL_CENTER: [number, number] = [-70.6693, -33.4489]
 const INITIAL_ZOOM = 3
 const EARTHQUAKES_SOURCE_ID = 'earthquakes'
 const EARTHQUAKES_LAYER_ID = 'earthquakes-circles'
+const TECTONIC_PLATES_SOURCE_ID = 'tectonic-plates'
+const TECTONIC_PLATES_LAYER_ID = 'tectonic-plates-lines'
+const TECTONIC_PLATES_DATA_URL =
+  '/data/tectonic-plates/PB2002_boundaries.geojson'
 const SHALLOW_MAX_DEPTH_KM = 70
 const INTERMEDIATE_MAX_DEPTH_KM = 300
 const DEPTH_COLORS = {
@@ -90,11 +94,26 @@ type MapViewProps = {
 export function MapView({ earthquakes }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
+  const platesVisibleRef = useRef(true)
   const earthquakesGeoJSONRef = useRef(summariesToGeoJSON([]))
   const selectedIdRef = useRef<string | null>(null)
+  const [platesVisible, setPlatesVisible] = useState(true)
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
   const select = useEarthquakeSelection((state) => state.select)
   const clear = useEarthquakeSelection((state) => state.clear)
+
+  useEffect(() => {
+    platesVisibleRef.current = platesVisible
+
+    const map = mapRef.current
+    if (map?.getLayer(TECTONIC_PLATES_LAYER_ID)) {
+      map.setLayoutProperty(
+        TECTONIC_PLATES_LAYER_ID,
+        'visibility',
+        platesVisible ? 'visible' : 'none',
+      )
+    }
+  }, [platesVisible])
 
   useEffect(() => {
     if (!earthquakes) return
@@ -164,6 +183,35 @@ export function MapView({ earthquakes }: MapViewProps) {
     }
 
     map.on('load', () => {
+      map.addSource(TECTONIC_PLATES_SOURCE_ID, {
+        type: 'geojson',
+        data: TECTONIC_PLATES_DATA_URL,
+      })
+
+      map.addLayer({
+        id: TECTONIC_PLATES_LAYER_ID,
+        type: 'line',
+        source: TECTONIC_PLATES_SOURCE_ID,
+        layout: {
+          visibility: platesVisibleRef.current ? 'visible' : 'none',
+        },
+        paint: {
+          'line-color': '#536577',
+          'line-opacity': 0.58,
+          'line-width': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            1,
+            0.7,
+            7,
+            1.35,
+            11,
+            2,
+          ],
+        },
+      })
+
       map.addSource(EARTHQUAKES_SOURCE_ID, {
         type: 'geojson',
         data: earthquakesGeoJSONRef.current,
@@ -275,6 +323,15 @@ export function MapView({ earthquakes }: MapViewProps) {
         role="region"
         aria-label="Mapa sismico"
       />
+      <button
+        className="plates-toggle"
+        type="button"
+        aria-pressed={platesVisible}
+        onClick={() => setPlatesVisible((visible) => !visible)}
+      >
+        <span className="plates-toggle__line" aria-hidden="true" />
+        Límites de placas
+      </button>
       <aside className="depth-legend" aria-label="Leyenda de profundidad">
         <p className="depth-legend__title">Profundidad</p>
         <ul className="depth-legend__list">

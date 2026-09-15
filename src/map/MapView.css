@@ -13,6 +13,49 @@
   background: #dce3ea;
 }
 
+.plates-toggle {
+  position: absolute;
+  z-index: 1;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid rgb(148 163 184 / 65%);
+  border-radius: 0.3rem;
+  background: rgb(248 250 252 / 94%);
+  box-shadow: 0 0.2rem 0.7rem rgb(15 23 42 / 12%);
+  color: #243244;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.plates-toggle:hover {
+  background: #fff;
+}
+
+.plates-toggle:focus-visible {
+  outline: 2px solid #28527a;
+  outline-offset: 2px;
+}
+
+.plates-toggle[aria-pressed='false'] {
+  color: #667587;
+}
+
+.plates-toggle__line {
+  width: 1.15rem;
+  border-top: 2px solid #536577;
+}
+
+.plates-toggle[aria-pressed='false'] .plates-toggle__line {
+  border-top-style: dashed;
+  opacity: 0.45;
+}
+
 .depth-legend {
   position: absolute;
   z-index: 1;
