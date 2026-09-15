@@ -39,6 +39,42 @@ const DEPTH_LEGEND_ITEMS = [
   { label: 'Sin dato', color: DEPTH_COLORS.unknown },
 ] as const
 
+function numericProperty(value: unknown): number | null {
+  return typeof value === 'number' && Number.isFinite(value) ? value : null
+}
+
+function createEarthquakePopupContent(
+  properties: Record<string, unknown>,
+): HTMLDivElement {
+  const magnitude = numericProperty(properties.magnitude)
+  const depthKm = numericProperty(properties.depthKm)
+  const place =
+    typeof properties.place === 'string' && properties.place.trim()
+      ? properties.place
+      : 'Ubicación sin dato'
+
+  const content = document.createElement('div')
+  content.className = 'earthquake-popup'
+
+  const magnitudeElement = document.createElement('strong')
+  magnitudeElement.className = 'earthquake-popup__magnitude'
+  magnitudeElement.textContent = `M ${magnitude?.toFixed(1) ?? '—'}`
+
+  const placeElement = document.createElement('span')
+  placeElement.className = 'earthquake-popup__place'
+  placeElement.textContent = place
+
+  const depthElement = document.createElement('span')
+  depthElement.className = 'earthquake-popup__depth'
+  depthElement.textContent =
+    depthKm === null
+      ? 'Profundidad sin dato'
+      : `${depthKm.toFixed(1)} km de profundidad`
+
+  content.append(magnitudeElement, placeElement, depthElement)
+  return content
+}
+
 /**
  * Contenedor MapLibre con ciclo de vida seguro bajo React Strict Mode:
  * create en effect, `map.remove()` en cleanup.
@@ -73,6 +109,16 @@ export function MapView({ earthquakes }: MapViewProps) {
     })
 
     mapRef.current = map
+    const popup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      offset: 12,
+    })
+
+    const clearHover = () => {
+      map.getCanvas().style.cursor = ''
+      popup.remove()
+    }
 
     map.on('load', () => {
       map.addSource(EARTHQUAKES_SOURCE_ID, {
@@ -120,9 +166,32 @@ export function MapView({ earthquakes }: MapViewProps) {
           'circle-stroke-width': 1.25,
         },
       })
+
+      map.on('mouseenter', EARTHQUAKES_LAYER_ID, () => {
+        map.getCanvas().style.cursor = 'pointer'
+      })
+
+      map.on('mousemove', EARTHQUAKES_LAYER_ID, (event) => {
+        const properties = event.features?.[0]?.properties
+        if (!properties) {
+          clearHover()
+          return
+        }
+
+        popup
+          .setLngLat(event.lngLat)
+          .setDOMContent(createEarthquakePopupContent(properties))
+          .addTo(map)
+      })
+
+      map.on('mouseleave', EARTHQUAKES_LAYER_ID, clearHover)
     })
 
+    map.on('movestart', clearHover)
+    map.on('zoomstart', clearHover)
+
     return () => {
+      popup.remove()
       map.remove()
       mapRef.current = null
     }

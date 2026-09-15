@@ -59,3 +59,43 @@
   border: 1px solid rgb(15 23 42 / 22%);
   border-radius: 50%;
 }
+
+.map-view .maplibregl-popup-content {
+  padding: 0;
+  border: 1px solid rgb(148 163 184 / 55%);
+  border-radius: 0.3rem;
+  background: rgb(248 250 252 / 96%);
+  box-shadow: 0 0.25rem 0.8rem rgb(15 23 42 / 18%);
+}
+
+.map-view .maplibregl-popup-tip {
+  border-top-color: rgb(248 250 252 / 96%);
+  border-bottom-color: rgb(248 250 252 / 96%);
+}
+
+.earthquake-popup {
+  display: grid;
+  gap: 0.12rem;
+  max-width: 16rem;
+  padding: 0.6rem 0.7rem;
+  color: #243244;
+  text-align: left;
+}
+
+.earthquake-popup__magnitude {
+  color: #172033;
+  font-size: 0.85rem;
+}
+
+.earthquake-popup__place {
+  overflow: hidden;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.earthquake-popup__depth {
+  color: #526174;
+  font-size: 0.7rem;
+}
