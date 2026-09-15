@@ -13,7 +13,7 @@ import './MapView.css'
 const INITIAL_CENTER: [number, number] = [-70.6693, -33.4489]
 const INITIAL_ZOOM = 3
 const EARTHQUAKES_SOURCE_ID = 'earthquakes'
-const EARTHQUAKES_LAYER_ID = 'earthquakes-placeholder'
+const EARTHQUAKES_LAYER_ID = 'earthquakes-circles'
 
 /**
  * Contenedor MapLibre con ciclo de vida seguro bajo React Strict Mode:
@@ -62,9 +62,25 @@ export function MapView({ earthquakes }: MapViewProps) {
         source: EARTHQUAKES_SOURCE_ID,
         paint: {
           'circle-color': '#d97706',
-          'circle-radius': 4,
+          'circle-radius': [
+            'interpolate',
+            ['linear'],
+            ['coalesce', ['get', 'magnitude'], 0],
+            0,
+            3,
+            2,
+            5,
+            4,
+            9,
+            6,
+            14,
+            8,
+            18,
+          ],
+          'circle-opacity': 0.72,
           'circle-stroke-color': '#fff7ed',
-          'circle-stroke-width': 1,
+          'circle-stroke-opacity': 0.9,
+          'circle-stroke-width': 1.25,
         },
       })
     })
