@@ -28,3 +28,6 @@ logs/
 !.vscode/extensions.json
 .idea/
 
+# Cursor local (hooks MCP, etc.; no publicar)
+.cursor/
+

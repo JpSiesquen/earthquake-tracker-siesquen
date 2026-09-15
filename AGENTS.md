@@ -22,18 +22,17 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 
 ## Estado
 
-Fase 0 (sandbox MapLibre) y Fase 1 (andamiaje) cerradas: Vite app, CI
-`verificar`, hooks, docs de proceso, proxy `/api`, README, deploy Vercel.
+Fase 0 y Fase 1 cerradas. Fase 2 en curso: BFF serverless + catalogo USGS.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
 | 0 | Sandbox MapLibre | Hecha |
 | 1 | Andamiaje + README semilla | Hecha |
-| 2 | BFF + catalogo vivo | Pendiente |
+| 2 | BFF + catalogo vivo | En curso |
 | 3 | Mapa 2D producto (Capa 1, corte natural) | Pendiente |
 | 4-7 | Detail/FDSN/DEM, 3D, productos USGS, cierre | Pendiente |
 
-**Siguiente:** Fase 2 (`#29+`), BFF + catalogo USGS vivo.
+**Siguiente:** `#29` `GET /api/health`, luego tipos/shared y feed USGS (`#30+`).
 
 ## Stack
 
