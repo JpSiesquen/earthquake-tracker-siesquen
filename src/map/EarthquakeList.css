@@ -1,6 +1,10 @@
 .earthquake-list {
   width: 100%;
-  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 12rem;
+  margin-top: 0;
   text-align: left;
   color: var(--color-ink);
 }
@@ -41,7 +45,8 @@
 .earthquake-list__items {
   display: grid;
   gap: 0.25rem;
-  max-height: 18rem;
+  flex: 1;
+  max-height: none;
   margin: 0;
   padding: 0;
   overflow: auto;
