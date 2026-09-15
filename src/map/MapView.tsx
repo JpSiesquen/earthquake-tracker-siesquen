@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 
@@ -10,6 +10,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { BASEMAP_STYLE_URL } from './basemap.ts'
 import { summariesToGeoJSON } from './earthquakesGeoJSON.ts'
 import { LayerControl, type MapLayerVisibility } from './LayerControl.tsx'
+import { MagnitudeFilter } from './MagnitudeFilter.tsx'
 import './MapView.css'
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl)
@@ -29,6 +30,7 @@ const DEFAULT_LAYER_VISIBILITY: MapLayerVisibility = {
   plates: true,
   heatmap: false,
 }
+const DEFAULT_MIN_MAGNITUDE = 0
 const SHALLOW_MAX_DEPTH_KM = 70
 const INTERMEDIATE_MAX_DEPTH_KM = 300
 const DEPTH_COLORS = {
@@ -107,9 +109,18 @@ export function MapView({ earthquakes }: MapViewProps) {
   const [layerVisibility, setLayerVisibility] = useState(
     DEFAULT_LAYER_VISIBILITY,
   )
+  const [minMagnitude, setMinMagnitude] = useState(DEFAULT_MIN_MAGNITUDE)
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
   const select = useEarthquakeSelection((state) => state.select)
   const clear = useEarthquakeSelection((state) => state.clear)
+  const visibleEarthquakes = useMemo(
+    () =>
+      earthquakes?.filter(
+        (earthquake) =>
+          earthquake.magnitude !== null && earthquake.magnitude >= minMagnitude,
+      ) ?? [],
+    [earthquakes, minMagnitude],
+  )
 
   useEffect(() => {
     layerVisibilityRef.current = layerVisibility
@@ -135,26 +146,22 @@ export function MapView({ earthquakes }: MapViewProps) {
   }, [layerVisibility])
 
   useEffect(() => {
-    if (!earthquakes) return
-
-    earthquakesGeoJSONRef.current = summariesToGeoJSON(earthquakes)
+    earthquakesGeoJSONRef.current = summariesToGeoJSON(visibleEarthquakes)
 
     const source = mapRef.current?.getSource(EARTHQUAKES_SOURCE_ID)
     if (source instanceof maplibregl.GeoJSONSource) {
       source.setData(earthquakesGeoJSONRef.current)
     }
-  }, [earthquakes])
+  }, [visibleEarthquakes])
 
   useEffect(() => {
-    if (!earthquakes) return
-
     if (
       selectedId !== null &&
-      !earthquakes.some((earthquake) => earthquake.id === selectedId)
+      !visibleEarthquakes.some((earthquake) => earthquake.id === selectedId)
     ) {
       clear()
     }
-  }, [clear, earthquakes, selectedId])
+  }, [clear, selectedId, visibleEarthquakes])
 
   useEffect(() => {
     const map = mapRef.current
@@ -398,31 +405,39 @@ export function MapView({ earthquakes }: MapViewProps) {
 
   return (
     <div className="map-frame">
-      <div
-        ref={containerRef}
-        className="map-view"
-        role="region"
-        aria-label="Mapa sismico"
+      <div className="map-stage">
+        <div
+          ref={containerRef}
+          className="map-view"
+          role="region"
+          aria-label="Mapa sismico"
+        />
+        <LayerControl
+          visibility={layerVisibility}
+          onVisibilityChange={handleLayerVisibilityChange}
+        />
+        <aside className="depth-legend" aria-label="Leyenda de profundidad">
+          <p className="depth-legend__title">Profundidad</p>
+          <ul className="depth-legend__list">
+            {DEPTH_LEGEND_ITEMS.map((item) => (
+              <li key={item.label}>
+                <span
+                  className="depth-legend__swatch"
+                  style={{ backgroundColor: item.color }}
+                  aria-hidden="true"
+                />
+                {item.label}
+              </li>
+            ))}
+          </ul>
+        </aside>
+      </div>
+      <MagnitudeFilter
+        value={minMagnitude}
+        visibleCount={visibleEarthquakes.length}
+        totalCount={earthquakes?.length ?? 0}
+        onChange={setMinMagnitude}
       />
-      <LayerControl
-        visibility={layerVisibility}
-        onVisibilityChange={handleLayerVisibilityChange}
-      />
-      <aside className="depth-legend" aria-label="Leyenda de profundidad">
-        <p className="depth-legend__title">Profundidad</p>
-        <ul className="depth-legend__list">
-          {DEPTH_LEGEND_ITEMS.map((item) => (
-            <li key={item.label}>
-              <span
-                className="depth-legend__swatch"
-                style={{ backgroundColor: item.color }}
-                aria-hidden="true"
-              />
-              {item.label}
-            </li>
-          ))}
-        </ul>
-      </aside>
     </div>
   )
 }
