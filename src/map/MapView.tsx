@@ -21,6 +21,7 @@ import {
 import { MapPresets } from './MapPresets.tsx'
 import { GLOBAL_PRESET, type MapCameraPreset } from './mapPresets.ts'
 import { Open3DCta } from './Open3DCta.tsx'
+import { useEventDeepLink } from './useEventDeepLink.ts'
 import './MapView.css'
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl)
@@ -101,6 +102,26 @@ function createEarthquakePopupContent(
   return content
 }
 
+function prefersReducedMotion(): boolean {
+  return globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+function flyMapToEarthquake(
+  map: maplibregl.Map,
+  earthquake: EarthquakeSummary,
+): void {
+  const [longitude, latitude] = earthquake.coordinates
+  const nextZoom = Math.max(map.getZoom(), 5)
+  const center: [number, number] = [longitude, latitude]
+
+  if (prefersReducedMotion()) {
+    map.jumpTo({ center, zoom: nextZoom })
+    return
+  }
+
+  map.easeTo({ center, zoom: nextZoom, duration: 700 })
+}
+
 /**
  * Contenedor MapLibre con ciclo de vida seguro bajo React Strict Mode:
  * create en effect, `map.remove()` en cleanup.
@@ -129,6 +150,7 @@ export function MapView({
   const layerVisibilityRef = useRef(DEFAULT_LAYER_VISIBILITY)
   const earthquakesGeoJSONRef = useRef(summariesToGeoJSON([]))
   const selectedIdRef = useRef<string | null>(null)
+  const pendingDeepLinkFlyRef = useRef<EarthquakeSummary | null>(null)
   const [layerVisibility, setLayerVisibility] = useState(
     DEFAULT_LAYER_VISIBILITY,
   )
@@ -141,6 +163,13 @@ export function MapView({
     () => filterEarthquakes(earthquakes, minMagnitude, maxDepthKm),
     [earthquakes, maxDepthKm, minMagnitude],
   )
+
+  useEventDeepLink({
+    earthquakes,
+    onDeepLinkSelect: (earthquake) => {
+      pendingDeepLinkFlyRef.current = earthquake
+    },
+  })
 
   useEffect(() => {
     layerVisibilityRef.current = layerVisibility
@@ -175,13 +204,16 @@ export function MapView({
   }, [visibleEarthquakes])
 
   useEffect(() => {
+    // No limpiar mientras el catalogo aun no cargo (rompe deep link ?event=).
+    if (earthquakes === undefined) return
+
     if (
       selectedId !== null &&
       !visibleEarthquakes.some((earthquake) => earthquake.id === selectedId)
     ) {
       clear()
     }
-  }, [clear, selectedId, visibleEarthquakes])
+  }, [clear, earthquakes, selectedId, visibleEarthquakes])
 
   useEffect(() => {
     const map = mapRef.current
@@ -206,6 +238,15 @@ export function MapView({
   }, [selectedId])
 
   useEffect(() => {
+    const pending = pendingDeepLinkFlyRef.current
+    const map = mapRef.current
+    if (pending === null || map === null || selectedId !== pending.id) return
+
+    pendingDeepLinkFlyRef.current = null
+    flyMapToEarthquake(map, pending)
+  }, [selectedId, visibleEarthquakes])
+
+  useEffect(() => {
     const container = containerRef.current
     if (!container || mapRef.current) return
 
@@ -217,6 +258,17 @@ export function MapView({
     })
 
     mapRef.current = map
+
+    const flushPendingDeepLinkFly = () => {
+      const pending = pendingDeepLinkFlyRef.current
+      if (pending === null || selectedIdRef.current !== pending.id) return
+      pendingDeepLinkFlyRef.current = null
+      flyMapToEarthquake(map, pending)
+    }
+
+    flushPendingDeepLinkFly()
+    map.once('load', flushPendingDeepLinkFly)
+
     const popup = new maplibregl.Popup({
       closeButton: false,
       closeOnClick: false,
@@ -440,19 +492,7 @@ export function MapView({
     const map = mapRef.current
     if (!map) return
 
-    const [longitude, latitude] = earthquake.coordinates
-    const nextZoom = Math.max(map.getZoom(), 5)
-    const center: [number, number] = [longitude, latitude]
-    const reducedMotion = globalThis.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches
-
-    if (reducedMotion) {
-      map.jumpTo({ center, zoom: nextZoom })
-      return
-    }
-
-    map.easeTo({ center, zoom: nextZoom, duration: 700 })
+    flyMapToEarthquake(map, earthquake)
   }
 
   const applyCameraPreset = (preset: MapCameraPreset) => {
