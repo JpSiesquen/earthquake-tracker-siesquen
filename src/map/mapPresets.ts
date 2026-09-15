@@ -1,35 +1,34 @@
 export type MapCameraPreset = {
   id: 'global' | 'latam' | 'ring-of-fire'
   label: string
-  /** Usar centro+zoom, o bounds (fitBounds). */
-  center?: [number, number]
-  zoom?: number
-  bounds?: [[number, number], [number, number]]
-  fitMaxZoom?: number
+  center: [number, number]
+  zoom: number
 }
 
-/** Vista inicial del producto (alineada al sandbox Fase 0). */
+/**
+ * Overview mundial. No usar Santiago: a zoom medio solo muestra el Cono Sur.
+ * [lon, lat] GeoJSON.
+ */
 export const GLOBAL_PRESET: MapCameraPreset = {
   id: 'global',
   label: 'Global',
-  center: [-70.6693, -33.4489],
-  zoom: 3,
+  center: [0, 12],
+  zoom: 1.35,
 }
 
-/** Encuadre util de LATAM / margen pacifico sudamericano. */
+/**
+ * America Latina / margen pacifico. Center+zoom evita el fitBounds laxo
+ * que empujaba el Atlantico y el borde de Africa en viewports anchos.
+ */
 export const LATAM_PRESET: MapCameraPreset = {
   id: 'latam',
   label: 'LATAM',
-  bounds: [
-    [-120, -58],
-    [-30, 35],
-  ],
-  fitMaxZoom: 4,
+  center: [-72, -15],
+  zoom: 2.55,
 }
 
 /**
  * Cinturon de fuego (vista 2D centrada en el Pacifico).
- * Evita fitBounds que crucen el antimeridiano de forma ambigua.
  */
 export const RING_OF_FIRE_PRESET: MapCameraPreset = {
   id: 'ring-of-fire',
