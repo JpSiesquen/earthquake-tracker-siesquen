@@ -9,7 +9,9 @@ import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 import { BASEMAP_STYLE_URL } from './basemap.ts'
+import { EarthquakeList } from './EarthquakeList.tsx'
 import { summariesToGeoJSON } from './earthquakesGeoJSON.ts'
+import { filterEarthquakes } from './filterEarthquakes.ts'
 import { LayerControl, type MapLayerVisibility } from './LayerControl.tsx'
 import {
   DEFAULT_MAX_DEPTH_KM,
@@ -133,14 +135,7 @@ export function MapView({
   const select = useEarthquakeSelection((state) => state.select)
   const clear = useEarthquakeSelection((state) => state.clear)
   const visibleEarthquakes = useMemo(
-    () =>
-      earthquakes?.filter(
-        (earthquake) =>
-          earthquake.magnitude !== null &&
-          earthquake.magnitude >= minMagnitude &&
-          earthquake.depthKm !== null &&
-          earthquake.depthKm <= maxDepthKm,
-      ) ?? [],
+    () => filterEarthquakes(earthquakes, minMagnitude, maxDepthKm),
     [earthquakes, maxDepthKm, minMagnitude],
   )
 
@@ -474,6 +469,7 @@ export function MapView({
         onWindowChange={onWindowChange}
         onReset={resetFilters}
       />
+      <EarthquakeList earthquakes={visibleEarthquakes} />
     </div>
   )
 }

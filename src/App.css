@@ -34,23 +34,3 @@ p {
   margin: 0;
   color: #4b5563;
 }
-
-.meta {
-  font-size: 0.85rem;
-}
-
-.catalog {
-  text-align: left;
-  width: 100%;
-}
-
-.json {
-  margin: 0;
-  padding: 0.75rem;
-  overflow: auto;
-  max-height: 20rem;
-  background: #e8ecf1;
-  border-radius: 0.35rem;
-  font-size: 0.75rem;
-  text-align: left;
-}

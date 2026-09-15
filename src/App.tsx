@@ -15,8 +15,7 @@ function App() {
     <main className="app">
       <h1>Earthquake Tracker</h1>
       <p>
-        Fase 3: mapa de producto con basemap OpenFreeMap. Capas de sismos en
-        issues siguientes.
+        Mapa de producto: capas, filtros y lista del catalogo filtrado (Capa 1).
       </p>
 
       <MapView
@@ -28,25 +27,6 @@ function App() {
         catalogError={error?.message ?? null}
         onWindowChange={setWindow}
       />
-
-      {currentCatalog ? (
-        <section className="catalog" aria-live="polite">
-          <p>
-            <strong>{currentCatalog.count}</strong> eventos (
-            {currentCatalog.window}){currentCatalog.stale ? ' · stale' : ''}
-            {isFetching && !isLoading ? ' · actualizando...' : ''}
-          </p>
-          <p className="meta">
-            fetchedAt {new Date(currentCatalog.fetchedAt).toISOString()}
-          </p>
-          <pre className="json">
-            {JSON.stringify(currentCatalog.earthquakes.slice(0, 5), null, 2)}
-            {currentCatalog.earthquakes.length > 5
-              ? `\n... +${currentCatalog.earthquakes.length - 5} mas`
-              : ''}
-          </pre>
-        </section>
-      ) : null}
     </main>
   )
 }
