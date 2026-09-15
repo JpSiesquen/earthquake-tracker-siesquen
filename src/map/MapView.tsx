@@ -14,6 +14,30 @@ const INITIAL_CENTER: [number, number] = [-70.6693, -33.4489]
 const INITIAL_ZOOM = 3
 const EARTHQUAKES_SOURCE_ID = 'earthquakes'
 const EARTHQUAKES_LAYER_ID = 'earthquakes-circles'
+const SHALLOW_MAX_DEPTH_KM = 70
+const INTERMEDIATE_MAX_DEPTH_KM = 300
+const DEPTH_COLORS = {
+  shallow: '#b86b25',
+  intermediate: '#287a78',
+  deep: '#28527a',
+  unknown: '#6b7280',
+} as const
+
+const DEPTH_LEGEND_ITEMS = [
+  {
+    label: `Menos de ${SHALLOW_MAX_DEPTH_KM} km`,
+    color: DEPTH_COLORS.shallow,
+  },
+  {
+    label: `${SHALLOW_MAX_DEPTH_KM} a <${INTERMEDIATE_MAX_DEPTH_KM} km`,
+    color: DEPTH_COLORS.intermediate,
+  },
+  {
+    label: `${INTERMEDIATE_MAX_DEPTH_KM} km o más`,
+    color: DEPTH_COLORS.deep,
+  },
+  { label: 'Sin dato', color: DEPTH_COLORS.unknown },
+] as const
 
 /**
  * Contenedor MapLibre con ciclo de vida seguro bajo React Strict Mode:
@@ -61,7 +85,20 @@ export function MapView({ earthquakes }: MapViewProps) {
         type: 'circle',
         source: EARTHQUAKES_SOURCE_ID,
         paint: {
-          'circle-color': '#d97706',
+          'circle-color': [
+            'case',
+            ['==', ['get', 'depthKm'], null],
+            DEPTH_COLORS.unknown,
+            [
+              'step',
+              ['get', 'depthKm'],
+              DEPTH_COLORS.shallow,
+              SHALLOW_MAX_DEPTH_KM,
+              DEPTH_COLORS.intermediate,
+              INTERMEDIATE_MAX_DEPTH_KM,
+              DEPTH_COLORS.deep,
+            ],
+          ],
           'circle-radius': [
             'interpolate',
             ['linear'],
@@ -92,11 +129,28 @@ export function MapView({ earthquakes }: MapViewProps) {
   }, [])
 
   return (
-    <div
-      ref={containerRef}
-      className="map-view"
-      role="region"
-      aria-label="Mapa sismico"
-    />
+    <div className="map-frame">
+      <div
+        ref={containerRef}
+        className="map-view"
+        role="region"
+        aria-label="Mapa sismico"
+      />
+      <aside className="depth-legend" aria-label="Leyenda de profundidad">
+        <p className="depth-legend__title">Profundidad</p>
+        <ul className="depth-legend__list">
+          {DEPTH_LEGEND_ITEMS.map((item) => (
+            <li key={item.label}>
+              <span
+                className="depth-legend__swatch"
+                style={{ backgroundColor: item.color }}
+                aria-hidden="true"
+              />
+              {item.label}
+            </li>
+          ))}
+        </ul>
+      </aside>
+    </div>
   )
 }
