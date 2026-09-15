@@ -15,6 +15,8 @@ No crear `CLAUDE.md` en este repo.
 | `AGENTS.md` | Estado, stack, convenciones, siguiente trabajo | Si |
 | `PRODUCT.md` | Tesis, voz, anti-referencias | Si |
 | `CONTRIBUTING.md` | Flujo issue-PR-CI, labels, npm ci | Si |
+| `docs/00-maplibre-basico.md` | Modelo style/source/layer (sandbox) | Si |
+| `docs/01-maplibre-xss-ghsa.md` | Registro GHSA MapLibre (XSS attribution) | Si |
 | `PLAN.md` | Plan interno | No (gitignore) |
 | `Notas/` | Estudio y handoff local | No (gitignore) |
 
@@ -61,7 +63,8 @@ Tras clonar: `npm ci` + `npm run hooks`. Sin el segundo, no hay Husky
 
 Sandbox Fase 0: `python -m http.server 4173` y abrir `/sandbox/maplibre/`.
 Su CDN MapLibre debe permanecer en una version parcheada (`>=6.4.1`) y alineada
-con la version exacta del producto cuando sea posible.
+con la version exacta del producto cuando sea posible. Registro:
+[`docs/01-maplibre-xss-ghsa.md`](./docs/01-maplibre-xss-ghsa.md).
 
 ## Convenciones
 
