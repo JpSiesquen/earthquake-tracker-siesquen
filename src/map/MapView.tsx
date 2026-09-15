@@ -3,6 +3,7 @@ import * as maplibregl from 'maplibre-gl'
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 
 import type { EarthquakeSummary } from '../../shared/earthquake.ts'
+import type { CatalogWindow } from '../../shared/window.ts'
 import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -101,9 +102,23 @@ function createEarthquakePopupContent(
  */
 type MapViewProps = {
   earthquakes?: readonly EarthquakeSummary[]
+  window: CatalogWindow
+  isCatalogLoading: boolean
+  isCatalogFetching: boolean
+  isCatalogStale: boolean
+  catalogError: string | null
+  onWindowChange: (window: CatalogWindow) => void
 }
 
-export function MapView({ earthquakes }: MapViewProps) {
+export function MapView({
+  earthquakes,
+  window,
+  isCatalogLoading,
+  isCatalogFetching,
+  isCatalogStale,
+  catalogError,
+  onWindowChange,
+}: MapViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const layerVisibilityRef = useRef(DEFAULT_LAYER_VISIBILITY)
@@ -449,8 +464,14 @@ export function MapView({ earthquakes }: MapViewProps) {
         maxDepthKm={maxDepthKm}
         visibleCount={visibleEarthquakes.length}
         totalCount={earthquakes?.length ?? 0}
+        window={window}
+        isCatalogLoading={isCatalogLoading}
+        isCatalogFetching={isCatalogFetching}
+        isCatalogStale={isCatalogStale}
+        catalogError={catalogError}
         onMinMagnitudeChange={setMinMagnitude}
         onMaxDepthChange={setMaxDepthKm}
+        onWindowChange={onWindowChange}
         onReset={resetFilters}
       />
     </div>
