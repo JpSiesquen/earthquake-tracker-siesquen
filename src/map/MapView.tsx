@@ -10,7 +10,11 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { BASEMAP_STYLE_URL } from './basemap.ts'
 import { summariesToGeoJSON } from './earthquakesGeoJSON.ts'
 import { LayerControl, type MapLayerVisibility } from './LayerControl.tsx'
-import { MagnitudeFilter } from './MagnitudeFilter.tsx'
+import {
+  DEFAULT_MAX_DEPTH_KM,
+  DEFAULT_MIN_MAGNITUDE,
+  MapFilters,
+} from './MapFilters.tsx'
 import './MapView.css'
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl)
@@ -30,7 +34,6 @@ const DEFAULT_LAYER_VISIBILITY: MapLayerVisibility = {
   plates: true,
   heatmap: false,
 }
-const DEFAULT_MIN_MAGNITUDE = 0
 const SHALLOW_MAX_DEPTH_KM = 70
 const INTERMEDIATE_MAX_DEPTH_KM = 300
 const DEPTH_COLORS = {
@@ -110,6 +113,7 @@ export function MapView({ earthquakes }: MapViewProps) {
     DEFAULT_LAYER_VISIBILITY,
   )
   const [minMagnitude, setMinMagnitude] = useState(DEFAULT_MIN_MAGNITUDE)
+  const [maxDepthKm, setMaxDepthKm] = useState(DEFAULT_MAX_DEPTH_KM)
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
   const select = useEarthquakeSelection((state) => state.select)
   const clear = useEarthquakeSelection((state) => state.clear)
@@ -117,9 +121,12 @@ export function MapView({ earthquakes }: MapViewProps) {
     () =>
       earthquakes?.filter(
         (earthquake) =>
-          earthquake.magnitude !== null && earthquake.magnitude >= minMagnitude,
+          earthquake.magnitude !== null &&
+          earthquake.magnitude >= minMagnitude &&
+          earthquake.depthKm !== null &&
+          earthquake.depthKm <= maxDepthKm,
       ) ?? [],
-    [earthquakes, minMagnitude],
+    [earthquakes, maxDepthKm, minMagnitude],
   )
 
   useEffect(() => {
@@ -403,6 +410,11 @@ export function MapView({ earthquakes }: MapViewProps) {
     setLayerVisibility((current) => ({ ...current, [layer]: visible }))
   }
 
+  const resetFilters = () => {
+    setMinMagnitude(DEFAULT_MIN_MAGNITUDE)
+    setMaxDepthKm(DEFAULT_MAX_DEPTH_KM)
+  }
+
   return (
     <div className="map-frame">
       <div className="map-stage">
@@ -432,11 +444,14 @@ export function MapView({ earthquakes }: MapViewProps) {
           </ul>
         </aside>
       </div>
-      <MagnitudeFilter
-        value={minMagnitude}
+      <MapFilters
+        minMagnitude={minMagnitude}
+        maxDepthKm={maxDepthKm}
         visibleCount={visibleEarthquakes.length}
         totalCount={earthquakes?.length ?? 0}
-        onChange={setMinMagnitude}
+        onMinMagnitudeChange={setMinMagnitude}
+        onMaxDepthChange={setMaxDepthKm}
+        onReset={resetFilters}
       />
     </div>
   )
