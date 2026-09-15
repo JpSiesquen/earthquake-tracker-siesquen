@@ -425,6 +425,27 @@ export function MapView({
     setMaxDepthKm(DEFAULT_MAX_DEPTH_KM)
   }
 
+  const handleSelectFromList = (earthquake: EarthquakeSummary) => {
+    select(earthquake.id)
+
+    const map = mapRef.current
+    if (!map) return
+
+    const [longitude, latitude] = earthquake.coordinates
+    const nextZoom = Math.max(map.getZoom(), 5)
+    const center: [number, number] = [longitude, latitude]
+    const reducedMotion = globalThis.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+
+    if (reducedMotion) {
+      map.jumpTo({ center, zoom: nextZoom })
+      return
+    }
+
+    map.easeTo({ center, zoom: nextZoom, duration: 700 })
+  }
+
   return (
     <div className="map-frame">
       <div className="map-stage">
@@ -469,7 +490,10 @@ export function MapView({
         onWindowChange={onWindowChange}
         onReset={resetFilters}
       />
-      <EarthquakeList earthquakes={visibleEarthquakes} />
+      <EarthquakeList
+        earthquakes={visibleEarthquakes}
+        onSelectEarthquake={handleSelectFromList}
+      />
     </div>
   )
 }

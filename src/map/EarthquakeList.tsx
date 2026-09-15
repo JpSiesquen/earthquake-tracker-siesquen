@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+
 import type { EarthquakeSummary } from '../../shared/earthquake.ts'
 import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
 
@@ -11,6 +13,7 @@ const timeFormatter = new Intl.DateTimeFormat('es-CL', {
 
 type EarthquakeListProps = {
   earthquakes: readonly EarthquakeSummary[]
+  onSelectEarthquake: (earthquake: EarthquakeSummary) => void
 }
 
 function formatMagnitude(magnitude: number | null): string {
@@ -18,20 +21,41 @@ function formatMagnitude(magnitude: number | null): string {
 }
 
 function formatPlace(place: string | null): string {
-  return place?.trim() ? place : 'Ubicación sin dato'
+  return place?.trim() ? place : 'Ubicacion sin dato'
 }
 
 function formatTimeUtc(timeMs: number): string {
   return `${timeFormatter.format(new Date(timeMs))} UTC`
 }
 
+function prefersReducedMotion(): boolean {
+  return globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 /**
  * Lista operable del catalogo filtrado (misma vista que el mapa).
- * La sincronizacion flyTo / scroll queda en #58.
+ * Seleccion compartida con el mapa via Zustand + callbacks de sync.
  */
-export function EarthquakeList({ earthquakes }: EarthquakeListProps) {
+export function EarthquakeList({
+  earthquakes,
+  onSelectEarthquake,
+}: EarthquakeListProps) {
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
-  const select = useEarthquakeSelection((state) => state.select)
+  const itemsRef = useRef<HTMLUListElement | null>(null)
+
+  useEffect(() => {
+    if (selectedId === null || !itemsRef.current) return
+
+    const item = itemsRef.current.querySelector(
+      `[data-earthquake-id="${CSS.escape(selectedId)}"]`,
+    )
+    if (!(item instanceof HTMLElement)) return
+
+    item.scrollIntoView({
+      block: 'nearest',
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+    })
+  }, [selectedId])
 
   return (
     <section
@@ -50,12 +74,12 @@ export function EarthquakeList({ earthquakes }: EarthquakeListProps) {
           Ningun evento con los filtros actuales.
         </p>
       ) : (
-        <ul className="earthquake-list__items">
+        <ul className="earthquake-list__items" ref={itemsRef}>
           {earthquakes.map((earthquake) => {
             const isSelected = earthquake.id === selectedId
 
             return (
-              <li key={earthquake.id}>
+              <li key={earthquake.id} data-earthquake-id={earthquake.id}>
                 <button
                   type="button"
                   className={
@@ -64,7 +88,7 @@ export function EarthquakeList({ earthquakes }: EarthquakeListProps) {
                       : 'earthquake-list__item'
                   }
                   aria-current={isSelected ? 'true' : undefined}
-                  onClick={() => select(earthquake.id)}
+                  onClick={() => onSelectEarthquake(earthquake)}
                 >
                   <span className="earthquake-list__mag">
                     M {formatMagnitude(earthquake.magnitude)}
