@@ -14,6 +14,8 @@
     "test:usgs-schema": "node --experimental-strip-types scripts/check-usgs-schema.ts"
   },
   "dependencies": {
+    "@fontsource/ibm-plex-sans": "5.2.8",
+    "@fontsource/ibm-plex-serif": "5.2.7",
     "@tanstack/react-query": "5.102.8",
     "maplibre-gl": "6.9.1",
     "react": "19.2.8",

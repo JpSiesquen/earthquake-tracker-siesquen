@@ -1,3 +1,48 @@
+:root {
+  /* Laboratorio: claros, neutrales, sin HUD espacial. */
+  --color-ink: #172033;
+  --color-ink-muted: #4b5563;
+  --color-ink-soft: #667587;
+  --color-surface: #f4f6f8;
+  --color-surface-raised: #f8fafc;
+  --color-surface-panel: rgb(248 250 252 / 94%);
+  --color-border: #c5ced8;
+  --color-border-strong: #94a3b8;
+  --color-accent: #28527a;
+  --color-accent-warm: #b86b25;
+  --color-danger: #b42318;
+  --color-focus: #28527a;
+  --color-shadow: rgb(15 23 42 / 12%);
+
+  --font-sans: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  --font-display: 'IBM Plex Serif', 'Georgia', serif;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --radius: 0.3rem;
+  --focus-ring: 2px solid var(--color-focus);
+
+  color: var(--color-ink);
+  background: var(--color-surface);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
+  min-width: 320px;
+}
+
+:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
 }
