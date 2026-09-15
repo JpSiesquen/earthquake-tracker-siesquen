@@ -32,7 +32,7 @@ Fase 0 y Fase 1 cerradas. Fase 2 en curso: BFF serverless + catalogo USGS.
 | 3 | Mapa 2D producto (Capa 1, corte natural) | Pendiente |
 | 4-7 | Detail/FDSN/DEM, 3D, productos USGS, cierre | Pendiente |
 
-**Siguiente:** `#29` `GET /api/health`, luego tipos/shared y feed USGS (`#30+`).
+**Siguiente:** feed USGS en servidor (`#31+`), luego Zod y DTO.
 
 ## Stack
 
