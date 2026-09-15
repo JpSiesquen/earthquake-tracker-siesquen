@@ -1,8 +1,10 @@
 import type { EarthquakeSummary } from '../shared/earthquake.js'
-import type { UsgsFeature } from '../shared/usgs.js'
+import type { UsgsDetailFeature, UsgsFeature } from '../shared/usgs.js'
 
-/** Feature USGS → DTO interno del BFF. */
-export function toEarthquakeSummary(feature: UsgsFeature): EarthquakeSummary {
+/** Feature USGS (summary o detail) → DTO interno del BFF. */
+export function toEarthquakeSummary(
+  feature: UsgsFeature | UsgsDetailFeature,
+): EarthquakeSummary {
   const [longitude, latitude, depthKm] = feature.geometry.coordinates
   return {
     id: feature.id,

@@ -7,6 +7,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import {
+  usgsDetailFeatureSchema,
   usgsFeatureCollectionSchema,
   usgsFeatureSchema,
 } from '../shared/usgs.ts'
@@ -47,6 +48,18 @@ const invalidFeature = loadJson('fixtures/usgs-feature-invalid.json')
 assert(
   'Feature invalida falla',
   !usgsFeatureSchema.safeParse(invalidFeature).success,
+)
+
+const validDetail = loadJson('fixtures/usgs-detail-valid.json')
+assert(
+  'Detail Feature valida pasa',
+  usgsDetailFeatureSchema.safeParse(validDetail).success,
+)
+
+const invalidDetail = loadJson('fixtures/usgs-detail-invalid.json')
+assert(
+  'Detail Feature invalida falla',
+  !usgsDetailFeatureSchema.safeParse(invalidDetail).success,
 )
 
 if (failed > 0) {

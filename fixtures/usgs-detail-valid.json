@@ -1,0 +1,19 @@
+{
+  "type": "Feature",
+  "id": "us7000pn9s",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [95.9247, 22.0014, 10]
+  },
+  "properties": {
+    "mag": 7.7,
+    "place": "2025 Mandalay, Burma (Myanmar) Earthquake",
+    "time": 1743142852715,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000pn9s",
+    "products": {
+      "shakemap": [{ "type": "shakemap", "status": "UPDATE" }],
+      "losspager": [{ "type": "losspager", "status": "UPDATE" }],
+      "dyfi": [{ "type": "dyfi", "status": "UPDATE" }]
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import {
+  usgsDetailFeatureSchema,
   usgsFeatureCollectionSchema,
-  usgsFeatureSchema,
-  type UsgsFeature,
+  type UsgsDetailFeature,
   type UsgsFeatureCollection,
 } from '../shared/usgs.js'
 import type { CatalogWindow } from '../shared/window.js'
@@ -101,11 +101,11 @@ export async function fetchUsgsCollection(
 }
 
 /**
- * Detail USGS por event id (Feature GeoJSON). Validacion provisional con el
- * mismo schema de Feature del summary; #68 endurecera el schema de detail.
+ * Detail USGS por event id (Feature GeoJSON).
+ * Valida con `usgsDetailFeatureSchema` (#68).
  */
 export async function fetchUsgsDetailFeature(id: string): Promise<{
-  feature: UsgsFeature
+  feature: UsgsDetailFeature
   usgsUrl: string | null
 }> {
   if (!isUsgsEventId(id)) {
@@ -117,7 +117,7 @@ export async function fetchUsgsDetailFeature(id: string): Promise<{
     'USGS detail',
   )
 
-  const parsed = usgsFeatureSchema.safeParse(json)
+  const parsed = usgsDetailFeatureSchema.safeParse(json)
   if (!parsed.success) {
     throw new BffError(
       502,
@@ -126,14 +126,9 @@ export async function fetchUsgsDetailFeature(id: string): Promise<{
     )
   }
 
-  return { feature: parsed.data, usgsUrl: readUsgsEventUrl(json) }
-}
-
-/** Lee `properties.url` del JSON crudo sin exigirla en el schema provisional. */
-export function readUsgsEventUrl(json: unknown): string | null {
-  if (!json || typeof json !== 'object') return null
-  const properties = (json as { properties?: unknown }).properties
-  if (!properties || typeof properties !== 'object') return null
-  const url = (properties as { url?: unknown }).url
-  return typeof url === 'string' && url.trim() ? url : null
+  const url = parsed.data.properties.url
+  return {
+    feature: parsed.data,
+    usgsUrl: typeof url === 'string' && url.trim() ? url : null,
+  }
 }

@@ -1,0 +1,15 @@
+{
+  "type": "Feature",
+  "id": "bad-detail",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [95.9, 22.0]
+  },
+  "properties": {
+    "mag": 7.7,
+    "place": "Incomplete depth",
+    "time": 1743142852715,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/bad-detail",
+    "products": "not-an-object-map"
+  }
+}
