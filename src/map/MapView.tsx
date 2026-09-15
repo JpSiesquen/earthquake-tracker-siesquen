@@ -18,13 +18,15 @@ import {
   DEFAULT_MIN_MAGNITUDE,
   MapFilters,
 } from './MapFilters.tsx'
+import { MapPresets } from './MapPresets.tsx'
+import { GLOBAL_PRESET, type MapCameraPreset } from './mapPresets.ts'
 import './MapView.css'
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl)
 
-/** Centro inicial alineado al sandbox Fase 0 (Santiago / LATAM). */
-const INITIAL_CENTER: [number, number] = [-70.6693, -33.4489]
-const INITIAL_ZOOM = 3
+/** Centro/zoom iniciales = preset Global. */
+const INITIAL_CENTER = GLOBAL_PRESET.center
+const INITIAL_ZOOM = GLOBAL_PRESET.zoom
 const EARTHQUAKES_SOURCE_ID = 'earthquakes'
 const EARTHQUAKES_LAYER_ID = 'earthquakes-circles'
 const EARTHQUAKES_HEATMAP_LAYER_ID = 'earthquakes-heatmap'
@@ -446,6 +448,26 @@ export function MapView({
     map.easeTo({ center, zoom: nextZoom, duration: 700 })
   }
 
+  const applyCameraPreset = (preset: MapCameraPreset) => {
+    const map = mapRef.current
+    if (!map) return
+
+    const reducedMotion = globalThis.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+
+    if (reducedMotion) {
+      map.jumpTo({ center: preset.center, zoom: preset.zoom })
+      return
+    }
+
+    map.easeTo({
+      center: preset.center,
+      zoom: preset.zoom,
+      duration: 800,
+    })
+  }
+
   return (
     <div className="map-frame">
       <div className="map-stage">
@@ -475,6 +497,7 @@ export function MapView({
           </ul>
         </aside>
       </div>
+      <MapPresets onApplyPreset={applyCameraPreset} />
       <MapFilters
         minMagnitude={minMagnitude}
         maxDepthKm={maxDepthKm}
