@@ -24,25 +24,25 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 
 ## Estado
 
-Fase 0 y 1 cerradas. Fase 2 (BFF + catalogo USGS) cerrada: health, Zod, DTO,
-cache TTL, `/api/earthquakes`, TanStack Query y UI smoke.
+Fase 0–3 cerradas. Capa 1 (mapa 2D de producto) entregable: MapLibre multicapa,
+filtros, lista, presets, deep link `?event=`, CTA 3D honesto.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
 | 0 | Sandbox MapLibre | Hecha |
 | 1 | Andamiaje + README semilla | Hecha |
 | 2 | BFF + catalogo vivo | Hecha |
-| 3 | Mapa 2D producto (Capa 1, corte natural) | Pendiente |
+| 3 | Mapa 2D producto (Capa 1, corte natural) | Hecha |
 | 4-7 | Detail/FDSN/DEM, 3D, productos USGS, cierre | Pendiente |
 
-**Siguiente:** Fase 3 (`#43+`), mapa 2D de producto (Capa 1).
+**Siguiente:** Fase 4 (`#67+`), detalle USGS, FDSN y spike DEM.
 
 ## Stack
 
 - Front: Vite, React 19, TypeScript, MapLibre 6 (`MapView`, ESM, WebGL2,
   worker Vite explicito); R3F en Capa 2
 - Datos (hoy): BFF serverless, Zod, TanStack Query
-- Estado UI: Zustand (`selectedId` compartido; el catalogo permanece en TanStack Query)
+- Estado UI: Zustand (`selectedId` + deep link `?event=`; catalogo en TanStack Query)
 - Calidad: oxlint, Prettier, Husky, GitHub Actions (`verificar`)
 - Hosting: Vercel (Production + Preview en PRs)
 
