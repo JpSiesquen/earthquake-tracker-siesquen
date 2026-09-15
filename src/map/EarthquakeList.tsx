@@ -29,7 +29,7 @@ function formatTimeUtc(timeMs: number): string {
 }
 
 function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  return globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
 /**

@@ -434,7 +434,7 @@ export function MapView({
     const [longitude, latitude] = earthquake.coordinates
     const nextZoom = Math.max(map.getZoom(), 5)
     const center: [number, number] = [longitude, latitude]
-    const reducedMotion = window.matchMedia(
+    const reducedMotion = globalThis.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches
 
