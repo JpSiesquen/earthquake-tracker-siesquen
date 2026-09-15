@@ -37,7 +37,8 @@ cache TTL, `/api/earthquakes`, TanStack Query y UI smoke.
 
 ## Stack
 
-- Front: Vite, React 19, TypeScript, MapLibre (`MapView`); R3F en Capa 2
+- Front: Vite, React 19, TypeScript, MapLibre 6 (`MapView`, ESM, WebGL2,
+  worker Vite explicito); R3F en Capa 2
 - Datos (hoy): BFF serverless, Zod, TanStack Query
 - Estado UI: Zustand (`selectedId` compartido; el catalogo permanece en TanStack Query)
 - Calidad: oxlint, Prettier, Husky, GitHub Actions (`verificar`)
