@@ -37,7 +37,7 @@ cache TTL, `/api/earthquakes`, TanStack Query y UI smoke.
 
 ## Stack
 
-- Front: Vite, React 19, TypeScript; MapLibre y R3F entran en fases de mapa/3D
+- Front: Vite, React 19, TypeScript, MapLibre (`MapView`); R3F en Capa 2
 - Datos (hoy): BFF serverless, Zod, TanStack Query
 - Calidad: oxlint, Prettier, Husky, GitHub Actions (`verificar`)
 - Hosting: Vercel (Production + Preview en PRs)
