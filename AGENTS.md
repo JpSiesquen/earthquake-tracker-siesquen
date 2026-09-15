@@ -17,6 +17,7 @@ No crear `CLAUDE.md` en este repo.
 | `CONTRIBUTING.md` | Flujo issue-PR-CI, labels, npm ci | Si |
 | `docs/00-maplibre-basico.md` | Modelo style/source/layer (sandbox) | Si |
 | `docs/01-maplibre-xss-ghsa.md` | Registro GHSA MapLibre (XSS attribution) | Si |
+| `docs/02-mapa-producto-capa-1.md` | Mapa 2D de producto (Capa 1) | Si |
 | `PLAN.md` | Plan interno | No (gitignore) |
 | `Notas/` | Estudio y handoff local | No (gitignore) |
 
