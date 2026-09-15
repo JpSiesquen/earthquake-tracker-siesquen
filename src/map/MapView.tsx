@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 
 import type { EarthquakeSummary } from '../../shared/earthquake.ts'
+import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -80,15 +81,21 @@ function createEarthquakePopupContent(
  * create en effect, `map.remove()` en cleanup.
  */
 type MapViewProps = {
-  earthquakes: readonly EarthquakeSummary[]
+  earthquakes?: readonly EarthquakeSummary[]
 }
 
 export function MapView({ earthquakes }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const earthquakesGeoJSONRef = useRef(summariesToGeoJSON([]))
+  const selectedIdRef = useRef<string | null>(null)
+  const selectedId = useEarthquakeSelection((state) => state.selectedId)
+  const select = useEarthquakeSelection((state) => state.select)
+  const clear = useEarthquakeSelection((state) => state.clear)
 
   useEffect(() => {
+    if (!earthquakes) return
+
     earthquakesGeoJSONRef.current = summariesToGeoJSON(earthquakes)
 
     const source = mapRef.current?.getSource(EARTHQUAKES_SOURCE_ID)
@@ -96,6 +103,39 @@ export function MapView({ earthquakes }: MapViewProps) {
       source.setData(earthquakesGeoJSONRef.current)
     }
   }, [earthquakes])
+
+  useEffect(() => {
+    if (!earthquakes) return
+
+    if (
+      selectedId !== null &&
+      !earthquakes.some((earthquake) => earthquake.id === selectedId)
+    ) {
+      clear()
+    }
+  }, [clear, earthquakes, selectedId])
+
+  useEffect(() => {
+    const map = mapRef.current
+    const previousId = selectedIdRef.current
+    selectedIdRef.current = selectedId
+
+    if (!map?.getSource(EARTHQUAKES_SOURCE_ID)) return
+
+    if (previousId !== null) {
+      map.setFeatureState(
+        { source: EARTHQUAKES_SOURCE_ID, id: previousId },
+        { selected: false },
+      )
+    }
+
+    if (selectedId !== null) {
+      map.setFeatureState(
+        { source: EARTHQUAKES_SOURCE_ID, id: selectedId },
+        { selected: true },
+      )
+    }
+  }, [selectedId])
 
   useEffect(() => {
     const container = containerRef.current
@@ -161,11 +201,31 @@ export function MapView({ earthquakes }: MapViewProps) {
             18,
           ],
           'circle-opacity': 0.72,
-          'circle-stroke-color': '#fff7ed',
+          'circle-stroke-color': [
+            'case',
+            ['boolean', ['feature-state', 'selected'], false],
+            '#172033',
+            '#fff7ed',
+          ],
           'circle-stroke-opacity': 0.9,
-          'circle-stroke-width': 1.25,
+          'circle-stroke-width': [
+            'case',
+            ['boolean', ['feature-state', 'selected'], false],
+            3,
+            1.25,
+          ],
         },
       })
+
+      if (selectedIdRef.current !== null) {
+        map.setFeatureState(
+          {
+            source: EARTHQUAKES_SOURCE_ID,
+            id: selectedIdRef.current,
+          },
+          { selected: true },
+        )
+      }
 
       map.on('mouseenter', EARTHQUAKES_LAYER_ID, () => {
         map.getCanvas().style.cursor = 'pointer'
@@ -184,6 +244,13 @@ export function MapView({ earthquakes }: MapViewProps) {
           .addTo(map)
       })
 
+      map.on('click', EARTHQUAKES_LAYER_ID, (event) => {
+        const id = event.features?.[0]?.properties.id
+        if (typeof id === 'string') {
+          select(id)
+        }
+      })
+
       map.on('mouseleave', EARTHQUAKES_LAYER_ID, clearHover)
     })
 
@@ -195,7 +262,7 @@ export function MapView({ earthquakes }: MapViewProps) {
       map.remove()
       mapRef.current = null
     }
-  }, [])
+  }, [select])
 
   return (
     <div className="map-frame">

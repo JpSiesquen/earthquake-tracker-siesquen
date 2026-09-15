@@ -18,7 +18,7 @@ function App() {
         issues siguientes.
       </p>
 
-      <MapView earthquakes={data?.earthquakes ?? []} />
+      <MapView earthquakes={data?.earthquakes} />
 
       <div className="toolbar">
         <label>
