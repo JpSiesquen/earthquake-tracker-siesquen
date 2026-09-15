@@ -1,6 +1,9 @@
 .map-frame {
-  position: relative;
   width: 100%;
+}
+
+.map-stage {
+  position: relative;
 }
 
 .map-view {
@@ -107,6 +110,63 @@
   margin-top: 0.12rem;
   color: #667587;
   font-size: 0.64rem;
+}
+
+.magnitude-filter {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.65rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #c5ced8;
+  border-radius: 0.3rem;
+  background: #f8fafc;
+  color: #243244;
+}
+
+.magnitude-filter__heading,
+.magnitude-filter__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.magnitude-filter__heading label {
+  color: #172033;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.magnitude-filter__heading output {
+  min-width: 4.2rem;
+  color: #28527a;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+  text-align: right;
+}
+
+.magnitude-filter input[type='range'] {
+  width: 100%;
+  margin: 0;
+  accent-color: #28527a;
+}
+
+.magnitude-filter input[type='range']:focus-visible {
+  outline: 2px solid #28527a;
+  outline-offset: 3px;
+}
+
+.magnitude-filter__meta {
+  color: #667587;
+  font-size: 0.68rem;
+}
+
+.magnitude-filter__meta strong {
+  color: #243244;
+  font-variant-numeric: tabular-nums;
 }
 
 .depth-legend {
