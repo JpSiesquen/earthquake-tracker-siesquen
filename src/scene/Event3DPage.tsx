@@ -110,7 +110,7 @@ export function Event3DPage() {
               <p className="event-3d-page__eyebrow">Volumen de referencia</p>
               <h2 id="scene-placeholder-title">Área de escena 3D</h2>
             </div>
-            <span className="event-3d-page__status">Canvas base</span>
+            <span className="event-3d-page__status">Escena local</span>
           </div>
 
           <Suspense
@@ -121,6 +121,10 @@ export function Event3DPage() {
             }
           >
             <EventSceneCanvas
+              eventId={eventId}
+              magnitude={detailQuery.data?.earthquake.magnitude}
+              place={detailQuery.data?.earthquake.place}
+              backTo={backTo}
               depthKm={detailQuery.data?.earthquake.depthKm ?? null}
               focusId={eventId}
               focusCoordinates={

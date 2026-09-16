@@ -1,0 +1,84 @@
+.scene-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  pointer-events: none;
+}
+
+.scene-overlay__card,
+.scene-overlay__action {
+  pointer-events: auto;
+}
+
+.scene-overlay__card {
+  max-width: min(22rem, 70%);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius);
+  background: rgb(247 244 239 / 92%);
+  box-shadow: 0 0.5rem 1.25rem var(--color-shadow);
+  backdrop-filter: blur(6px);
+}
+
+.scene-overlay__eyebrow {
+  margin: 0 0 var(--space-1);
+  color: var(--color-ink-soft);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.scene-overlay__magnitude {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.scene-overlay__place {
+  margin: var(--space-1) 0 0;
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.scene-overlay__id {
+  margin: var(--space-2) 0 0;
+  color: var(--color-ink-soft);
+  font-size: 0.75rem;
+}
+
+.scene-overlay__id code {
+  color: var(--color-ink);
+}
+
+.scene-overlay__action {
+  flex: 0 0 auto;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius);
+  background: rgb(247 244 239 / 94%);
+  color: var(--color-accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 0.35rem 1rem var(--color-shadow);
+}
+
+.scene-overlay__action:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.scene-overlay__action:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}

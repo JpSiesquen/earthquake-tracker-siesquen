@@ -11,13 +11,19 @@ import { SCENE_CAMERA, SCENE_CONTROLS, SCENE_ORIGIN } from './sceneCamera.ts'
 import { ReferenceSurface } from './ReferenceSurface.tsx'
 import { SceneDebugHelpers } from './SceneDebugHelpers.tsx'
 import { SceneLighting } from './SceneLighting.tsx'
+import { SceneOverlay } from './SceneOverlay.tsx'
 import './EventSceneCanvas.css'
 
 /**
  * Viewport base de Capa 2. La camara orbita el epicentro sin poder cruzar el
  * plano de superficie. Los helpers espaciales existen solo en desarrollo.
+ * El overlay HTML vive fuera del Canvas para no interferir con OrbitControls.
  */
 type EventSceneCanvasProps = {
+  eventId: string
+  magnitude: number | null | undefined
+  place: string | null | undefined
+  backTo: string
   depthKm: number | null
   focusId: string
   focusCoordinates: LonLat | null
@@ -25,6 +31,10 @@ type EventSceneCanvasProps = {
 }
 
 export default function EventSceneCanvas({
+  eventId,
+  magnitude,
+  place,
+  backTo,
   depthKm,
   focusId,
   focusCoordinates,
@@ -32,6 +42,12 @@ export default function EventSceneCanvas({
 }: EventSceneCanvasProps) {
   return (
     <div className="event-scene-canvas" aria-label="Viewport 3D del evento">
+      <SceneOverlay
+        eventId={eventId}
+        magnitude={magnitude}
+        place={place}
+        backTo={backTo}
+      />
       <Canvas
         camera={SCENE_CAMERA}
         className="event-scene-canvas__renderer"
