@@ -63,3 +63,41 @@ export function deriveShakeMapContourUiState(
 
   return { kind: 'loading' }
 }
+
+/**
+ * Geometría MMI usable en el mapa (#235).
+ * `ready` diferido o sin features no cuenta como capa pintable.
+ */
+export function isShakeMapContourGeometryUsable(
+  state: ShakeMapContourUiState | null,
+): boolean {
+  if (state === null || state.kind !== 'ready') return false
+  if (state.deferred) return false
+  return (state.featureCount ?? 0) > 0
+}
+
+/**
+ * Copy corta para el toggle de LayerControl cuando no hay geometría usable.
+ */
+export function shakeMapContourToggleHint(
+  state: ShakeMapContourUiState | null,
+  hasSelectedEvent: boolean,
+): string {
+  if (!hasSelectedEvent) return 'Selecciona un evento'
+  if (state === null) return 'Cargando detalle…'
+
+  switch (state.kind) {
+    case 'absent':
+      return 'Sin ShakeMap en este evento'
+    case 'absent_no_contours':
+      return 'Sin geometría MMI'
+    case 'loading':
+      return 'Cargando contornos…'
+    case 'error':
+      return 'Contornos no disponibles'
+    case 'ready':
+      if (state.deferred) return 'Geometría aún no lista'
+      if ((state.featureCount ?? 0) === 0) return 'Sin geometría MMI'
+      return 'ShakeMap del evento'
+  }
+}
