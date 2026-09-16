@@ -46,7 +46,7 @@ DEM en producción: N/A (ADR).
 | 6 | Productos USGS (Capa 3) | En curso |
 | 7 | Cierre y README portfolio | Pendiente |
 
-**Siguiente:** `#104`, DYFI felt/CDI en ficha.
+**Siguiente:** `#105`, limpiar capas de producto al cambiar evento.
 
 Fase 6 parcial: products DTO (#99); estados UI (#100); BFF contornos (#101);
 pintado MapLibre MMI (#102).

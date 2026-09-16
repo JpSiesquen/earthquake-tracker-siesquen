@@ -60,6 +60,14 @@ function formatPagerAlertLabel(level: PagerAlertLevel): string {
   }
 }
 
+function formatDyfiFelt(felt: number): string {
+  return Number.isInteger(felt) ? String(felt) : felt.toFixed(0)
+}
+
+function formatDyfiCdi(cdi: number): string {
+  return Number.isInteger(cdi) ? String(cdi) : cdi.toFixed(1)
+}
+
 /**
  * Ficha de evento: mag, profundidad, lugar, hora y link USGS.
  * Instrumento de panel; no card de marketing.
@@ -94,6 +102,9 @@ export function EventDetailPanel() {
       : null,
   )
   const pagerAlert = parsePagerAlert(products?.pager.alert)
+  const dyfiFelt = products?.dyfi.felt ?? null
+  const dyfiCdi = products?.dyfi.cdi ?? null
+  const hasDyfiMetrics = dyfiFelt !== null || dyfiCdi !== null
 
   return (
     <section
@@ -178,6 +189,22 @@ export function EventDetailPanel() {
                 app.
               </p>
             </div>
+          ) : null}
+          {hasDyfiMetrics ? (
+            <dl className="event-detail-panel__dyfi" aria-label="DYFI">
+              {dyfiFelt !== null ? (
+                <div>
+                  <dt>Felt</dt>
+                  <dd>{formatDyfiFelt(dyfiFelt)}</dd>
+                </div>
+              ) : null}
+              {dyfiCdi !== null ? (
+                <div>
+                  <dt>CDI</dt>
+                  <dd>{formatDyfiCdi(dyfiCdi)}</dd>
+                </div>
+              ) : null}
+            </dl>
           ) : null}
           {contourState ? (
             <ShakeMapContourStatus
