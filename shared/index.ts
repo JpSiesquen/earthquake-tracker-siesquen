@@ -13,7 +13,9 @@ export {
   usgsFeatureSchema,
   usgsFeatureCollectionSchema,
   usgsDetailFeatureSchema,
+  fdsnFeatureCollectionSchema,
   type UsgsFeature,
   type UsgsFeatureCollection,
   type UsgsDetailFeature,
+  type FdsnFeatureCollection,
 } from './usgs.js'

@@ -6,12 +6,13 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { toEarthquakeSummary, toProductFlags } from '../api/_normalize.ts'
 import {
+  fdsnFeatureCollectionSchema,
   usgsDetailFeatureSchema,
   usgsFeatureCollectionSchema,
   usgsFeatureSchema,
 } from '../shared/usgs.ts'
-import { toProductFlags } from '../api/_normalize.ts'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -89,6 +90,23 @@ if (parsedNoProducts.success) {
     !flags.shakemap && !flags.pager && !flags.dyfi,
   )
 }
+
+const validFdsn = loadJson('fixtures/fdsn-featurecollection-valid.json')
+const parsedFdsn = fdsnFeatureCollectionSchema.safeParse(validFdsn)
+assert('FDSN FeatureCollection valida pasa', parsedFdsn.success)
+if (parsedFdsn.success) {
+  const summaries = parsedFdsn.data.features.map(toEarthquakeSummary)
+  assert(
+    'FDSN normaliza a EarthquakeSummary',
+    summaries.length === 1 && summaries[0]?.id === 'us1000fdsn',
+  )
+}
+
+const invalidFdsn = loadJson('fixtures/fdsn-featurecollection-invalid.json')
+assert(
+  'FDSN FeatureCollection con count incoherente falla',
+  !fdsnFeatureCollectionSchema.safeParse(invalidFdsn).success,
+)
 
 if (failed > 0) {
   console.error(`\n${failed} assertion(s) failed`)
