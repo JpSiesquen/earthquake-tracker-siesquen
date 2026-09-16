@@ -23,7 +23,7 @@ function readIdFromRequest(request: Request): string | null {
 export async function GET(request: Request): Promise<Response> {
   try {
     const id = readIdFromRequest(request)
-    if (id === null || !isUsgsEventId(id)) {
+    if (id === null || id === 'search' || !isUsgsEventId(id)) {
       throw new BffError(400, 'bad_request', 'Invalid earthquake id')
     }
 
