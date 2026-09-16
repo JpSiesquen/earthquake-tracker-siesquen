@@ -49,6 +49,8 @@ Loading/error de detail y neighbors son visibles: detail fatal ofrece
 reintentar o volver; fallo de vecinos deja escena parcial con el foco.
 El deep link 3D usa `/event/:id/3d` como fuente de verdad: refresh rehidrata
 desde el BFF y alinea `selectedId` para el retorno al mapa.
+`npm run test:local-coordinates` (CI `verificar`) cubre origen XZ, offsets
+este/norte, depth→Y y bandas de color.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -60,7 +62,7 @@ desde el BFF y alinea `selectedId` para el retorno al mapa.
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#97`, test numerico lat/lon y profundidad.
+**Siguiente:** `#98`, docs/escena-3d.md (unidades y exageracion).
 
 ## Stack
 
