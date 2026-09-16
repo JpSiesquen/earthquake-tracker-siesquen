@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
+import { useEarthquakeDetail } from '../api/useEarthquakeDetail.ts'
 import './Event3DPage.css'
 
 const EVENT_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/
@@ -63,6 +64,7 @@ export function Event3DPage() {
   const { id } = useParams<{ id: string }>()
   const eventId = readEventId(id)
   const hasInvalidId = id !== undefined && id.trim().length > 0
+  const detailQuery = useEarthquakeDetail(eventId)
 
   useDocumentTitle(
     eventId
@@ -115,7 +117,9 @@ export function Event3DPage() {
               </div>
             }
           >
-            <EventSceneCanvas />
+            <EventSceneCanvas
+              depthKm={detailQuery.data?.earthquake.depthKm ?? null}
+            />
           </Suspense>
         </section>
 

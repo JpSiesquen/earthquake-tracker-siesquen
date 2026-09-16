@@ -7,7 +7,14 @@ export function ReferenceSurface() {
       <planeGeometry
         args={[REFERENCE_SURFACE_SIZE_KM, REFERENCE_SURFACE_SIZE_KM]}
       />
-      <meshStandardMaterial color="#d8e0e6" metalness={0} roughness={0.94} />
+      <meshStandardMaterial
+        color="#d8e0e6"
+        depthWrite={false}
+        metalness={0}
+        opacity={0.72}
+        roughness={0.94}
+        transparent
+      />
     </mesh>
   )
 }

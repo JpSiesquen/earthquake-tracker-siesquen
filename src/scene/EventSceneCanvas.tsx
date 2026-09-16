@@ -2,6 +2,7 @@ import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 
 import { EpicenterMarker } from './EpicenterMarker.tsx'
+import { HypocenterMarker } from './HypocenterMarker.tsx'
 import { SCENE_CAMERA, SCENE_CONTROLS, SCENE_ORIGIN } from './sceneCamera.ts'
 import { ReferenceSurface } from './ReferenceSurface.tsx'
 import { SceneDebugHelpers } from './SceneDebugHelpers.tsx'
@@ -12,7 +13,11 @@ import './EventSceneCanvas.css'
  * Viewport base de Capa 2. La camara orbita el epicentro sin poder cruzar el
  * plano de superficie. Los helpers espaciales existen solo en desarrollo.
  */
-export default function EventSceneCanvas() {
+type EventSceneCanvasProps = {
+  depthKm: number | null
+}
+
+export default function EventSceneCanvas({ depthKm }: EventSceneCanvasProps) {
   return (
     <div className="event-scene-canvas" aria-label="Viewport 3D del evento">
       <Canvas
@@ -30,6 +35,7 @@ export default function EventSceneCanvas() {
         <SceneLighting />
         <ReferenceSurface />
         <EpicenterMarker />
+        <HypocenterMarker depthKm={depthKm} />
         <SceneDebugHelpers />
         <OrbitControls
           makeDefault
