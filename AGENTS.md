@@ -19,6 +19,7 @@ No crear `CLAUDE.md` en este repo.
 | `docs/01-maplibre-xss-ghsa.md` | Registro GHSA MapLibre (XSS attribution) | Si |
 | `docs/02-mapa-producto-capa-1.md` | Mapa 2D de producto (Capa 1) | Si |
 | `docs/03-detalle-fdsn-dem.md` | Detalle, FDSN, ficha, stub 3D (Fase 4) | Si |
+| `docs/04-escena-3d.md` | Escena 3D: ejes, unidades, exageracion (Fase 5) | Si |
 | `docs/dem-spike.md` | Spike DEM coste cero (Fase 4) | Si |
 | `docs/adr-dem.md` | ADR: plano honesto vs DEM (Capa 2) | Si |
 | `PLAN.md` | Plan interno | No (gitignore) |
@@ -28,29 +29,11 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 
 ## Estado
 
-Fase 0–4 cerradas. Fase 5 en curso: Capa 2 tiene ruta estable, layout dedicado,
-canvas R3F diferido, camara orbital limitada e iluminacion base sin sombras.
-Los helpers de ejes y grid se renderizan exclusivamente en desarrollo.
-La proyeccion geografica local usa km: este en +X y norte en -Z.
-Profundidad positiva usa -Y con exageracion vertical 1.5x; null se excluye.
-El suelo honesto es un plano de 500 km centrado en el origen local.
-La malla DEM (#88) se cerro N/A conforme al ADR; produccion no depende de DEM.
-El epicentro se identifica con una diana plana azul en el origen Y=0.
-El hipocentro usa el detail real y un octaedro calido en Y negativo; null se omite.
-Un segmento vertical discreto conecta epicentro e hipocentro sin animacion.
-Los vecinos FDSN aparecen como esferas alrededor del foco, con radio acotado
-por magnitud (M2→3 km, M7+→9 km); el foco se excluye y el cap de render es 50
-(alineado a `NEIGHBOR_LIMIT`). El color de vecinos usa las mismas bandas de
-profundidad que el mapa 2D (<70 / 70–300 / ≥300 km); no se codifica el tiempo.
-
-Un overlay HTML sobre el viewport muestra mag/lugar del foco y un CTA para
-volver al mapa (`/?event=:id`) sin bloquear OrbitControls (pointer-events).
-Loading/error de detail y neighbors son visibles: detail fatal ofrece
-reintentar o volver; fallo de vecinos deja escena parcial con el foco.
-El deep link 3D usa `/event/:id/3d` como fuente de verdad: refresh rehidrata
-desde el BFF y alinea `selectedId` para el retorno al mapa.
-`npm run test:local-coordinates` (CI `verificar`) cubre origen XZ, offsets
-este/norte, depth→Y y bandas de color.
+Fase 0–5 cerradas. Capa 2 (escena R3F local) está usable: ruta `/event/:id/3d`,
+plano honesto 500 km, epicentro/hipocentro, conector, vecinos FDSN (escala por
+mag, color por profundidad), overlay HTML, loading/error y deep link.
+Unidades y exageración: [`docs/04-escena-3d.md`](./docs/04-escena-3d.md).
+DEM en producción: N/A (ADR).
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -59,10 +42,11 @@ este/norte, depth→Y y bandas de color.
 | 2 | BFF + catalogo vivo | Hecha |
 | 3 | Mapa 2D producto (Capa 1, corte natural) | Hecha |
 | 4 | Detalle, FDSN y spike DEM | Hecha |
-| 5 | Escena 3D local (Capa 2) | En curso |
-| 6-7 | Productos USGS y cierre | Pendiente |
+| 5 | Escena 3D local (Capa 2) | Hecha |
+| 6 | Productos USGS (Capa 3) | Pendiente |
+| 7 | Cierre y README portfolio | Pendiente |
 
-**Siguiente:** `#98`, docs/escena-3d.md (unidades y exageracion).
+**Siguiente:** primera issue abierta de Fase 6 (productos USGS en mapa).
 
 ## Stack
 

@@ -1,32 +1,32 @@
 # Earthquake Tracker
 
-Visualizacion sismica **2D → 3D**: mapa operativo con capas y, al seleccionar un
+Visualización sísmica **2D → 3D**: mapa operativo con capas y, al seleccionar un
 evento, escena local con profundidad (hipocentro).
 
-No es un globo generico con puntos. El foco es entender un evento: ubicacion,
-magnitud y profundidad, con datos USGS atraves de un BFF propio.
+No es un globo genérico con puntos. El foco es entender un evento: ubicación,
+magnitud y profundidad, con datos USGS a través de un BFF propio.
+
+[![Demo](https://img.shields.io/badge/demo-vercel-black?style=flat-square)](https://earthquake-tracker-siesquen.vercel.app)
+[![CI](https://img.shields.io/github/actions/workflow/status/JpSiesquen/earthquake-tracker-siesquen/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/JpSiesquen/earthquake-tracker-siesquen/actions/workflows/ci.yml)
+
+**Demo:** https://earthquake-tracker-siesquen.vercel.app
+
+## Qué hay hoy
+
+- **Capa 1:** mapa MapLibre (círculos, heatmap, placas), filtros, lista, deep link `?event=`
+- **Capa 2:** escena R3F en `/event/:id/3d` (plano honesto, epicentro/hipocentro, vecinos FDSN)
+- **BFF:** catálogo, detail y search FDSN (Zod + TanStack Query)
 
 ## Stack
 
-- Vite, React 19, TypeScript, React Router
-- MapLibre 6 (mapa 2D de producto), Zustand (seleccion UI)
-- React Three Fiber (escena 3D: Fase 5; hay ruta stub `/event/:id/3d`)
-- BFF serverless (catalogo, detail, search FDSN), Zod, TanStack Query
-- oxlint, Prettier, Husky, GitHub Actions (`verificar`)
-- Vercel
+- Vite, React 19, TypeScript, React Router, Zustand
+- MapLibre 6 · Three / R3F / Drei
+- BFF serverless (Vercel), oxlint, Prettier, Husky, GitHub Actions (`verificar`)
 
-## Demo
+## Estado
 
-https://earthquake-tracker-siesquen.vercel.app
-
-## Estado del proyecto
-
-**Capa 1 usable** + **Fase 4 cerrada:** ficha con detail USGS, chips de products
-(disponibilidad), vecinos via FDSN en BFF, CTA «Abrir 3D» a stub de ruta, ADR de
-suelo = plano honesto.
-
-**Falta:** escena R3F real (Fase 5), capas de productos en mapa (Fase 6), media
-README (Fase 7).
+Capa 1 y Capa 2 usables. Siguiente: productos USGS en mapa (Fase 6). El README
+público se irá afinando (media y tono portfolio en Fase 7); no es una bitácora.
 
 ## Desarrollo
 
@@ -36,20 +36,11 @@ npm run hooks
 npm run dev
 ```
 
-Usa `npm ci` (no `npm install` para clonar). Luego `npm run hooks`: el repo
-tiene `ignore-scripts=true` en `.npmrc`, asi que Husky no se activa solo.
-
-Eso es deliberado. Bloquea scripts de paquetes en install (vector de worms npm
-como Shai-Hulud, 2025: robo de tokens y repos en GitHub). Detalle en
+Usa `npm ci` (no `npm install` al clonar). Luego `npm run hooks`: el repo tiene
+`ignore-scripts=true` en `.npmrc`, así que Husky no se activa solo. Detalle en
 [`CONTRIBUTING.md`](./CONTRIBUTING.md#seguridad-de-dependencias).
 
-Sandbox MapLibre (Fase 0):
+Sandbox MapLibre (Fase 0): `python -m http.server 4173` → `/sandbox/maplibre/`.
 
-```bash
-python -m http.server 4173
-```
-
-Abrir `http://localhost:4173/sandbox/maplibre/`.
-
-Mas detalle: [`CONTRIBUTING.md`](./CONTRIBUTING.md), [`PRODUCT.md`](./PRODUCT.md),
-[`AGENTS.md`](./AGENTS.md).
+Más detalle: [`PRODUCT.md`](./PRODUCT.md), [`AGENTS.md`](./AGENTS.md),
+[`docs/04-escena-3d.md`](./docs/04-escena-3d.md).
