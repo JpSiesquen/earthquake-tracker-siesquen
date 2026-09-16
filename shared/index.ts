@@ -7,6 +7,7 @@ export type {
   EarthquakeDetailResponse,
   EarthquakeProductFlags,
 } from './detail.js'
+export type { EarthquakeSearchResponse } from './search.js'
 export type { BffErrorBody, BffErrorCode } from './errors.js'
 export {
   usgsFeatureSchema,
