@@ -4,6 +4,12 @@ import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&ur
 
 import type { EarthquakeSummary } from '../../shared/earthquake.ts'
 import type { CatalogWindow } from '../../shared/window.ts'
+import {
+  DEPTH_COLORS,
+  DEPTH_LEGEND_ITEMS,
+  INTERMEDIATE_MAX_DEPTH_KM,
+  SHALLOW_MAX_DEPTH_KM,
+} from '../geo/depthBands.ts'
 import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -42,31 +48,6 @@ const DEFAULT_LAYER_VISIBILITY: MapLayerVisibility = {
   plates: true,
   heatmap: false,
 }
-const SHALLOW_MAX_DEPTH_KM = 70
-const INTERMEDIATE_MAX_DEPTH_KM = 300
-const DEPTH_COLORS = {
-  shallow: '#b86b25',
-  intermediate: '#287a78',
-  deep: '#28527a',
-  unknown: '#6b7280',
-} as const
-
-const DEPTH_LEGEND_ITEMS = [
-  {
-    label: `Menos de ${SHALLOW_MAX_DEPTH_KM} km`,
-    color: DEPTH_COLORS.shallow,
-  },
-  {
-    label: `${SHALLOW_MAX_DEPTH_KM} a <${INTERMEDIATE_MAX_DEPTH_KM} km`,
-    color: DEPTH_COLORS.intermediate,
-  },
-  {
-    label: `${INTERMEDIATE_MAX_DEPTH_KM} km o más`,
-    color: DEPTH_COLORS.deep,
-  },
-  { label: 'Sin dato', color: DEPTH_COLORS.unknown },
-] as const
-
 function numericProperty(value: unknown): number | null {
   return typeof value === 'number' && Number.isFinite(value) ? value : null
 }

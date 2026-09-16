@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 
 import { useEarthquakeDetail } from '../api/useEarthquakeDetail.ts'
 import { useEarthquakeNeighbors } from '../api/useEarthquakeNeighbors.ts'
+import { SCENE_DEPTH_LEGEND_ITEMS } from '../geo/depthBands.ts'
 import './Event3DPage.css'
 
 const EVENT_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/
@@ -138,8 +139,9 @@ export function Event3DPage() {
             <p className="event-3d-page__eyebrow">Lectura prevista</p>
             <h2>Del mapa al volumen</h2>
             <p>
-              La escena explicará la profundidad del foco respecto de la
-              superficie y su relación con sismos cercanos.
+              La escena sitúa el foco bajo el plano de referencia y muestra
+              sismos cercanos con el mismo código de color por profundidad que
+              el mapa 2D.
             </p>
           </section>
 
@@ -147,9 +149,30 @@ export function Event3DPage() {
             <p className="event-3d-page__eyebrow">Referencia espacial</p>
             <h2>Plano honesto</h2>
             <p>
-              La superficie será un plano de referencia, no una representación
-              de topografía real.
+              La superficie es un plano de referencia, no una representación de
+              topografía real.
             </p>
+          </section>
+
+          <section aria-label="Leyenda de profundidad de vecinos">
+            <p className="event-3d-page__eyebrow">Vecinos FDSN</p>
+            <h2>Color = profundidad</h2>
+            <p>
+              El radio sigue la magnitud; el color usa las bandas del mapa
+              (&lt;70 / 70–300 / ≥300 km). No se codifica el tiempo.
+            </p>
+            <ul className="event-3d-page__depth-legend">
+              {SCENE_DEPTH_LEGEND_ITEMS.map((item) => (
+                <li key={item.band}>
+                  <span
+                    className="event-3d-page__depth-swatch"
+                    style={{ backgroundColor: item.color }}
+                    aria-hidden="true"
+                  />
+                  {item.label}
+                </li>
+              ))}
+            </ul>
           </section>
 
           <Link className="event-3d-page__action" to={backTo}>

@@ -1,5 +1,6 @@
 import type { EarthquakeSummary, LonLat } from '../../shared/earthquake.ts'
 
+import { depthKmToColor } from '../geo/depthBands.ts'
 import {
   depthKmToY,
   projectLatLonToLocalXZ,
@@ -9,9 +10,6 @@ import {
   magnitudeToNeighborRadiusKm,
   SCENE_NEIGHBOR_RENDER_CAP,
 } from './neighborMagnitude.ts'
-
-/** Neutro de laboratorio; el encoding por depth/time queda para #93. */
-const NEIGHBOR_COLOR = '#6b7c8f'
 
 type NeighborMarkersProps = {
   focusId: string
@@ -28,6 +26,7 @@ function toGeographic([longitude, latitude]: LonLat): GeographicPoint {
  * ya se filtra en el fetch (#73) y se vuelve a excluir por id por defensa.
  * Sin profundidad conocida no hay posicion honesta → se omite.
  * Cap de render: `SCENE_NEIGHBOR_RENDER_CAP` (alineado a `NEIGHBOR_LIMIT`).
+ * Color = banda de profundidad (misma paleta que el mapa 2D); no tiempo.
  */
 export function NeighborMarkers({
   focusId,
@@ -65,7 +64,7 @@ export function NeighborMarkers({
       >
         <sphereGeometry args={[radius, 16, 12]} />
         <meshStandardMaterial
-          color={NEIGHBOR_COLOR}
+          color={depthKmToColor(neighbor.depthKm)}
           metalness={0}
           roughness={0.72}
         />
