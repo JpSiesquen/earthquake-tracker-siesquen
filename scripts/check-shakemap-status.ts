@@ -1,7 +1,11 @@
 /**
  * Chequeo numérico del lenguaje de degradación ShakeMap (#100).
  */
-import { deriveShakeMapContourUiState } from '../src/map/shakeMapContourStatus.ts'
+import {
+  deriveShakeMapContourUiState,
+  isShakeMapContourGeometryUsable,
+  shakeMapContourToggleHint,
+} from '../src/map/shakeMapContourStatus.ts'
 import {
   EMPTY_SHAKEMAP_FEATURE_COLLECTION,
   resolveShakeMapSourceData,
@@ -90,6 +94,57 @@ assert(
   'dato diferido → ready',
 )
 assert(ready?.featureCount === 0, 'ready expone featureCount')
+
+assert(
+  !isShakeMapContourGeometryUsable(null),
+  'sin estado → geometría no usable',
+)
+assert(
+  !isShakeMapContourGeometryUsable(ready ?? null),
+  'ready diferido sin features → no usable',
+)
+assert(
+  shakeMapContourToggleHint(null, false) === 'Selecciona un evento',
+  'hint sin selección',
+)
+assert(
+  shakeMapContourToggleHint({ kind: 'absent' }, true) ===
+    'Sin ShakeMap en este evento',
+  'hint absent',
+)
+
+const readyWithGeometry = deriveShakeMapContourUiState(withUrl, {
+  isPending: false,
+  isFetching: false,
+  isError: false,
+  error: null,
+  data: {
+    ...readyBody,
+    deferred: false,
+    features: [
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: [
+            [0, 0],
+            [1, 1],
+          ],
+        },
+        properties: { mmi: 4 },
+      },
+    ],
+  },
+})
+assert(
+  isShakeMapContourGeometryUsable(readyWithGeometry ?? null),
+  'ready con features → usable',
+)
+assert(
+  shakeMapContourToggleHint(readyWithGeometry ?? null, true) ===
+    'ShakeMap del evento',
+  'hint con geometría',
+)
 
 assert(
   resolveShakeMapSourceData({

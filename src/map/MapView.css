@@ -97,6 +97,15 @@
   background: rgb(226 232 240 / 65%);
 }
 
+.layer-control__option--disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.layer-control__option--disabled:hover {
+  background: transparent;
+}
+
 .layer-control__option:has(input:focus-visible) {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;

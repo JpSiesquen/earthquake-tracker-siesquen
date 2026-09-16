@@ -38,6 +38,11 @@ import {
   SHAKEMAP_CONTOURS_LINE_LAYER_ID,
   SHAKEMAP_CONTOURS_SOURCE_ID,
 } from './shakemapContours.ts'
+import {
+  deriveShakeMapContourUiState,
+  isShakeMapContourGeometryUsable,
+  shakeMapContourToggleHint,
+} from './shakeMapContourStatus.ts'
 import { useEventDeepLink } from './useEventDeepLink.ts'
 import { useEarthquakeDetail } from '../api/useEarthquakeDetail.ts'
 import { useShakeMapContours } from '../api/useShakeMapContours.ts'
@@ -155,10 +160,26 @@ export function MapView({
   const select = useEarthquakeSelection((state) => state.select)
   const clear = useEarthquakeSelection((state) => state.clear)
   const { data: detail } = useEarthquakeDetail(selectedId)
-  const contoursQuery = useShakeMapContours(
-    selectedId,
-    detail?.products.shakemap.contourMiUrl,
+  const contourMiUrl = detail?.products.shakemap.contourMiUrl
+  const contoursQuery = useShakeMapContours(selectedId, contourMiUrl)
+  const contourState = deriveShakeMapContourUiState(
+    detail?.products.shakemap,
+    contourMiUrl
+      ? {
+          isPending: contoursQuery.isPending,
+          isFetching: contoursQuery.isFetching,
+          isError: contoursQuery.isError,
+          error: contoursQuery.error,
+          data: contoursQuery.data,
+        }
+      : null,
   )
+  const shakemapGeometryUsable = isShakeMapContourGeometryUsable(contourState)
+  const shakemapVisible = layerVisibility.shakemap && shakemapGeometryUsable
+  const shakemapToggle = {
+    enabled: shakemapGeometryUsable,
+    hint: shakeMapContourToggleHint(contourState, selectedId !== null),
+  }
   const visibleEarthquakes = useMemo(
     () => filterEarthquakes(earthquakes, minMagnitude, maxDepthKm),
     [earthquakes, maxDepthKm, minMagnitude],
@@ -172,7 +193,10 @@ export function MapView({
   })
 
   useEffect(() => {
-    layerVisibilityRef.current = layerVisibility
+    layerVisibilityRef.current = {
+      ...layerVisibility,
+      shakemap: layerVisibility.shakemap && shakemapGeometryUsable,
+    }
 
     const map = mapRef.current
     if (!map) return
@@ -181,8 +205,8 @@ export function MapView({
       [EARTHQUAKES_LAYER_ID, layerVisibility.earthquakes],
       [TECTONIC_PLATES_LAYER_ID, layerVisibility.plates],
       [EARTHQUAKES_HEATMAP_LAYER_ID, layerVisibility.heatmap],
-      [SHAKEMAP_CONTOURS_FILL_LAYER_ID, layerVisibility.shakemap],
-      [SHAKEMAP_CONTOURS_LINE_LAYER_ID, layerVisibility.shakemap],
+      [SHAKEMAP_CONTOURS_FILL_LAYER_ID, shakemapVisible],
+      [SHAKEMAP_CONTOURS_LINE_LAYER_ID, shakemapVisible],
     ]
 
     for (const [layerId, visible] of mapLayers) {
@@ -194,7 +218,7 @@ export function MapView({
         )
       }
     }
-  }, [layerVisibility])
+  }, [layerVisibility, shakemapGeometryUsable, shakemapVisible])
 
   useEffect(() => {
     earthquakesGeoJSONRef.current = summariesToGeoJSON(visibleEarthquakes)
@@ -600,6 +624,7 @@ export function MapView({
           <LayerControl
             visibility={layerVisibility}
             onVisibilityChange={handleLayerVisibilityChange}
+            shakemapToggle={shakemapToggle}
           />
           <aside className="depth-legend" aria-label="Leyenda de profundidad">
             <p className="depth-legend__title">Profundidad</p>
@@ -616,9 +641,7 @@ export function MapView({
               ))}
             </ul>
           </aside>
-          {contoursQuery.data &&
-          contoursQuery.data.features.length > 0 &&
-          layerVisibility.shakemap ? (
+          {shakemapVisible ? (
             <aside className="mmi-legend" aria-label="Leyenda MMI ShakeMap">
               <p className="mmi-legend__title">MMI</p>
               <ul className="mmi-legend__list">
