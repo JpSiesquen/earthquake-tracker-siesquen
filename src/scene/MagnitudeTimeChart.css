@@ -1,0 +1,64 @@
+.mt-chart {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.mt-chart__title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mt-chart__svg {
+  width: 100%;
+  max-width: 20rem;
+  height: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.mt-chart__axis {
+  stroke: var(--color-border-strong);
+  stroke-width: 1;
+}
+
+.mt-chart__line {
+  stroke: var(--color-accent);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0.75;
+}
+
+.mt-chart__point {
+  fill: var(--color-accent);
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+.mt-chart__point--focus {
+  fill: var(--color-accent-warm);
+}
+
+.mt-chart__label {
+  fill: var(--color-ink-muted);
+  font-size: 8px;
+  font-family: var(--font-sans);
+}
+
+.mt-chart__empty,
+.mt-chart__disclaimer {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.mt-chart__disclaimer {
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.35rem;
+}
