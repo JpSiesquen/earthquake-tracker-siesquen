@@ -33,6 +33,7 @@ npm run dev
 | `npm run format:check` | Prettier (solo comprueba; lo usa el CI) |
 | `npm run preview` | Sirve el build local |
 | `npm run hooks` | Instala hooks de git |
+| `npm run test:local-coordinates` | Proyeccion lat/lon a XZ locales |
 | `npm run test:usgs-schema` | Fixtures Zod del feed USGS |
 
 ### `npm ci`, no `npm install`

@@ -11,6 +11,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "hooks": "husky",
+    "test:local-coordinates": "node --experimental-strip-types scripts/check-local-coordinates.ts",
     "test:usgs-schema": "node --experimental-strip-types scripts/check-usgs-schema.ts"
   },
   "dependencies": {

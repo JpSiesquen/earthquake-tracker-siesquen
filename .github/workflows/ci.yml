@@ -35,5 +35,8 @@ jobs:
       - name: Schema USGS
         run: npm run test:usgs-schema
 
+      - name: Coordenadas locales
+        run: npm run test:local-coordinates
+
       - name: Compilar
         run: npm run build
