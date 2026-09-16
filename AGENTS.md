@@ -46,7 +46,11 @@ DEM en producción: N/A (ADR).
 | 6 | Productos USGS (Capa 3) | En curso |
 | 7 | Cierre y README portfolio | Pendiente |
 
-**Siguiente:** `#100`, UI vacio vs cargando contornos ShakeMap.
+**Siguiente:** `#101`, contornos MMI vía BFF (descarga + Zod).
+
+Fase 6 parcial: DTO de products con URLs (#99); ficha distingue sin
+ShakeMap / sin URL / cargando / error / listo diferido (#100). Stub
+`GET /api/earthquakes/:id/shakemap` sin pegarle a USGS aún.
 
 ## Stack
 

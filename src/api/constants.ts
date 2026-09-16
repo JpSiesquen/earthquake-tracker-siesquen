@@ -4,6 +4,9 @@ export const EARTHQUAKES_STALE_TIME_MS = 5 * 60 * 1000
 /** staleTime del detail (ms). Alineado al TTL corto del BFF (~60s). */
 export const EARTHQUAKE_DETAIL_STALE_TIME_MS = 60 * 1000
 
+/** staleTime de contornos ShakeMap (ms). Payload más pesado; TTL propio (#101). */
+export const SHAKEMAP_CONTOURS_STALE_TIME_MS = 2 * 60 * 1000
+
 export const EARTHQUAKES_QUERY_RETRIES = 2
 
 /** Vecinos (#73): media bbox en grados alrededor del foco. */

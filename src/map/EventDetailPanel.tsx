@@ -1,5 +1,9 @@
 import { useEarthquakeDetail } from '../api/useEarthquakeDetail.ts'
+import { useShakeMapContours } from '../api/useShakeMapContours.ts'
 import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
+
+import { ShakeMapContourStatus } from './ShakeMapContourStatus.tsx'
+import { deriveShakeMapContourUiState } from './shakeMapContourStatus.ts'
 
 import './EventDetailPanel.css'
 
@@ -33,6 +37,9 @@ export function EventDetailPanel() {
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
   const { data, error, isLoading, isFetching } = useEarthquakeDetail(selectedId)
 
+  const contourMiUrl = data?.products.shakemap.contourMiUrl
+  const contoursQuery = useShakeMapContours(selectedId, contourMiUrl)
+
   if (selectedId === null) return null
 
   const earthquake = data?.earthquake
@@ -42,6 +49,19 @@ export function EventDetailPanel() {
   if (products?.shakemap.available) availableProducts.push('ShakeMap')
   if (products?.pager.available) availableProducts.push('PAGER')
   if (products?.dyfi.available) availableProducts.push('DYFI')
+
+  const contourState = deriveShakeMapContourUiState(
+    products?.shakemap,
+    products?.shakemap.contourMiUrl
+      ? {
+          isPending: contoursQuery.isPending,
+          isFetching: contoursQuery.isFetching,
+          isError: contoursQuery.isError,
+          error: contoursQuery.error,
+          data: contoursQuery.data,
+        }
+      : null,
+  )
 
   return (
     <section
@@ -110,9 +130,21 @@ export function EventDetailPanel() {
             </p>
           )}
           <p className="event-detail-panel__products-note">
-            Disponible en USGS. La URL de contornos MMI se resuelve en el BFF
-            cuando existe; la descarga al mapa es el siguiente paso.
+            Chip = existe en USGS. Contornos MMI tienen estado propio debajo; no
+            equivalen a capa pintada en el mapa.
           </p>
+          {contourState ? (
+            <ShakeMapContourStatus
+              state={contourState}
+              onRetry={
+                contourState.kind === 'error'
+                  ? () => {
+                      void contoursQuery.refetch()
+                    }
+                  : undefined
+              }
+            />
+          ) : null}
         </div>
       ) : null}
 
