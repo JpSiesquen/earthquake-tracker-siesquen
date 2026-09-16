@@ -2,6 +2,7 @@ export type MapLayerVisibility = {
   earthquakes: boolean
   plates: boolean
   heatmap: boolean
+  shakemap: boolean
 }
 
 type LayerControlProps = {
@@ -27,6 +28,11 @@ const LAYER_OPTIONS = [
     id: 'heatmap',
     label: 'Densidad sísmica',
     description: 'Concentración por magnitud',
+  },
+  {
+    id: 'shakemap',
+    label: 'Contornos MMI',
+    description: 'ShakeMap del evento',
   },
 ] as const
 

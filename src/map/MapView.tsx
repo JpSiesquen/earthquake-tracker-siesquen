@@ -28,7 +28,19 @@ import {
 import { MapPresets } from './MapPresets.tsx'
 import { GLOBAL_PRESET, type MapCameraPreset } from './mapPresets.ts'
 import { Open3DCta } from './Open3DCta.tsx'
+import {
+  contoursToFeatureCollection,
+  EMPTY_SHAKEMAP_FEATURE_COLLECTION,
+  MMI_FILL_COLOR,
+  MMI_LEGEND_ITEMS,
+  MMI_LINE_COLOR,
+  SHAKEMAP_CONTOURS_FILL_LAYER_ID,
+  SHAKEMAP_CONTOURS_LINE_LAYER_ID,
+  SHAKEMAP_CONTOURS_SOURCE_ID,
+} from './shakemapContours.ts'
 import { useEventDeepLink } from './useEventDeepLink.ts'
+import { useEarthquakeDetail } from '../api/useEarthquakeDetail.ts'
+import { useShakeMapContours } from '../api/useShakeMapContours.ts'
 import './MapView.css'
 
 maplibregl.setWorkerUrl(maplibreWorkerUrl)
@@ -47,6 +59,7 @@ const DEFAULT_LAYER_VISIBILITY: MapLayerVisibility = {
   earthquakes: true,
   plates: true,
   heatmap: false,
+  shakemap: true,
 }
 function numericProperty(value: unknown): number | null {
   return typeof value === 'number' && Number.isFinite(value) ? value : null
@@ -141,6 +154,11 @@ export function MapView({
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
   const select = useEarthquakeSelection((state) => state.select)
   const clear = useEarthquakeSelection((state) => state.clear)
+  const { data: detail } = useEarthquakeDetail(selectedId)
+  const contoursQuery = useShakeMapContours(
+    selectedId,
+    detail?.products.shakemap.contourMiUrl,
+  )
   const visibleEarthquakes = useMemo(
     () => filterEarthquakes(earthquakes, minMagnitude, maxDepthKm),
     [earthquakes, maxDepthKm, minMagnitude],
@@ -163,6 +181,8 @@ export function MapView({
       [EARTHQUAKES_LAYER_ID, layerVisibility.earthquakes],
       [TECTONIC_PLATES_LAYER_ID, layerVisibility.plates],
       [EARTHQUAKES_HEATMAP_LAYER_ID, layerVisibility.heatmap],
+      [SHAKEMAP_CONTOURS_FILL_LAYER_ID, layerVisibility.shakemap],
+      [SHAKEMAP_CONTOURS_LINE_LAYER_ID, layerVisibility.shakemap],
     ]
 
     for (const [layerId, visible] of mapLayers) {
@@ -184,6 +204,18 @@ export function MapView({
       source.setData(earthquakesGeoJSONRef.current)
     }
   }, [visibleEarthquakes])
+
+  useEffect(() => {
+    const source = mapRef.current?.getSource(SHAKEMAP_CONTOURS_SOURCE_ID)
+    if (!(source instanceof maplibregl.GeoJSONSource)) return
+
+    if (selectedId === null || !contoursQuery.data) {
+      source.setData(EMPTY_SHAKEMAP_FEATURE_COLLECTION)
+      return
+    }
+
+    source.setData(contoursToFeatureCollection(contoursQuery.data.features))
+  }, [contoursQuery.data, selectedId])
 
   useEffect(() => {
     // No limpiar mientras el catalogo aun no cargo (rompe deep link ?event=).
@@ -288,6 +320,56 @@ export function MapView({
             1.35,
             11,
             2,
+          ],
+        },
+      })
+
+      // Contornos MMI: placas < contornos < heatmap/círculos (#102).
+      map.addSource(SHAKEMAP_CONTOURS_SOURCE_ID, {
+        type: 'geojson',
+        data: EMPTY_SHAKEMAP_FEATURE_COLLECTION,
+      })
+
+      map.addLayer({
+        id: SHAKEMAP_CONTOURS_FILL_LAYER_ID,
+        type: 'fill',
+        source: SHAKEMAP_CONTOURS_SOURCE_ID,
+        filter: [
+          'any',
+          ['==', ['geometry-type'], 'Polygon'],
+          ['==', ['geometry-type'], 'MultiPolygon'],
+        ],
+        layout: {
+          visibility: layerVisibilityRef.current.shakemap ? 'visible' : 'none',
+        },
+        paint: {
+          'fill-color': MMI_FILL_COLOR,
+          'fill-opacity': 1,
+        },
+      })
+
+      map.addLayer({
+        id: SHAKEMAP_CONTOURS_LINE_LAYER_ID,
+        type: 'line',
+        source: SHAKEMAP_CONTOURS_SOURCE_ID,
+        layout: {
+          visibility: layerVisibilityRef.current.shakemap ? 'visible' : 'none',
+          'line-cap': 'round',
+          'line-join': 'round',
+        },
+        paint: {
+          'line-color': MMI_LINE_COLOR,
+          'line-opacity': 0.88,
+          'line-width': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            2,
+            1.1,
+            6,
+            1.8,
+            10,
+            2.6,
           ],
         },
       })
@@ -526,6 +608,25 @@ export function MapView({
               ))}
             </ul>
           </aside>
+          {contoursQuery.data &&
+          contoursQuery.data.features.length > 0 &&
+          layerVisibility.shakemap ? (
+            <aside className="mmi-legend" aria-label="Leyenda MMI ShakeMap">
+              <p className="mmi-legend__title">MMI</p>
+              <ul className="mmi-legend__list">
+                {MMI_LEGEND_ITEMS.map((item) => (
+                  <li key={item.label}>
+                    <span
+                      className="mmi-legend__swatch"
+                      style={{ backgroundColor: item.color }}
+                      aria-hidden="true"
+                    />
+                    {item.label}
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          ) : null}
         </div>
       </div>
       <aside className="map-shell__panel" aria-label="Panel de control">
