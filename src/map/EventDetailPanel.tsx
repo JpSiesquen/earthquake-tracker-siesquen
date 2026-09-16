@@ -39,9 +39,9 @@ export function EventDetailPanel() {
   const usgsUrl = data?.usgsUrl
   const products = data?.products
   const availableProducts: string[] = []
-  if (products?.shakemap) availableProducts.push('ShakeMap')
-  if (products?.pager) availableProducts.push('PAGER')
-  if (products?.dyfi) availableProducts.push('DYFI')
+  if (products?.shakemap.available) availableProducts.push('ShakeMap')
+  if (products?.pager.available) availableProducts.push('PAGER')
+  if (products?.dyfi.available) availableProducts.push('DYFI')
 
   return (
     <section
@@ -110,7 +110,8 @@ export function EventDetailPanel() {
             </p>
           )}
           <p className="event-detail-panel__products-note">
-            Disponible en USGS; contornos aun no se descargan aqui.
+            Disponible en USGS. La URL de contornos MMI se resuelve en el BFF
+            cuando existe; la descarga al mapa es el siguiente paso.
           </p>
         </div>
       ) : null}

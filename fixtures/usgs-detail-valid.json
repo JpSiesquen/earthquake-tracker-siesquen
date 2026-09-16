@@ -11,9 +11,40 @@
     "time": 1743142852715,
     "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000pn9s",
     "products": {
-      "shakemap": [{ "type": "shakemap", "status": "UPDATE" }],
-      "losspager": [{ "type": "losspager", "status": "UPDATE" }],
-      "dyfi": [{ "type": "dyfi", "status": "UPDATE" }]
+      "shakemap": [
+        {
+          "type": "shakemap",
+          "status": "UPDATE",
+          "preferredWeight": 100,
+          "contents": {
+            "download/cont_mi.json": {
+              "contentType": "application/json",
+              "url": "https://earthquake.usgs.gov/product/shakemap/us7000pn9s/us/1/download/cont_mi.json"
+            }
+          }
+        }
+      ],
+      "losspager": [
+        {
+          "type": "losspager",
+          "status": "UPDATE",
+          "preferredWeight": 100,
+          "properties": {
+            "alertlevel": "red"
+          }
+        }
+      ],
+      "dyfi": [
+        {
+          "type": "dyfi",
+          "status": "UPDATE",
+          "preferredWeight": 100,
+          "properties": {
+            "numResp": "42",
+            "maxmmi": "6.1"
+          }
+        }
+      ]
     }
   }
 }

@@ -43,10 +43,10 @@ DEM en producción: N/A (ADR).
 | 3 | Mapa 2D producto (Capa 1, corte natural) | Hecha |
 | 4 | Detalle, FDSN y spike DEM | Hecha |
 | 5 | Escena 3D local (Capa 2) | Hecha |
-| 6 | Productos USGS (Capa 3) | Pendiente |
+| 6 | Productos USGS (Capa 3) | En curso |
 | 7 | Cierre y README portfolio | Pendiente |
 
-**Siguiente:** primera issue abierta de Fase 6 (productos USGS en mapa).
+**Siguiente:** `#100`, UI vacio vs cargando contornos ShakeMap.
 
 ## Stack
 
