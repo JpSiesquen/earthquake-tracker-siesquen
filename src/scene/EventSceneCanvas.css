@@ -1,0 +1,33 @@
+.event-scene-canvas {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 24rem;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.event-scene-canvas__renderer {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  background: var(--color-surface);
+}
+
+.event-scene-canvas__fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 24rem;
+  padding: var(--space-5);
+  color: var(--color-danger);
+  text-align: center;
+}
+
+@media (max-width: 52rem) {
+  .event-scene-canvas,
+  .event-scene-canvas__fallback {
+    min-height: 20rem;
+  }
+}

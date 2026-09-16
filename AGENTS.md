@@ -29,7 +29,7 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 ## Estado
 
 Fase 0–4 cerradas. Fase 5 en curso: Capa 2 tiene ruta estable, layout dedicado,
-guardrails y stack Three/R3F/Drei instalado; el canvas aun no se monta.
+guardrails y canvas R3F vacio con fondo de laboratorio y carga diferida.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -41,7 +41,7 @@ guardrails y stack Three/R3F/Drei instalado; el canvas aun no se monta.
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#81`, canvas vacio con fondo de laboratorio.
+**Siguiente:** `#82`, camara y OrbitControls con limites.
 
 ## Stack
 
