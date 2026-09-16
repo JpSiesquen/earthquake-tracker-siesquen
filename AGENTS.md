@@ -35,6 +35,7 @@ La proyeccion geografica local usa km: este en +X y norte en -Z.
 Profundidad positiva usa -Y con exageracion vertical 1.5x; null se excluye.
 El suelo honesto es un plano de 500 km centrado en el origen local.
 La malla DEM (#88) se cerro N/A conforme al ADR; produccion no depende de DEM.
+El epicentro se identifica con una diana plana azul en el origen Y=0.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -46,7 +47,7 @@ La malla DEM (#88) se cerro N/A conforme al ADR; produccion no depende de DEM.
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#89`, marcador de epicentro en Y=0.
+**Siguiente:** `#90`, marcador de hipocentro en profundidad.
 
 ## Stack
 
