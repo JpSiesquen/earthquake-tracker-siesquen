@@ -38,6 +38,9 @@ La malla DEM (#88) se cerro N/A conforme al ADR; produccion no depende de DEM.
 El epicentro se identifica con una diana plana azul en el origen Y=0.
 El hipocentro usa el detail real y un octaedro calido en Y negativo; null se omite.
 Un segmento vertical discreto conecta epicentro e hipocentro sin animacion.
+Los vecinos FDSN aparecen como esferas neutras alrededor del foco, con radio
+acotado por magnitud (M2→3 km, M7+→9 km); el foco se excluye y el cap de
+render es 50 (alineado a `NEIGHBOR_LIMIT`). Color por depth/time: #93.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -49,7 +52,7 @@ Un segmento vertical discreto conecta epicentro e hipocentro sin animacion.
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#92`, vecinos en escena con escala por magnitud.
+**Siguiente:** `#93`, color de vecinos por profundidad o tiempo.
 
 ## Stack
 

@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import { useEarthquakeDetail } from '../api/useEarthquakeDetail.ts'
+import { useEarthquakeNeighbors } from '../api/useEarthquakeNeighbors.ts'
 import './Event3DPage.css'
 
 const EVENT_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/
@@ -65,6 +66,7 @@ export function Event3DPage() {
   const eventId = readEventId(id)
   const hasInvalidId = id !== undefined && id.trim().length > 0
   const detailQuery = useEarthquakeDetail(eventId)
+  const neighborsQuery = useEarthquakeNeighbors(detailQuery.data)
 
   useDocumentTitle(
     eventId
@@ -119,6 +121,11 @@ export function Event3DPage() {
           >
             <EventSceneCanvas
               depthKm={detailQuery.data?.earthquake.depthKm ?? null}
+              focusId={eventId}
+              focusCoordinates={
+                detailQuery.data?.earthquake.coordinates ?? null
+              }
+              neighbors={neighborsQuery.data?.earthquakes ?? []}
             />
           </Suspense>
         </section>
