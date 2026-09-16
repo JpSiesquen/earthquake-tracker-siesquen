@@ -34,6 +34,7 @@ Los helpers de ejes y grid se renderizan exclusivamente en desarrollo.
 La proyeccion geografica local usa km: este en +X y norte en -Z.
 Profundidad positiva usa -Y con exageracion vertical 1.5x; null se excluye.
 El suelo honesto es un plano de 500 km centrado en el origen local.
+La malla DEM (#88) se cerro N/A conforme al ADR; produccion no depende de DEM.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -45,7 +46,7 @@ El suelo honesto es un plano de 500 km centrado en el origen local.
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#88`, malla DEM solo si el ADR la exige (actualmente diferida).
+**Siguiente:** `#89`, marcador de epicentro en Y=0.
 
 ## Stack
 

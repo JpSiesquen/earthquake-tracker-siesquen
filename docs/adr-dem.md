@@ -4,6 +4,8 @@
 - **Fecha:** 2026-09-15
 - **Issue:** #77
 - **Contexto previo:** [`docs/dem-spike.md`](./dem-spike.md) (#76)
+- **Resolucion de implementacion:** #88 cerrada como N/A; #87 materializa el
+  plano honesto sin dependencia DEM.
 
 ## Contexto
 
@@ -38,7 +40,7 @@ terreno fotorealista”.
 | Area | Efecto |
 | --- | --- |
 | Fase 5 | Priorizar camara, epicentro/hipocentro, vecinos, overlay; no bloquear por DEM |
-| Issue de mesh DEM | El item de backlog tipo “mesh DEM” (#88 o equivalente) queda **N/A / diferido**; no bloquea el cierre de Capa 2 |
+| Issue de mesh DEM | #88 queda **N/A / diferida**; no bloquea el cierre de Capa 2 |
 | CTA / ruta 3D (#78) | Puede navegar a stub sin esperar tiles de elevacion |
 | Riesgo demo | Baja: cero dependencia de CDN de elevacion en el happy path |
 
