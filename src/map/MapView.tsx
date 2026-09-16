@@ -654,11 +654,11 @@ export function MapView({
           onWindowChange={onWindowChange}
           onReset={resetFilters}
         />
+        <EventDetailPanel />
         <EarthquakeList
           earthquakes={visibleEarthquakes}
           onSelectEarthquake={handleSelectFromList}
         />
-        <EventDetailPanel />
         <Open3DCta />
       </aside>
     </div>
