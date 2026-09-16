@@ -115,3 +115,58 @@
   color: var(--color-ink-muted);
   font-size: 0.75rem;
 }
+
+.event-detail-panel__pager {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.event-detail-panel__pager-title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.event-detail-panel__pager-note {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: 0.7rem;
+  line-height: 1.35;
+}
+
+.event-detail-panel__pager--green {
+  border-color: color-mix(in srgb, #3f6b4a 35%, var(--color-border));
+  background: color-mix(in srgb, #3f6b4a 8%, var(--color-surface));
+}
+
+.event-detail-panel__pager--yellow {
+  border-color: color-mix(in srgb, #a68b2c 40%, var(--color-border));
+  background: color-mix(in srgb, #a68b2c 10%, var(--color-surface));
+}
+
+.event-detail-panel__pager--orange {
+  border-color: color-mix(
+    in srgb,
+    var(--color-accent-warm) 45%,
+    var(--color-border)
+  );
+  background: color-mix(
+    in srgb,
+    var(--color-accent-warm) 10%,
+    var(--color-surface)
+  );
+}
+
+.event-detail-panel__pager--red {
+  border-color: color-mix(
+    in srgb,
+    var(--color-danger) 40%,
+    var(--color-border)
+  );
+  background: color-mix(in srgb, var(--color-danger) 8%, var(--color-surface));
+}
