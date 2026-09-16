@@ -4,7 +4,9 @@ import { Link, useParams } from 'react-router-dom'
 import { useEarthquakeDetail } from '../api/useEarthquakeDetail.ts'
 import { useEarthquakeNeighbors } from '../api/useEarthquakeNeighbors.ts'
 import { SCENE_DEPTH_LEGEND_ITEMS } from '../geo/depthBands.ts'
+import { SceneQueryStatus } from './SceneQueryStatus.tsx'
 import './Event3DPage.css'
+import './SceneQueryStatus.css'
 
 const EVENT_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/
 const EventSceneCanvas = lazy(() => import('./EventSceneCanvas.tsx'))
@@ -80,6 +82,17 @@ export function Event3DPage() {
   }
 
   const backTo = `/?event=${encodeURIComponent(eventId)}`
+  const hasDetail = detailQuery.data !== undefined
+  const detailFailed = detailQuery.isError && !hasDetail
+  const statusLabel = detailFailed
+    ? 'Error de detalle'
+    : detailQuery.isLoading && !hasDetail
+      ? 'Cargando detalle'
+      : neighborsQuery.isError
+        ? 'Escena parcial'
+        : neighborsQuery.isFetching
+          ? 'Cargando vecinos'
+          : 'Escena local'
 
   return (
     <main className="event-3d-page">
@@ -104,35 +117,65 @@ export function Event3DPage() {
         <section
           className="event-3d-page__viewport"
           aria-labelledby="scene-placeholder-title"
+          aria-busy={
+            (detailQuery.isLoading && !hasDetail) || neighborsQuery.isFetching
+          }
         >
           <div className="event-3d-page__viewport-header">
             <div>
               <p className="event-3d-page__eyebrow">Volumen de referencia</p>
               <h2 id="scene-placeholder-title">Área de escena 3D</h2>
             </div>
-            <span className="event-3d-page__status">Escena local</span>
+            <span className="event-3d-page__status">{statusLabel}</span>
           </div>
 
-          <Suspense
-            fallback={
-              <div className="event-3d-page__canvas-loading" role="status">
-                Inicializando viewport 3D…
-              </div>
+          <SceneQueryStatus
+            detailLoading={detailQuery.isLoading}
+            detailError={
+              detailQuery.error instanceof Error ? detailQuery.error : null
             }
-          >
-            <EventSceneCanvas
-              eventId={eventId}
-              magnitude={detailQuery.data?.earthquake.magnitude}
-              place={detailQuery.data?.earthquake.place}
-              backTo={backTo}
-              depthKm={detailQuery.data?.earthquake.depthKm ?? null}
-              focusId={eventId}
-              focusCoordinates={
-                detailQuery.data?.earthquake.coordinates ?? null
+            neighborsLoading={neighborsQuery.isFetching}
+            neighborsError={
+              neighborsQuery.error instanceof Error
+                ? neighborsQuery.error
+                : null
+            }
+            hasDetail={hasDetail}
+            backTo={backTo}
+            onRetryDetail={() => {
+              void detailQuery.refetch()
+            }}
+            onRetryNeighbors={() => {
+              void neighborsQuery.refetch()
+            }}
+          />
+
+          {detailFailed ? (
+            <div className="event-3d-page__canvas-loading" role="status">
+              Sin detalle no se puede situar el foco en el volumen.
+            </div>
+          ) : (
+            <Suspense
+              fallback={
+                <div className="event-3d-page__canvas-loading" role="status">
+                  Inicializando viewport 3D…
+                </div>
               }
-              neighbors={neighborsQuery.data?.earthquakes ?? []}
-            />
-          </Suspense>
+            >
+              <EventSceneCanvas
+                eventId={eventId}
+                magnitude={detailQuery.data?.earthquake.magnitude}
+                place={detailQuery.data?.earthquake.place}
+                backTo={backTo}
+                depthKm={detailQuery.data?.earthquake.depthKm ?? null}
+                focusId={eventId}
+                focusCoordinates={
+                  detailQuery.data?.earthquake.coordinates ?? null
+                }
+                neighbors={neighborsQuery.data?.earthquakes ?? []}
+              />
+            </Suspense>
+          )}
         </section>
 
         <aside

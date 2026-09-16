@@ -45,6 +45,8 @@ profundidad que el mapa 2D (<70 / 70–300 / ≥300 km); no se codifica el tiemp
 
 Un overlay HTML sobre el viewport muestra mag/lugar del foco y un CTA para
 volver al mapa (`/?event=:id`) sin bloquear OrbitControls (pointer-events).
+Loading/error de detail y neighbors son visibles: detail fatal ofrece
+reintentar o volver; fallo de vecinos deja escena parcial con el foco.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -56,7 +58,7 @@ volver al mapa (`/?event=:id`) sin bloquear OrbitControls (pointer-events).
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#95`, loading/error de detail y neighbors.
+**Siguiente:** `#96`, deep link 3D compartible.
 
 ## Stack
 
