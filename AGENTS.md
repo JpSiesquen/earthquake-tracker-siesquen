@@ -43,6 +43,9 @@ por magnitud (M2→3 km, M7+→9 km); el foco se excluye y el cap de render es 5
 (alineado a `NEIGHBOR_LIMIT`). El color de vecinos usa las mismas bandas de
 profundidad que el mapa 2D (<70 / 70–300 / ≥300 km); no se codifica el tiempo.
 
+Un overlay HTML sobre el viewport muestra mag/lugar del foco y un CTA para
+volver al mapa (`/?event=:id`) sin bloquear OrbitControls (pointer-events).
+
 | Fase | Foco | Estado |
 | --- | --- | --- |
 | 0 | Sandbox MapLibre | Hecha |
@@ -53,7 +56,7 @@ profundidad que el mapa 2D (<70 / 70–300 / ≥300 km); no se codifica el tiemp
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#94`, overlay HTML con datos y volver al mapa.
+**Siguiente:** `#95`, loading/error de detail y neighbors.
 
 ## Stack
 
