@@ -32,6 +32,7 @@ Fase 0–4 cerradas. Fase 5 en curso: Capa 2 tiene ruta estable, layout dedicado
 canvas R3F diferido, camara orbital limitada e iluminacion base sin sombras.
 Los helpers de ejes y grid se renderizan exclusivamente en desarrollo.
 La proyeccion geografica local usa km: este en +X y norte en -Z.
+Profundidad positiva usa -Y con exageracion vertical 1.5x; null se excluye.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -43,7 +44,7 @@ La proyeccion geografica local usa km: este en +X y norte en -Z.
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#86`, util de profundidad en km a coordenada Y.
+**Siguiente:** `#87`, mesh de suelo plano (plan B).
 
 ## Stack
 

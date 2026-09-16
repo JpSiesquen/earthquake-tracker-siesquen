@@ -24,6 +24,15 @@ terreno fotorealista”.
 - DEM free (p. ej. Terrarium) queda **fuera del camino critico**; solo si sobra
   tiempo despues de la escena minima.
 
+### Convencion vertical
+
+- Las coordenadas locales se expresan en kilometros en los tres ejes.
+- Una profundidad sismica positiva se representa sobre **Y negativo**.
+- La escena usa una exageracion vertical moderada de **1.5x** para hacer legible
+  la profundidad sin presentarla como escala 1:1.
+- Una profundidad desconocida no se dibuja: no se sustituye por Y=0, porque eso
+  afirmaria incorrectamente que el evento esta en la superficie.
+
 ## Consecuencias
 
 | Area | Efecto |
