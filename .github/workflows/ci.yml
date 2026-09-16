@@ -38,5 +38,8 @@ jobs:
       - name: Coordenadas locales
         run: npm run test:local-coordinates
 
+      - name: Estado ShakeMap UI
+        run: npm run test:shakemap-status
+
       - name: Compilar
         run: npm run build

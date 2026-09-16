@@ -12,6 +12,7 @@
     "format:check": "prettier --check .",
     "hooks": "husky",
     "test:local-coordinates": "node --experimental-strip-types scripts/check-local-coordinates.ts",
+    "test:shakemap-status": "node --experimental-strip-types scripts/check-shakemap-status.ts",
     "test:usgs-schema": "node --experimental-strip-types scripts/check-usgs-schema.ts"
   },
   "dependencies": {
