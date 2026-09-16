@@ -133,6 +133,11 @@ export function Event3DPage() {
         </p>
       </div>
 
+      <p className="event-3d-page__narrow-hint" role="note">
+        En pantallas pequeñas esta escena se lee mejor en desktop; el mapa 2D
+        sigue siendo la puerta de entrada.
+      </p>
+
       <div className="event-3d-page__workspace">
         <section
           className="event-3d-page__viewport"

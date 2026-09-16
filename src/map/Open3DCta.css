@@ -23,6 +23,10 @@
   font-size: 0.8rem;
 }
 
+.open-3d-cta__narrow-hint {
+  display: none;
+}
+
 .open-3d-cta button {
   justify-self: start;
   min-height: 2.2rem;
@@ -57,4 +61,18 @@
   background: var(--color-border);
   color: var(--color-ink-soft);
   cursor: not-allowed;
+}
+
+@media (max-width: 56rem) {
+  .open-3d-cta__narrow-hint {
+    display: block;
+    color: var(--color-ink-muted);
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
+
+  .open-3d-cta__action,
+  .open-3d-cta button {
+    min-height: 2.75rem;
+  }
 }

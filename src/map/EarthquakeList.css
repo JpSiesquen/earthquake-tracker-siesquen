@@ -115,3 +115,14 @@
   color: var(--color-ink-muted);
   font-size: 0.72rem;
 }
+
+@media (max-width: 56rem) {
+  .earthquake-list {
+    min-height: 12rem;
+  }
+
+  .earthquake-list__item {
+    min-height: 2.75rem;
+    padding: 0.7rem 0.75rem;
+  }
+}
