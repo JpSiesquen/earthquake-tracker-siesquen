@@ -84,6 +84,7 @@ assert(
   ready?.kind === 'ready' && ready.deferred === true,
   'dato diferido → ready',
 )
+assert(ready?.featureCount === 0, 'ready expone featureCount')
 
 if (failed > 0) {
   console.error(`\n${failed} shakemap status check(s) failed`)

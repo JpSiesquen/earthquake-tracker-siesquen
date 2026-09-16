@@ -1,13 +1,12 @@
 /**
  * Contornos MMI: `GET /api/earthquakes/:id/shakemap`.
  *
- * #100: stub de contrato — si el detail tiene `contourMiUrl`, responde 200
- * diferido sin pegarle a USGS. #101 descarga y valida el GeoJSON.
+ * Descarga `cont_mi.json` solo en servidor (#101), valida con Zod y
+ * devuelve FeatureCollection propio (`properties.mmi`).
  */
-import { getEarthquakeDetail } from '../../_detail.js'
+import { getShakeMapContours } from '../../_shakemap.js'
 import { BffError, jsonError } from '../../_errors.js'
 import { isUsgsEventId } from '../../_usgs.js'
-import type { ShakeMapContoursResponse } from '../../../shared/shakemap.js'
 
 const CACHE_CONTROL = 'public, s-maxage=120, stale-while-revalidate=300'
 
@@ -29,30 +28,10 @@ export async function GET(request: Request): Promise<Response> {
       throw new BffError(400, 'bad_request', 'Invalid earthquake id')
     }
 
-    const detail = await getEarthquakeDetail(id)
-    const { available, contourMiUrl } = detail.products.shakemap
-
-    if (!available || contourMiUrl === null) {
-      throw new BffError(
-        404,
-        'not_found',
-        available
-          ? 'ShakeMap sin URL de contornos MMI'
-          : 'Sin ShakeMap en este evento',
-      )
-    }
-
-    const body: ShakeMapContoursResponse = {
-      fetchedAt: Date.now(),
-      contourMiUrl,
-      deferred: true,
-      type: 'FeatureCollection',
-      features: [],
-    }
-
+    const body = await getShakeMapContours(id)
     return Response.json(body, {
       headers: {
-        'cache-control': detail.stale ? 'no-store' : CACHE_CONTROL,
+        'cache-control': CACHE_CONTROL,
       },
     })
   } catch (error) {

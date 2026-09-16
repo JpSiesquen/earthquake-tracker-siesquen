@@ -46,18 +46,17 @@ DEM en producción: N/A (ADR).
 | 6 | Productos USGS (Capa 3) | En curso |
 | 7 | Cierre y README portfolio | Pendiente |
 
-**Siguiente:** `#101`, contornos MMI vía BFF (descarga + Zod).
+**Siguiente:** `#102`, pintar contornos MMI en MapLibre.
 
-Fase 6 parcial: DTO de products con URLs (#99); ficha distingue sin
-ShakeMap / sin URL / cargando / error / listo diferido (#100). Stub
-`GET /api/earthquakes/:id/shakemap` sin pegarle a USGS aún.
+Fase 6 parcial: DTO products (#99); estados UI ShakeMap (#100); BFF descarga
+y valida `cont_mi.json` con Zod + cache propia (#101).
 
 ## Stack
 
 - Front: Vite, React 19, TypeScript, MapLibre 6 (`MapView`, ESM, WebGL2,
   worker Vite explicito); Three 0.186, R3F 9 y Drei 10 en Capa 2
-- Datos (hoy): BFF serverless (`/api/earthquakes`, `/:id`, `/search`), Zod,
-  TanStack Query
+- Datos (hoy): BFF serverless (`/api/earthquakes`, `/:id`, `/:id/shakemap`,
+  `/search`), Zod, TanStack Query
 - Estado UI: Zustand (`selectedId` + deep link `?event=`; catalogo en TanStack Query);
   React Router (`/`, `/event/:id/3d` con shell propia y retorno al deep link 2D)
 - Calidad: oxlint, Prettier, Husky, GitHub Actions (`verificar`)

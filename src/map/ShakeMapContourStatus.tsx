@@ -85,8 +85,10 @@ export function ShakeMapContourStatus({
       <p className="shakemap-contour-status__title">Contornos MMI listos</p>
       <p className="shakemap-contour-status__message">
         {state.deferred
-          ? 'URL resuelta. La descarga validada y el pintado en mapa llegan a continuación.'
-          : 'Dato recibido. El pintado en MapLibre es el siguiente paso.'}
+          ? 'URL resuelta. La descarga validada llega a continuación.'
+          : state.featureCount === 0
+            ? 'Respuesta vacía: ShakeMap sin geometría MMI usable.'
+            : `${state.featureCount ?? 0} contorno(s) recibidos. El pintado en MapLibre es el siguiente paso.`}
       </p>
     </div>
   )

@@ -1,0 +1,15 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "label": "sin valor MMI"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.0, 46.2]
+      }
+    }
+  ]
+}
