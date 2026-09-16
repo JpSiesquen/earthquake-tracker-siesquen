@@ -31,6 +31,7 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 Fase 0–4 cerradas. Fase 5 en curso: Capa 2 tiene ruta estable, layout dedicado,
 canvas R3F diferido, camara orbital limitada e iluminacion base sin sombras.
 Los helpers de ejes y grid se renderizan exclusivamente en desarrollo.
+La proyeccion geografica local usa km: este en +X y norte en -Z.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -42,7 +43,7 @@ Los helpers de ejes y grid se renderizan exclusivamente en desarrollo.
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#85`, util de lat/lon a coordenadas XZ locales.
+**Siguiente:** `#86`, util de profundidad en km a coordenada Y.
 
 ## Stack
 
@@ -64,6 +65,7 @@ npm run dev
 npm run build
 npm run lint
 npm run format:check
+npm run test:local-coordinates
 npm run test:usgs-schema
 ```
 
