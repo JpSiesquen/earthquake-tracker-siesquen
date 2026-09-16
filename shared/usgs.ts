@@ -69,3 +69,32 @@ export const usgsDetailFeatureSchema = z.object({
 })
 
 export type UsgsDetailFeature = z.infer<typeof usgsDetailFeatureSchema>
+
+/**
+ * FeatureCollection FDSN (`format=geojson`).
+ * Reutiliza el Feature summary; metadata.count es opcional (si viene, debe
+ * coincidir con features.length).
+ */
+export const fdsnFeatureCollectionSchema = z
+  .object({
+    type: z.literal('FeatureCollection'),
+    metadata: z
+      .object({
+        count: z.number().int().nonnegative().optional(),
+      })
+      .passthrough()
+      .optional(),
+    features: z.array(usgsFeatureSchema),
+  })
+  .superRefine((data, ctx) => {
+    const count = data.metadata?.count
+    if (count !== undefined && count !== data.features.length) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `metadata.count (${count}) !== features.length (${data.features.length})`,
+        path: ['metadata', 'count'],
+      })
+    }
+  })
+
+export type FdsnFeatureCollection = z.infer<typeof fdsnFeatureCollectionSchema>

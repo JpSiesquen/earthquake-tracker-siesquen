@@ -1,7 +1,5 @@
-import { z } from 'zod'
-
 import type { EarthquakeSearchResponse } from '../shared/search.js'
-import { usgsFeatureSchema } from '../shared/usgs.js'
+import { fdsnFeatureCollectionSchema } from '../shared/usgs.js'
 
 import { BffError } from './_errors.js'
 import { toEarthquakeSummary } from './_normalize.js'
@@ -20,12 +18,6 @@ export const FDSN_LIMITS = {
   defaultLimit: 100,
   maxLimit: 200,
 } as const
-
-/** Coleccion FDSN provisional (#70). #71 sustituye por schema dedicado. */
-const fdsnFeatureCollectionProvisionalSchema = z.object({
-  type: z.literal('FeatureCollection'),
-  features: z.array(usgsFeatureSchema),
-})
 
 export type FdsnSearchParams = {
   minlatitude: number
@@ -214,7 +206,7 @@ export async function fetchFdsnSearch(
   }
 
   // Validacion provisional (#70); #71 endurece schema FDSN dedicado.
-  const parsed = fdsnFeatureCollectionProvisionalSchema.safeParse(json)
+  const parsed = fdsnFeatureCollectionSchema.safeParse(json)
   if (!parsed.success) {
     throw new BffError(
       502,

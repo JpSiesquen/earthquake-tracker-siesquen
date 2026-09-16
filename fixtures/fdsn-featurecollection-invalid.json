@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "count": 99
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "us1000bad",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.5, -33.4, 35]
+      },
+      "properties": {
+        "mag": 4.2,
+        "place": "Count mismatch",
+        "time": 1700000000000
+      }
+    }
+  ]
+}

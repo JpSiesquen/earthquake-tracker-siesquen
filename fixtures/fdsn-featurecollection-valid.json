@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "generated": 1700000000000,
+    "title": "FDSN fixture",
+    "count": 1
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "us1000fdsn",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-71.5, -33.4, 35]
+      },
+      "properties": {
+        "mag": 4.2,
+        "place": "Near Santiago, Chile",
+        "time": 1700000000000
+      }
+    }
+  ]
+}
