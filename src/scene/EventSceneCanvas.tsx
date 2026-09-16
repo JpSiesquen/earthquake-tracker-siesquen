@@ -2,6 +2,7 @@ import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 
 import { SCENE_CAMERA, SCENE_CONTROLS, SCENE_ORIGIN } from './sceneCamera.ts'
+import { SceneLighting } from './SceneLighting.tsx'
 import './EventSceneCanvas.css'
 
 /**
@@ -23,6 +24,7 @@ export default function EventSceneCanvas() {
           </p>
         }
       >
+        <SceneLighting />
         <OrbitControls
           makeDefault
           target={SCENE_ORIGIN}
