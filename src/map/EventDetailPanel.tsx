@@ -29,6 +29,37 @@ function formatTimeUtc(timeMs: number): string {
   return `${timeFormatter.format(new Date(timeMs))} UTC`
 }
 
+type PagerAlertLevel = 'green' | 'yellow' | 'orange' | 'red'
+
+function parsePagerAlert(
+  raw: string | null | undefined,
+): PagerAlertLevel | null {
+  if (!raw) return null
+  const level = raw.trim().toLowerCase()
+  if (
+    level === 'green' ||
+    level === 'yellow' ||
+    level === 'orange' ||
+    level === 'red'
+  ) {
+    return level
+  }
+  return null
+}
+
+function formatPagerAlertLabel(level: PagerAlertLevel): string {
+  switch (level) {
+    case 'green':
+      return 'Green'
+    case 'yellow':
+      return 'Yellow'
+    case 'orange':
+      return 'Orange'
+    case 'red':
+      return 'Red'
+  }
+}
+
 /**
  * Ficha de evento: mag, profundidad, lugar, hora y link USGS.
  * Instrumento de panel; no card de marketing.
@@ -62,6 +93,7 @@ export function EventDetailPanel() {
         }
       : null,
   )
+  const pagerAlert = parsePagerAlert(products?.pager.alert)
 
   return (
     <section
@@ -133,6 +165,20 @@ export function EventDetailPanel() {
             Chip = existe en USGS. Contornos MMI tienen estado propio debajo; no
             equivalen a capa pintada en el mapa.
           </p>
+          {pagerAlert ? (
+            <div
+              className={`event-detail-panel__pager event-detail-panel__pager--${pagerAlert}`}
+              role="status"
+            >
+              <p className="event-detail-panel__pager-title">
+                PAGER {formatPagerAlertLabel(pagerAlert)}
+              </p>
+              <p className="event-detail-panel__pager-note">
+                Alerta de impacto USGS (losspager). No es un cálculo de esta
+                app.
+              </p>
+            </div>
+          ) : null}
           {contourState ? (
             <ShakeMapContourStatus
               state={contourState}
