@@ -38,15 +38,10 @@ export function EventDetailPanel() {
   const earthquake = data?.earthquake
   const usgsUrl = data?.usgsUrl
   const products = data?.products
-  const availableProducts = products
-    ? (
-        [
-          products.shakemap ? 'ShakeMap' : null,
-          products.pager ? 'PAGER' : null,
-          products.dyfi ? 'DYFI' : null,
-        ] as const
-      ).filter((label): label is string => label !== null)
-    : []
+  const availableProducts: string[] = []
+  if (products?.shakemap) availableProducts.push('ShakeMap')
+  if (products?.pager) availableProducts.push('PAGER')
+  if (products?.dyfi) availableProducts.push('DYFI')
 
   return (
     <section
