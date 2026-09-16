@@ -1,6 +1,7 @@
 import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 
+import { DepthConnector } from './DepthConnector.tsx'
 import { EpicenterMarker } from './EpicenterMarker.tsx'
 import { HypocenterMarker } from './HypocenterMarker.tsx'
 import { SCENE_CAMERA, SCENE_CONTROLS, SCENE_ORIGIN } from './sceneCamera.ts'
@@ -34,6 +35,7 @@ export default function EventSceneCanvas({ depthKm }: EventSceneCanvasProps) {
       >
         <SceneLighting />
         <ReferenceSurface />
+        <DepthConnector depthKm={depthKm} />
         <EpicenterMarker />
         <HypocenterMarker depthKm={depthKm} />
         <SceneDebugHelpers />
