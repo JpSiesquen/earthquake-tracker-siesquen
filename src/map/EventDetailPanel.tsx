@@ -105,6 +105,10 @@ export function EventDetailPanel() {
   const dyfiFelt = products?.dyfi.felt ?? null
   const dyfiCdi = products?.dyfi.cdi ?? null
   const hasDyfiMetrics = dyfiFelt !== null || dyfiCdi !== null
+  const hasProductDetails =
+    pagerAlert !== null || hasDyfiMetrics || contourState !== null
+  const showAvailabilityNote =
+    availableProducts.length > 0 && !hasProductDetails
 
   return (
     <section
@@ -127,68 +131,69 @@ export function EventDetailPanel() {
       ) : null}
 
       {earthquake ? (
-        <dl className="event-detail-panel__fields">
-          <div>
-            <dt>Magnitud</dt>
-            <dd>M {formatMagnitude(earthquake.magnitude)}</dd>
-          </div>
-          <div>
-            <dt>Profundidad</dt>
-            <dd>{formatDepth(earthquake.depthKm)}</dd>
-          </div>
-          <div>
-            <dt>Lugar</dt>
-            <dd>{formatPlace(earthquake.place)}</dd>
-          </div>
-          <div>
-            <dt>Hora</dt>
-            <dd>{formatTimeUtc(earthquake.timeMs)}</dd>
-          </div>
-          <div>
-            <dt>Id</dt>
-            <dd>
-              <code>{earthquake.id}</code>
-            </dd>
-          </div>
-        </dl>
+        <>
+          <dl className="event-detail-panel__primary">
+            <div className="event-detail-panel__magnitude">
+              <dt>Magnitud</dt>
+              <dd>M {formatMagnitude(earthquake.magnitude)}</dd>
+            </div>
+            <div>
+              <dt>Lugar</dt>
+              <dd>{formatPlace(earthquake.place)}</dd>
+            </div>
+            <div>
+              <dt>Hora</dt>
+              <dd>{formatTimeUtc(earthquake.timeMs)}</dd>
+            </div>
+          </dl>
+          <dl className="event-detail-panel__secondary">
+            <div>
+              <dt>Profundidad</dt>
+              <dd>{formatDepth(earthquake.depthKm)}</dd>
+            </div>
+            <div>
+              <dt>Id</dt>
+              <dd>
+                <code>{earthquake.id}</code>
+              </dd>
+            </div>
+          </dl>
+        </>
       ) : null}
 
       {products ? (
         <div className="event-detail-panel__products">
           <p className="event-detail-panel__products-label">Products USGS</p>
           {availableProducts.length > 0 ? (
-            <ul
-              className="event-detail-panel__chips"
+            <p
+              className="event-detail-panel__availability"
               aria-label="Products disponibles"
             >
-              {availableProducts.map((label) => (
-                <li key={label}>
-                  <span className="event-detail-panel__chip">{label}</span>
-                </li>
-              ))}
-            </ul>
+              {availableProducts.join(' · ')}
+            </p>
           ) : (
             <p className="event-detail-panel__products-empty">
               Sin productos USGS (ShakeMap, PAGER, DYFI) en este evento.
             </p>
           )}
-          {availableProducts.length > 0 ? (
+          {showAvailabilityNote ? (
             <p className="event-detail-panel__products-note">
               Disponibles en USGS; no equivalen a capa en el mapa.
             </p>
           ) : null}
           {pagerAlert ? (
-            <div
+            <p
               className={`event-detail-panel__pager event-detail-panel__pager--${pagerAlert}`}
               role="status"
             >
-              <p className="event-detail-panel__pager-title">
-                PAGER · {formatPagerAlertLabel(pagerAlert)}
-              </p>
-              <p className="event-detail-panel__pager-note">
-                Alerta de impacto USGS. No es un cálculo de esta app.
-              </p>
-            </div>
+              <span className="event-detail-panel__pager-label">PAGER</span>
+              <span className="event-detail-panel__pager-value">
+                {formatPagerAlertLabel(pagerAlert)}
+              </span>
+              <span className="event-detail-panel__pager-note">
+                Impacto USGS; no es un cálculo de esta app.
+              </span>
+            </p>
           ) : null}
           {hasDyfiMetrics ? (
             <dl className="event-detail-panel__dyfi" aria-label="DYFI">
