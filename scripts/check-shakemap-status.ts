@@ -2,6 +2,10 @@
  * Chequeo numérico del lenguaje de degradación ShakeMap (#100).
  */
 import { deriveShakeMapContourUiState } from '../src/map/shakeMapContourStatus.ts'
+import {
+  EMPTY_SHAKEMAP_FEATURE_COLLECTION,
+  resolveShakeMapSourceData,
+} from '../src/map/shakemapContours.ts'
 import type { ShakeMapProductInfo } from '../shared/detail.ts'
 import type { ShakeMapContoursResponse } from '../shared/shakemap.ts'
 
@@ -25,6 +29,7 @@ const withUrl: ShakeMapProductInfo = {
 
 const readyBody: ShakeMapContoursResponse = {
   fetchedAt: 1,
+  eventId: 'us7000test',
   contourMiUrl: withUrl.contourMiUrl!,
   deferred: true,
   type: 'FeatureCollection',
@@ -85,6 +90,66 @@ assert(
   'dato diferido → ready',
 )
 assert(ready?.featureCount === 0, 'ready expone featureCount')
+
+assert(
+  resolveShakeMapSourceData({
+    selectedId: null,
+    contoursEventId: 'us1',
+    features: readyBody.features,
+    isError: false,
+  }) === EMPTY_SHAKEMAP_FEATURE_COLLECTION ||
+    resolveShakeMapSourceData({
+      selectedId: null,
+      contoursEventId: 'us1',
+      features: readyBody.features,
+      isError: false,
+    }).features.length === 0,
+  'sin selección → source vacío',
+)
+
+assert(
+  resolveShakeMapSourceData({
+    selectedId: 'us-b',
+    contoursEventId: 'us-a',
+    features: [
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: [
+            [0, 0],
+            [1, 1],
+          ],
+        },
+        properties: { mmi: 3 },
+      },
+    ],
+    isError: false,
+  }).features.length === 0,
+  'dato de otro id → source vacío',
+)
+
+assert(
+  resolveShakeMapSourceData({
+    selectedId: 'us-a',
+    contoursEventId: 'us-a',
+    features: [
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: [
+            [0, 0],
+            [1, 1],
+          ],
+        },
+        properties: { mmi: 3 },
+      },
+    ],
+    isError: false,
+  }).features.length === 1,
+  'id coincidente → conserva features',
+)
 
 if (failed > 0) {
   console.error(`\n${failed} shakemap status check(s) failed`)

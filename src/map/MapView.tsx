@@ -29,11 +29,11 @@ import { MapPresets } from './MapPresets.tsx'
 import { GLOBAL_PRESET, type MapCameraPreset } from './mapPresets.ts'
 import { Open3DCta } from './Open3DCta.tsx'
 import {
-  contoursToFeatureCollection,
   EMPTY_SHAKEMAP_FEATURE_COLLECTION,
   MMI_FILL_COLOR,
   MMI_LEGEND_ITEMS,
   MMI_LINE_COLOR,
+  resolveShakeMapSourceData,
   SHAKEMAP_CONTOURS_FILL_LAYER_ID,
   SHAKEMAP_CONTOURS_LINE_LAYER_ID,
   SHAKEMAP_CONTOURS_SOURCE_ID,
@@ -209,13 +209,21 @@ export function MapView({
     const source = mapRef.current?.getSource(SHAKEMAP_CONTOURS_SOURCE_ID)
     if (!(source instanceof maplibregl.GeoJSONSource)) return
 
-    if (selectedId === null || !contoursQuery.data) {
-      source.setData(EMPTY_SHAKEMAP_FEATURE_COLLECTION)
-      return
-    }
-
-    source.setData(contoursToFeatureCollection(contoursQuery.data.features))
-  }, [contoursQuery.data, selectedId])
+    // Limpieza síncrona al cambiar evento / error / dato de otro id (#105).
+    source.setData(
+      resolveShakeMapSourceData({
+        selectedId,
+        contoursEventId: contoursQuery.data?.eventId,
+        features: contoursQuery.data?.features,
+        isError: contoursQuery.isError,
+      }),
+    )
+  }, [
+    contoursQuery.data?.eventId,
+    contoursQuery.data?.features,
+    contoursQuery.isError,
+    selectedId,
+  ])
 
   useEffect(() => {
     // No limpiar mientras el catalogo aun no cargo (rompe deep link ?event=).

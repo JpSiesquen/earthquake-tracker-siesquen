@@ -53,6 +53,7 @@ export async function getShakeMapContours(
 
     const body: ShakeMapContoursResponse = {
       fetchedAt: Date.now(),
+      eventId: id,
       contourMiUrl,
       deferred: false,
       type: 'FeatureCollection',
