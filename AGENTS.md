@@ -18,6 +18,7 @@ No crear `CLAUDE.md` en este repo.
 | `docs/00-maplibre-basico.md` | Modelo style/source/layer (sandbox) | Si |
 | `docs/01-maplibre-xss-ghsa.md` | Registro GHSA MapLibre (XSS attribution) | Si |
 | `docs/02-mapa-producto-capa-1.md` | Mapa 2D de producto (Capa 1) | Si |
+| `docs/dem-spike.md` | Spike DEM coste cero (Fase 4) | Si |
 | `PLAN.md` | Plan interno | No (gitignore) |
 | `Notas/` | Estudio y handoff local | No (gitignore) |
 
