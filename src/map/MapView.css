@@ -42,6 +42,12 @@
   .map-shell {
     grid-template-columns: 1fr;
     min-height: auto;
+    gap: var(--space-2);
+  }
+
+  .map-shell__map,
+  .map-stage {
+    min-height: 18rem;
   }
 
   .map-shell__panel {
@@ -49,7 +55,30 @@
   }
 
   .map-view {
-    height: 22rem;
+    height: min(52vh, 22rem);
+    min-height: 18rem;
+  }
+
+  .layer-control {
+    top: 0.5rem;
+    right: 0.5rem;
+    width: min(13rem, calc(100% - 1rem));
+    max-height: calc(100% - 1rem);
+    overflow: auto;
+  }
+
+  .layer-control__option {
+    min-height: 2.75rem;
+    padding: 0.35rem 0.25rem;
+  }
+
+  .map-filters__header button,
+  .map-filter--window select {
+    min-height: 2.75rem;
+  }
+
+  .map-filter input[type='range'] {
+    min-height: 2.75rem;
   }
 }
 

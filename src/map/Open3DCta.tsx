@@ -6,7 +6,7 @@ import './Open3DCta.css'
 
 /**
  * CTA 2D → 3D: navega al layout dedicado `/event/:id/3d`.
- * El renderer R3F llega en las siguientes iteraciones de Fase 5.
+ * En móvil: usable, con aviso de lectura preferente en desktop (#110).
  */
 export function Open3DCta() {
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
@@ -18,6 +18,9 @@ export function Open3DCta() {
       <h2 id="open-3d-cta-title">Profundidad 3D</h2>
       <p>
         Abre el espacio de análisis local para leer la profundidad del evento.
+      </p>
+      <p className="open-3d-cta__narrow-hint">
+        En pantallas pequeñas la escena 3D se lee mejor en desktop.
       </p>
       <Link
         className="open-3d-cta__action"

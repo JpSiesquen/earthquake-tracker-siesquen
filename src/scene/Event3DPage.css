@@ -210,9 +210,25 @@
   margin-block: var(--space-3) var(--space-5);
 }
 
+.event-3d-page__narrow-hint {
+  display: none;
+}
+
 @media (max-width: 52rem) {
   .event-3d-page {
     padding: var(--space-3);
+  }
+
+  .event-3d-page__narrow-hint {
+    display: block;
+    margin: 0 0 var(--space-3);
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface-raised);
+    color: var(--color-ink-muted);
+    font-size: 0.8rem;
+    line-height: 1.4;
   }
 
   .event-3d-page__heading {
@@ -228,6 +244,7 @@
 
   .event-3d-page__workspace {
     grid-template-columns: 1fr;
+    min-height: auto;
   }
 
   .event-3d-page__viewport {
@@ -236,7 +253,11 @@
   }
 
   .event-3d-page__canvas-loading {
-    min-height: 20rem;
+    min-height: 16rem;
+  }
+
+  .event-3d-page__action {
+    min-height: 2.75rem;
   }
 }
 
