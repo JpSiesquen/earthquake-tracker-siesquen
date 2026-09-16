@@ -125,25 +125,28 @@
 }
 
 .layer-control__sample--earthquakes {
-  border: 1px solid #fff7ed;
+  border: 1px solid #fff;
   border-radius: 50%;
-  background: #287a78;
-  box-shadow: 0 0 0 1px rgb(15 23 42 / 20%);
+  /* Identidad de capa (puntos), no bin de profundidad */
+  background: #172033;
+  box-shadow: 0 0 0 1px rgb(15 23 42 / 28%);
 }
 
 .layer-control__sample--plates {
   height: 0;
-  border-top: 2px solid #536577;
+  border-top: 2px solid #64748b;
 }
 
 .layer-control__sample--heatmap {
   border-radius: 50%;
-  background: radial-gradient(circle, #6d283f 0 20%, #b86b25 45%, #287a78 75%);
+  /* Densidad neutra; evita la rampa shallow/intermediate/deep */
+  background: radial-gradient(circle, #1e293b 0 22%, #64748b 48%, #cbd5e1 78%);
 }
 
 .layer-control__sample--shakemap {
   height: 0.35rem;
   border-radius: 1px;
+  /* Alineado a la leyenda MMI, no a profundidad */
   background: linear-gradient(90deg, #8a9aab, #c4a35a, #8b3a4a);
 }
 
