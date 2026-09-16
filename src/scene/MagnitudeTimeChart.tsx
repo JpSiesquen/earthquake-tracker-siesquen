@@ -20,6 +20,9 @@ const WIDTH = 280
 const HEIGHT = 140
 const PAD = { top: 12, right: 12, bottom: 28, left: 32 }
 
+const DISCLAIMER =
+  'Vista exploratoria del conjunto actual de vecinos. No es un pronóstico ni un modelo de aftershocks.'
+
 function collectPoints(
   neighbors: readonly EarthquakeSummary[],
   focus: EarthquakeSummary | undefined,
@@ -68,7 +71,8 @@ function formatUtcTick(timeMs: number): string {
 }
 
 /**
- * Vista exploratoria M–t de vecinos FDSN (#106).
+ * Vista exploratoria M–t de vecinos FDSN (#106 / #234).
+ * El heading vive en la sección de Event3DPage; aquí solo el gráfico o el estado.
  * No es pronóstico ni modelo de aftershocks.
  */
 export function MagnitudeTimeChart({
@@ -82,12 +86,8 @@ export function MagnitudeTimeChart({
   if (isError) {
     return (
       <div className="mt-chart" role="status">
-        <p className="mt-chart__title">Magnitud–tiempo</p>
         <p className="mt-chart__empty">
           Vecinos no disponibles para el gráfico.
-        </p>
-        <p className="mt-chart__disclaimer">
-          Vista exploratoria. No es un pronóstico ni un modelo de aftershocks.
         </p>
       </div>
     )
@@ -96,11 +96,7 @@ export function MagnitudeTimeChart({
   if (isLoading && points.length === 0) {
     return (
       <div className="mt-chart" role="status" aria-busy="true">
-        <p className="mt-chart__title">Magnitud–tiempo</p>
         <p className="mt-chart__empty">Cargando vecinos…</p>
-        <p className="mt-chart__disclaimer">
-          Vista exploratoria. No es un pronóstico ni un modelo de aftershocks.
-        </p>
       </div>
     )
   }
@@ -108,12 +104,8 @@ export function MagnitudeTimeChart({
   if (points.length === 0) {
     return (
       <div className="mt-chart" role="status">
-        <p className="mt-chart__title">Magnitud–tiempo</p>
         <p className="mt-chart__empty">
           Sin vecinos con magnitud para graficar.
-        </p>
-        <p className="mt-chart__disclaimer">
-          Vista exploratoria. No es un pronóstico ni un modelo de aftershocks.
         </p>
       </div>
     )
@@ -142,7 +134,6 @@ export function MagnitudeTimeChart({
 
   return (
     <div className="mt-chart">
-      <p className="mt-chart__title">Magnitud–tiempo</p>
       <svg
         className="mt-chart__svg"
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
@@ -214,10 +205,7 @@ export function MagnitudeTimeChart({
           </circle>
         ))}
       </svg>
-      <p className="mt-chart__disclaimer">
-        Vista exploratoria del conjunto actual de vecinos. No es un pronóstico
-        ni un modelo de aftershocks.
-      </p>
+      <p className="mt-chart__disclaimer">{DISCLAIMER}</p>
     </div>
   )
 }
