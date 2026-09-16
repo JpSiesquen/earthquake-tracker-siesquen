@@ -6,6 +6,7 @@ import { useEarthquakeNeighbors } from '../api/useEarthquakeNeighbors.ts'
 import { SCENE_DEPTH_LEGEND_ITEMS } from '../geo/depthBands.ts'
 import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
 import { SceneQueryStatus } from './SceneQueryStatus.tsx'
+import { MagnitudeTimeChart } from './MagnitudeTimeChart.tsx'
 import './Event3DPage.css'
 import './SceneQueryStatus.css'
 
@@ -239,6 +240,17 @@ export function Event3DPage() {
                 </li>
               ))}
             </ul>
+          </section>
+
+          <section aria-label="Gráfico magnitud tiempo">
+            <p className="event-3d-page__eyebrow">Secuencia</p>
+            <h2>M–t exploratorio</h2>
+            <MagnitudeTimeChart
+              neighbors={neighborsQuery.data?.earthquakes ?? []}
+              focus={focus}
+              isLoading={neighborsQuery.isLoading || neighborsQuery.isFetching}
+              isError={neighborsQuery.isError}
+            />
           </section>
 
           <Link className="event-3d-page__action" to={backTo}>
