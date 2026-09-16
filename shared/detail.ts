@@ -1,15 +1,48 @@
 import type { EarthquakeSummary } from './earthquake.js'
 
 /**
- * Disponibilidad de products en el detail USGS.
+ * Products USGS en el DTO de detail (#69 + #99).
  *
- * Semantica: `true` = el arbol `properties.products` del detail trae al menos
- * una entrada de ese tipo (disponible en USGS). **No** significa que el BFF
- * haya descargado contornos, GeoJSON o PDFs (eso es Fase 6).
+ * Semantica:
+ * - `available` = el arbol `properties.products` trae al menos una entrada de
+ *   ese tipo (existe en USGS).
+ * - URL / alerta / felt / cdi = metadatos utiles resueltos en el BFF; `null`
+ *   si no hay dato usable. **No** implica que el BFF haya descargado GeoJSON
+ *   (contornos = #101+).
+ * - El browser no recorre `properties.products` ni llama a USGS.
+ */
+export type ShakeMapProductInfo = {
+  available: boolean
+  /** URL de `download/cont_mi.json` (o equivalente) si el product la trae */
+  contourMiUrl: string | null
+}
+
+export type PagerProductInfo = {
+  available: boolean
+  /** `alertlevel` del product losspager (green|yellow|orange|red), si viene */
+  alert: string | null
+}
+
+export type DyfiProductInfo = {
+  available: boolean
+  /** Respuestas DYFI (`numResp` / `num-responses`) */
+  felt: number | null
+  /** Intensidad reportada (`maxmmi` del product), si parseable */
+  cdi: number | null
+}
+
+export type EarthquakeProducts = {
+  shakemap: ShakeMapProductInfo
+  pager: PagerProductInfo
+  dyfi: DyfiProductInfo
+}
+
+/**
+ * @deprecated Preferir `EarthquakeProducts`. Alias de compatibilidad para
+ * lecturas que solo miran disponibilidad (chips).
  */
 export type EarthquakeProductFlags = {
   shakemap: boolean
-  /** USGS product type `losspager` */
   pager: boolean
   dyfi: boolean
 }
@@ -25,5 +58,5 @@ export type EarthquakeDetailResponse = {
   earthquake: EarthquakeSummary
   /** Event page USGS si el Feature la trae */
   usgsUrl: string | null
-  products: EarthquakeProductFlags
+  products: EarthquakeProducts
 }

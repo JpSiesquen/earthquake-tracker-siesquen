@@ -6,6 +6,10 @@ export type { CatalogResponse } from './catalog.js'
 export type {
   EarthquakeDetailResponse,
   EarthquakeProductFlags,
+  EarthquakeProducts,
+  DyfiProductInfo,
+  PagerProductInfo,
+  ShakeMapProductInfo,
 } from './detail.js'
 export type { EarthquakeSearchResponse } from './search.js'
 export type { BffErrorBody, BffErrorCode } from './errors.js'

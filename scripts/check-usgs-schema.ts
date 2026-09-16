@@ -1,12 +1,16 @@
 /**
- * Verifica schemas Zod del feed USGS (#42).
+ * Verifica schemas Zod del feed USGS (#42) y products del detail (#99).
  * Uso: npm run test:usgs-schema
  */
 import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { toEarthquakeSummary, toProductFlags } from '../api/_normalize.ts'
+import {
+  toEarthquakeProducts,
+  toEarthquakeSummary,
+  toProductFlags,
+} from '../api/_normalize.ts'
 import {
   fdsnFeatureCollectionSchema,
   usgsDetailFeatureSchema,
@@ -62,6 +66,18 @@ if (parsedValidDetail.success) {
     'Detail con ShakeMap/PAGER/DYFI reporta flags true',
     flags.shakemap && flags.pager && flags.dyfi,
   )
+
+  const products = toEarthquakeProducts(parsedValidDetail.data)
+  assert(
+    'Detail con cont_mi.json resuelve contourMiUrl',
+    typeof products.shakemap.contourMiUrl === 'string' &&
+      products.shakemap.contourMiUrl.includes('cont_mi.json'),
+  )
+  assert('Detail PAGER expone alertlevel', products.pager.alert === 'red')
+  assert(
+    'Detail DYFI expone felt y cdi',
+    products.dyfi.felt === 42 && products.dyfi.cdi === 6.1,
+  )
 }
 
 const invalidDetail = loadJson('fixtures/usgs-detail-invalid.json')
@@ -88,6 +104,49 @@ if (parsedNoProducts.success) {
   assert(
     'Detail sin products reporta flags false',
     !flags.shakemap && !flags.pager && !flags.dyfi,
+  )
+  const products = toEarthquakeProducts(parsedNoProducts.data)
+  assert(
+    'Detail sin products deja URLs y metadatos null',
+    products.shakemap.contourMiUrl === null &&
+      products.pager.alert === null &&
+      products.dyfi.felt === null &&
+      products.dyfi.cdi === null,
+  )
+}
+
+const shakemapWithoutContours = {
+  type: 'Feature',
+  id: 'us0000nocontour',
+  geometry: { type: 'Point', coordinates: [-70, -30, 40] },
+  properties: {
+    mag: 5.1,
+    place: 'ShakeMap sin contornos',
+    time: 1_700_000_000_000,
+    products: {
+      shakemap: [
+        {
+          type: 'shakemap',
+          status: 'UPDATE',
+          contents: {
+            'download/info.json': {
+              url: 'https://example.test/info.json',
+            },
+          },
+        },
+      ],
+    },
+  },
+}
+const parsedNoContour = usgsDetailFeatureSchema.safeParse(
+  shakemapWithoutContours,
+)
+assert('Detail con ShakeMap sin cont_mi pasa schema', parsedNoContour.success)
+if (parsedNoContour.success) {
+  const products = toEarthquakeProducts(parsedNoContour.data)
+  assert(
+    'ShakeMap disponible sin cont_mi deja contourMiUrl null',
+    products.shakemap.available && products.shakemap.contourMiUrl === null,
   )
 }
 

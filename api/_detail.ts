@@ -6,7 +6,7 @@ import {
   writeDetailCache,
 } from './_cache.js'
 import { BffError } from './_errors.js'
-import { toEarthquakeSummary, toProductFlags } from './_normalize.js'
+import { toEarthquakeSummary, toEarthquakeProducts } from './_normalize.js'
 import { fetchUsgsDetailFeature, isUsgsEventId } from './_usgs.js'
 
 /**
@@ -29,7 +29,7 @@ export async function getEarthquakeDetail(
       stale: false,
       earthquake: toEarthquakeSummary(feature),
       usgsUrl,
-      products: toProductFlags(feature),
+      products: toEarthquakeProducts(feature),
     }
     writeDetailCache(id, body)
     return body
