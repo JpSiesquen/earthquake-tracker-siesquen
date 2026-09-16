@@ -200,3 +200,9 @@
   color: var(--color-ink-soft);
   font-size: 0.8rem;
 }
+
+.event-detail-panel__dyfi-hint {
+  color: var(--color-ink-muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+}

@@ -45,8 +45,8 @@ DEM en producción: N/A (ADR).
 | 6 | Productos USGS (Capa 3) | Hecha |
 | 7 | Cierre y README portfolio | Pendiente |
 
-**Siguiente:** auditoría UX/UI Capa 3 → [#228](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/228)
-(continuación: #229–#231; Fase 7 #109+).
+**Siguiente:** [#233](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/233)
+→ #229 → #235 → #234 → #236 (paralelo: #110, #111, #230, #231).
 
 Fase 6 parcial: products DTO (#99); estados UI (#100); BFF contornos (#101);
 pintado MapLibre MMI (#102).

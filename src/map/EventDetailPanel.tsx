@@ -50,13 +50,13 @@ function parsePagerAlert(
 function formatPagerAlertLabel(level: PagerAlertLevel): string {
   switch (level) {
     case 'green':
-      return 'Green'
+      return 'alerta verde'
     case 'yellow':
-      return 'Yellow'
+      return 'alerta amarilla'
     case 'orange':
-      return 'Orange'
+      return 'alerta naranja'
     case 'red':
-      return 'Red'
+      return 'alerta roja'
   }
 }
 
@@ -169,24 +169,24 @@ export function EventDetailPanel() {
             </ul>
           ) : (
             <p className="event-detail-panel__products-empty">
-              Sin ShakeMap / PAGER / DYFI en este evento.
+              Sin productos USGS (ShakeMap, PAGER, DYFI) en este evento.
             </p>
           )}
-          <p className="event-detail-panel__products-note">
-            Chip = existe en USGS. Contornos MMI tienen estado propio debajo; no
-            equivalen a capa pintada en el mapa.
-          </p>
+          {availableProducts.length > 0 ? (
+            <p className="event-detail-panel__products-note">
+              Disponibles en USGS; no equivalen a capa en el mapa.
+            </p>
+          ) : null}
           {pagerAlert ? (
             <div
               className={`event-detail-panel__pager event-detail-panel__pager--${pagerAlert}`}
               role="status"
             >
               <p className="event-detail-panel__pager-title">
-                PAGER {formatPagerAlertLabel(pagerAlert)}
+                PAGER · {formatPagerAlertLabel(pagerAlert)}
               </p>
               <p className="event-detail-panel__pager-note">
-                Alerta de impacto USGS (losspager). No es un cálculo de esta
-                app.
+                Alerta de impacto USGS. No es un cálculo de esta app.
               </p>
             </div>
           ) : null}
@@ -194,14 +194,20 @@ export function EventDetailPanel() {
             <dl className="event-detail-panel__dyfi" aria-label="DYFI">
               {dyfiFelt !== null ? (
                 <div>
-                  <dt>Felt</dt>
+                  <dt>Reportes sentidos</dt>
                   <dd>{formatDyfiFelt(dyfiFelt)}</dd>
                 </div>
               ) : null}
               {dyfiCdi !== null ? (
                 <div>
                   <dt>CDI</dt>
-                  <dd>{formatDyfiCdi(dyfiCdi)}</dd>
+                  <dd>
+                    {formatDyfiCdi(dyfiCdi)}
+                    <span className="event-detail-panel__dyfi-hint">
+                      {' '}
+                      (intensidad comunitaria)
+                    </span>
+                  </dd>
                 </div>
               ) : null}
             </dl>

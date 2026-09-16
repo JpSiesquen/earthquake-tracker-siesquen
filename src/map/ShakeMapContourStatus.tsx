@@ -20,7 +20,7 @@ export function ShakeMapContourStatus({
       <div className="shakemap-contour-status" role="status">
         <p className="shakemap-contour-status__title">Sin ShakeMap</p>
         <p className="shakemap-contour-status__message">
-          Este evento no trae producto ShakeMap en USGS.
+          USGS no publica ShakeMap para este evento.
         </p>
       </div>
     )
@@ -31,7 +31,7 @@ export function ShakeMapContourStatus({
       <div className="shakemap-contour-status" role="status">
         <p className="shakemap-contour-status__title">ShakeMap sin contornos</p>
         <p className="shakemap-contour-status__message">
-          Hay ShakeMap, pero no hay URL usable de contornos MMI.
+          Hay producto ShakeMap, pero sin geometría MMI usable en el mapa.
         </p>
       </div>
     )
@@ -49,7 +49,7 @@ export function ShakeMapContourStatus({
           Cargando contornos MMI…
         </p>
         <p className="shakemap-contour-status__message">
-          Resolviendo geometría vía BFF. El chip no implica capa en el mapa.
+          Obteniendo geometría vía BFF.
         </p>
       </div>
     )
@@ -65,7 +65,7 @@ export function ShakeMapContourStatus({
           Contornos MMI no disponibles
         </p>
         <p className="shakemap-contour-status__message">
-          {state.message ?? 'Fallo al obtener contornos.'}
+          {state.message ?? 'No se pudieron cargar los contornos.'}
         </p>
         {onRetry ? (
           <button
@@ -85,10 +85,10 @@ export function ShakeMapContourStatus({
       <p className="shakemap-contour-status__title">Contornos MMI listos</p>
       <p className="shakemap-contour-status__message">
         {state.deferred
-          ? 'URL resuelta. La descarga validada llega a continuación.'
+          ? 'Metadatos listos; geometría aún no descargada.'
           : state.featureCount === 0
-            ? 'Respuesta vacía: ShakeMap sin geometría MMI usable.'
-            : `${state.featureCount ?? 0} contorno(s) recibidos. El pintado en MapLibre es el siguiente paso.`}
+            ? 'ShakeMap respondió sin geometría MMI; la capa del mapa queda vacía.'
+            : `${state.featureCount ?? 0} contorno(s) en el mapa (capa Contornos MMI).`}
       </p>
     </div>
   )
