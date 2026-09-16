@@ -74,3 +74,44 @@
   text-decoration: underline;
   text-underline-offset: 0.12em;
 }
+
+.event-detail-panel__products {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.event-detail-panel__products-label {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.event-detail-panel__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.event-detail-panel__chip {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.event-detail-panel__products-empty,
+.event-detail-panel__products-note {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: 0.75rem;
+}

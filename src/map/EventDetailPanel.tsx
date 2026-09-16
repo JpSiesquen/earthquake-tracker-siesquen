@@ -37,6 +37,16 @@ export function EventDetailPanel() {
 
   const earthquake = data?.earthquake
   const usgsUrl = data?.usgsUrl
+  const products = data?.products
+  const availableProducts = products
+    ? (
+        [
+          products.shakemap ? 'ShakeMap' : null,
+          products.pager ? 'PAGER' : null,
+          products.dyfi ? 'DYFI' : null,
+        ] as const
+      ).filter((label): label is string => label !== null)
+    : []
 
   return (
     <section
@@ -83,6 +93,31 @@ export function EventDetailPanel() {
             </dd>
           </div>
         </dl>
+      ) : null}
+
+      {products ? (
+        <div className="event-detail-panel__products">
+          <p className="event-detail-panel__products-label">Products USGS</p>
+          {availableProducts.length > 0 ? (
+            <ul
+              className="event-detail-panel__chips"
+              aria-label="Products disponibles"
+            >
+              {availableProducts.map((label) => (
+                <li key={label}>
+                  <span className="event-detail-panel__chip">{label}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="event-detail-panel__products-empty">
+              Sin ShakeMap / PAGER / DYFI en este evento.
+            </p>
+          )}
+          <p className="event-detail-panel__products-note">
+            Disponible en USGS; contornos aun no se descargan aqui.
+          </p>
+        </div>
       ) : null}
 
       {usgsUrl ? (
