@@ -33,6 +33,7 @@ canvas R3F diferido, camara orbital limitada e iluminacion base sin sombras.
 Los helpers de ejes y grid se renderizan exclusivamente en desarrollo.
 La proyeccion geografica local usa km: este en +X y norte en -Z.
 Profundidad positiva usa -Y con exageracion vertical 1.5x; null se excluye.
+El suelo honesto es un plano de 500 km centrado en el origen local.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -44,7 +45,7 @@ Profundidad positiva usa -Y con exageracion vertical 1.5x; null se excluye.
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#87`, mesh de suelo plano (plan B).
+**Siguiente:** `#88`, malla DEM solo si el ADR la exige (actualmente diferida).
 
 ## Stack
 
