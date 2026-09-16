@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useEarthquakeDetail } from '../api/useEarthquakeDetail.ts'
 import { useEarthquakeNeighbors } from '../api/useEarthquakeNeighbors.ts'
 import { SCENE_DEPTH_LEGEND_ITEMS } from '../geo/depthBands.ts'
+import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
 import { SceneQueryStatus } from './SceneQueryStatus.tsx'
 import './Event3DPage.css'
 import './SceneQueryStatus.css'
@@ -61,21 +62,39 @@ function EventRouteError({ hasInvalidId }: { hasInvalidId: boolean }) {
 }
 
 /**
- * Shell estable de Capa 2. La ruta y su jerarquia visual no dependen del
- * renderer 3D. El Canvas se carga solo en rutas validas de Capa 2.
+ * Shell estable de Capa 2. La ruta `/event/:id/3d` es la fuente de verdad del
+ * deep link: un refresh rehidrata detail/neighbors solo con ese id (BFF).
+ * El Canvas se carga solo en rutas validas de Capa 2.
  */
 export function Event3DPage() {
   const { id } = useParams<{ id: string }>()
   const eventId = readEventId(id)
   const hasInvalidId = id !== undefined && id.trim().length > 0
+  const select = useEarthquakeSelection((state) => state.select)
   const detailQuery = useEarthquakeDetail(eventId)
   const neighborsQuery = useEarthquakeNeighbors(detailQuery.data)
+  const focus = detailQuery.data?.earthquake
 
-  useDocumentTitle(
-    eventId
-      ? `Escena 3D · ${eventId} | Earthquake Tracker`
-      : 'Ruta 3D no disponible | Earthquake Tracker',
-  )
+  useEffect(() => {
+    if (eventId === null) return
+    select(eventId)
+  }, [eventId, select])
+
+  const titleMagnitude =
+    focus?.magnitude !== null &&
+    focus?.magnitude !== undefined &&
+    Number.isFinite(focus.magnitude)
+      ? `M${focus.magnitude.toFixed(1)}`
+      : null
+  const titlePlace = focus?.place?.trim() || null
+  const documentTitle =
+    eventId === null
+      ? 'Ruta 3D no disponible | Earthquake Tracker'
+      : titlePlace || titleMagnitude
+        ? `Escena 3D · ${[titleMagnitude, titlePlace].filter(Boolean).join(' · ')} | Earthquake Tracker`
+        : `Escena 3D · ${eventId} | Earthquake Tracker`
+
+  useDocumentTitle(documentTitle)
 
   if (eventId === null) {
     return <EventRouteError hasInvalidId={hasInvalidId} />
