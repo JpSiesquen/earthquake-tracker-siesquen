@@ -3,7 +3,10 @@ export type { EarthquakeId, EarthquakeSummary, LonLat } from './earthquake.js'
 export type { CatalogWindow } from './window.js'
 export { isCatalogWindow } from './window.js'
 export type { CatalogResponse } from './catalog.js'
-export type { EarthquakeDetailResponse } from './detail.js'
+export type {
+  EarthquakeDetailResponse,
+  EarthquakeProductFlags,
+} from './detail.js'
 export type { BffErrorBody, BffErrorCode } from './errors.js'
 export {
   usgsFeatureSchema,
