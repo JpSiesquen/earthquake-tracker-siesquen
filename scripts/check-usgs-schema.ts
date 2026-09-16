@@ -86,17 +86,7 @@ assert(
   !usgsDetailFeatureSchema.safeParse(invalidDetail).success,
 )
 
-const noProductsDetail = {
-  type: 'Feature',
-  id: 'us0000none',
-  geometry: { type: 'Point', coordinates: [-70, -30, 40] },
-  properties: {
-    mag: 5.1,
-    place: 'Sin products',
-    time: 1_700_000_000_000,
-    url: null,
-  },
-}
+const noProductsDetail = loadJson('fixtures/usgs-detail-no-products.json')
 const parsedNoProducts = usgsDetailFeatureSchema.safeParse(noProductsDetail)
 assert('Detail sin products pasa schema', parsedNoProducts.success)
 if (parsedNoProducts.success) {
@@ -115,29 +105,9 @@ if (parsedNoProducts.success) {
   )
 }
 
-const shakemapWithoutContours = {
-  type: 'Feature',
-  id: 'us0000nocontour',
-  geometry: { type: 'Point', coordinates: [-70, -30, 40] },
-  properties: {
-    mag: 5.1,
-    place: 'ShakeMap sin contornos',
-    time: 1_700_000_000_000,
-    products: {
-      shakemap: [
-        {
-          type: 'shakemap',
-          status: 'UPDATE',
-          contents: {
-            'download/info.json': {
-              url: 'https://example.test/info.json',
-            },
-          },
-        },
-      ],
-    },
-  },
-}
+const shakemapWithoutContours = loadJson(
+  'fixtures/usgs-detail-shakemap-no-contours.json',
+)
 const parsedNoContour = usgsDetailFeatureSchema.safeParse(
   shakemapWithoutContours,
 )
