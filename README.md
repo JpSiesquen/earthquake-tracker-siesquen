@@ -15,7 +15,21 @@ magnitud y profundidad, con datos USGS a través de un BFF propio.
 
 - **Capa 1:** mapa MapLibre (círculos, heatmap, placas), filtros, lista, deep link `?event=`
 - **Capa 2:** escena R3F en `/event/:id/3d` (plano honesto, epicentro/hipocentro, vecinos FDSN)
-- **BFF:** catálogo, detail y search FDSN (Zod + TanStack Query)
+- **Capa 3:** productos USGS en ficha y mapa (ShakeMap MMI, PAGER, DYFI) con degradación limpia
+- **BFF:** catálogo, detail, contornos ShakeMap y search FDSN (Zod + TanStack Query)
+
+## Productos USGS
+
+No todos los eventos traen products. Cuando existen, el BFF los normaliza a un DTO
+útil (`available`, URLs/metadatos); **no** expone el árbol crudo de
+`properties.products`. El navegador solo habla con `/api/...`, nunca con
+`earthquake.usgs.gov` ni CDN de products.
+
+| Producto | Qué hace aquí |
+| --- | --- |
+| **ShakeMap** | Si hay `cont_mi.json`, el BFF descarga y valida contornos MMI; el mapa los pinta bajo los círculos. Sin producto o sin URL: mensaje de ausencia, sin capa fantasma. |
+| **PAGER** | Nivel de alerta USGS en la ficha cuando el DTO trae `alert` (color sobrio). |
+| **DYFI** | Felt / CDI en la ficha solo si vienen valores; si no, no se inventan filas. |
 
 ## Stack
 
@@ -25,8 +39,8 @@ magnitud y profundidad, con datos USGS a través de un BFF propio.
 
 ## Estado
 
-Capa 1 y Capa 2 usables. Siguiente: productos USGS en mapa (Fase 6). El README
-público se irá afinando (media y tono portfolio en Fase 7); no es una bitácora.
+Capas 1–3 usables. Siguiente: cierre portfolio (Fase 7: a11y, media, README ES+EN).
+El README público no es una bitácora.
 
 ## Desarrollo
 
