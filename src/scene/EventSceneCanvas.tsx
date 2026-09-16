@@ -1,9 +1,12 @@
 import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 
+import type { EarthquakeSummary, LonLat } from '../../shared/earthquake.ts'
+
 import { DepthConnector } from './DepthConnector.tsx'
 import { EpicenterMarker } from './EpicenterMarker.tsx'
 import { HypocenterMarker } from './HypocenterMarker.tsx'
+import { NeighborMarkers } from './NeighborMarkers.tsx'
 import { SCENE_CAMERA, SCENE_CONTROLS, SCENE_ORIGIN } from './sceneCamera.ts'
 import { ReferenceSurface } from './ReferenceSurface.tsx'
 import { SceneDebugHelpers } from './SceneDebugHelpers.tsx'
@@ -16,9 +19,17 @@ import './EventSceneCanvas.css'
  */
 type EventSceneCanvasProps = {
   depthKm: number | null
+  focusId: string
+  focusCoordinates: LonLat | null
+  neighbors: readonly EarthquakeSummary[]
 }
 
-export default function EventSceneCanvas({ depthKm }: EventSceneCanvasProps) {
+export default function EventSceneCanvas({
+  depthKm,
+  focusId,
+  focusCoordinates,
+  neighbors,
+}: EventSceneCanvasProps) {
   return (
     <div className="event-scene-canvas" aria-label="Viewport 3D del evento">
       <Canvas
@@ -35,6 +46,13 @@ export default function EventSceneCanvas({ depthKm }: EventSceneCanvasProps) {
       >
         <SceneLighting />
         <ReferenceSurface />
+        {focusCoordinates ? (
+          <NeighborMarkers
+            focusId={focusId}
+            focusCoordinates={focusCoordinates}
+            neighbors={neighbors}
+          />
+        ) : null}
         <DepthConnector depthKm={depthKm} />
         <EpicenterMarker />
         <HypocenterMarker depthKm={depthKm} />
