@@ -37,6 +37,7 @@ El suelo honesto es un plano de 500 km centrado en el origen local.
 La malla DEM (#88) se cerro N/A conforme al ADR; produccion no depende de DEM.
 El epicentro se identifica con una diana plana azul en el origen Y=0.
 El hipocentro usa el detail real y un octaedro calido en Y negativo; null se omite.
+Un segmento vertical discreto conecta epicentro e hipocentro sin animacion.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -48,7 +49,7 @@ El hipocentro usa el detail real y un octaedro calido en Y negativo; null se omi
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#91`, linea epicentro-hipocentro.
+**Siguiente:** `#92`, vecinos en escena con escala por magnitud.
 
 ## Stack
 
