@@ -29,10 +29,9 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 
 ## Estado
 
-Fase 0–5 cerradas. Capa 2 (escena R3F local) está usable: ruta `/event/:id/3d`,
-plano honesto 500 km, epicentro/hipocentro, conector, vecinos FDSN (escala por
-mag, color por profundidad), overlay HTML, loading/error y deep link.
-Unidades y exageración: [`docs/04-escena-3d.md`](./docs/04-escena-3d.md).
+Fase 0–6 cerradas. Capas 1–3 usables: mapa, escena 3D local y productos USGS
+(ShakeMap MMI, PAGER, DYFI) con degradación limpia vía BFF.
+Unidades escena: [`docs/04-escena-3d.md`](./docs/04-escena-3d.md).
 DEM en producción: N/A (ADR).
 
 | Fase | Foco | Estado |
@@ -43,13 +42,10 @@ DEM en producción: N/A (ADR).
 | 3 | Mapa 2D producto (Capa 1, corte natural) | Hecha |
 | 4 | Detalle, FDSN y spike DEM | Hecha |
 | 5 | Escena 3D local (Capa 2) | Hecha |
-| 6 | Productos USGS (Capa 3) | En curso |
+| 6 | Productos USGS (Capa 3) | Hecha |
 | 7 | Cierre y README portfolio | Pendiente |
 
-**Siguiente:** `#108`, fixtures detail con/sin ShakeMap (cierre Fase 6).
-
-Fase 6: products DTO, estados UI, BFF contornos, MapLibre MMI, PAGER/DYFI,
-limpieza de capas, M–t exploratorio, README productos.
+**Siguiente:** Fase 7 / auditoría UX-UI (#109+).
 
 Fase 6 parcial: products DTO (#99); estados UI (#100); BFF contornos (#101);
 pintado MapLibre MMI (#102).
