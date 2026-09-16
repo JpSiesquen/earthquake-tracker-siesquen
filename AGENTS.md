@@ -28,8 +28,8 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 
 ## Estado
 
-Fase 0–4 cerradas. Fase 5 en curso: Capa 2 ya tiene ruta estable,
-layout dedicado y guardrails para `/event/:id/3d`.
+Fase 0–4 cerradas. Fase 5 en curso: Capa 2 tiene ruta estable, layout dedicado,
+guardrails y stack Three/R3F/Drei instalado; el canvas aun no se monta.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -41,12 +41,12 @@ layout dedicado y guardrails para `/event/:id/3d`.
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#80`, instalar Three.js, R3F y Drei con versiones exactas.
+**Siguiente:** `#81`, canvas vacio con fondo de laboratorio.
 
 ## Stack
 
 - Front: Vite, React 19, TypeScript, MapLibre 6 (`MapView`, ESM, WebGL2,
-  worker Vite explicito); R3F en Capa 2
+  worker Vite explicito); Three 0.186, R3F 9 y Drei 10 en Capa 2
 - Datos (hoy): BFF serverless (`/api/earthquakes`, `/:id`, `/search`), Zod,
   TanStack Query
 - Estado UI: Zustand (`selectedId` + deep link `?event=`; catalogo en TanStack Query);

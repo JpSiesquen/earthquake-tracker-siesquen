@@ -1,9 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import './Event3DPage.css'
 
 const EVENT_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/
+type R3FStackStatus = 'loading' | 'ready' | 'error'
 
 function readEventId(value: string | undefined): string | null {
   const eventId = value?.trim()
@@ -19,6 +20,37 @@ function useDocumentTitle(title: string) {
       document.title = previousTitle
     }
   }, [title])
+}
+
+function useR3FStackProbe(enabled: boolean): R3FStackStatus {
+  const [status, setStatus] = useState<R3FStackStatus>('loading')
+
+  useEffect(() => {
+    if (!enabled) return
+
+    let isCurrent = true
+
+    void import('./r3fStack.ts')
+      .then(({ probeR3FStack }) => {
+        probeR3FStack()
+        if (isCurrent) setStatus('ready')
+      })
+      .catch(() => {
+        if (isCurrent) setStatus('error')
+      })
+
+    return () => {
+      isCurrent = false
+    }
+  }, [enabled])
+
+  return status
+}
+
+function stackStatusLabel(status: R3FStackStatus): string {
+  if (status === 'ready') return 'Stack 3D listo'
+  if (status === 'error') return 'Stack 3D no disponible'
+  return 'Comprobando stack 3D'
 }
 
 function EventRouteError({ hasInvalidId }: { hasInvalidId: boolean }) {
@@ -56,12 +88,13 @@ function EventRouteError({ hasInvalidId }: { hasInvalidId: boolean }) {
 
 /**
  * Shell estable de Capa 2. La ruta y su jerarquia visual no dependen del
- * renderer 3D; Three/R3F se incorpora a partir de #80.
+ * renderer 3D. #80 aporta el stack; el Canvas se incorpora en #81.
  */
 export function Event3DPage() {
   const { id } = useParams<{ id: string }>()
   const eventId = readEventId(id)
   const hasInvalidId = id !== undefined && id.trim().length > 0
+  const stackStatus = useR3FStackProbe(eventId !== null)
 
   useDocumentTitle(
     eventId
@@ -104,7 +137,9 @@ export function Event3DPage() {
               <p className="event-3d-page__eyebrow">Volumen de referencia</p>
               <h2 id="scene-placeholder-title">Área de escena 3D</h2>
             </div>
-            <span className="event-3d-page__status">Base preparada</span>
+            <span className="event-3d-page__status" role="status">
+              {stackStatusLabel(stackStatus)}
+            </span>
           </div>
 
           <div className="event-3d-page__placeholder">
