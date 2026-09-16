@@ -2,12 +2,13 @@ import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 
 import { SCENE_CAMERA, SCENE_CONTROLS, SCENE_ORIGIN } from './sceneCamera.ts'
+import { SceneDebugHelpers } from './SceneDebugHelpers.tsx'
 import { SceneLighting } from './SceneLighting.tsx'
 import './EventSceneCanvas.css'
 
 /**
  * Viewport base de Capa 2. La camara orbita el epicentro sin poder cruzar el
- * plano de superficie; geometria e iluminacion llegan en issues posteriores.
+ * plano de superficie. Los helpers espaciales existen solo en desarrollo.
  */
 export default function EventSceneCanvas() {
   return (
@@ -25,6 +26,7 @@ export default function EventSceneCanvas() {
         }
       >
         <SceneLighting />
+        <SceneDebugHelpers />
         <OrbitControls
           makeDefault
           target={SCENE_ORIGIN}
