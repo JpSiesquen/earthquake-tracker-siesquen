@@ -46,7 +46,8 @@ filtros, lista, presets, deep link `?event=`, CTA 3D honesto.
   worker Vite explicito); R3F en Capa 2
 - Datos (hoy): BFF serverless (`/api/earthquakes`, `/api/earthquakes/:id`), Zod,
   TanStack Query
-- Estado UI: Zustand (`selectedId` + deep link `?event=`; catalogo en TanStack Query)
+- Estado UI: Zustand (`selectedId` + deep link `?event=`; catalogo en TanStack Query);
+  React Router (`/`, `/event/:id/3d` stub)
 - Calidad: oxlint, Prettier, Husky, GitHub Actions (`verificar`)
 - Hosting: Vercel (Production + Preview en PRs)
 

@@ -1,10 +1,12 @@
+import { Link } from 'react-router-dom'
+
 import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
 
 import './Open3DCta.css'
 
 /**
- * CTA honesto: enuncia la tesis 2D -> 3D sin montar escena falsa.
- * La navegacion real llega en Fase 4 (#78) / Fase 5.
+ * CTA 2D → 3D: navega a la ruta stub `/event/:id/3d`.
+ * La escena R3F llega en Fase 5; aqui solo hay navegacion honesta.
  */
 export function Open3DCta() {
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
@@ -15,12 +17,15 @@ export function Open3DCta() {
     <section className="open-3d-cta" aria-labelledby="open-3d-cta-title">
       <h2 id="open-3d-cta-title">Profundidad 3D</h2>
       <p>
-        La escena local con hipocentro es la siguiente capa. Aun no esta
-        disponible en esta entrega.
+        Abre la ruta de la escena local. Por ahora es un stub de laboratorio
+        (sin Three.js).
       </p>
-      <button type="button" disabled title="Disponible en una fase posterior">
+      <Link
+        className="open-3d-cta__action"
+        to={`/event/${encodeURIComponent(selectedId)}/3d`}
+      >
         Abrir 3D
-      </button>
+      </Link>
     </section>
   )
 }
