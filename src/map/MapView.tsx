@@ -10,6 +10,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 
 import { BASEMAP_STYLE_URL } from './basemap.ts'
 import { EarthquakeList } from './EarthquakeList.tsx'
+import { EventDetailPanel } from './EventDetailPanel.tsx'
 import { summariesToGeoJSON } from './earthquakesGeoJSON.ts'
 import { filterEarthquakes } from './filterEarthquakes.ts'
 import { LayerControl, type MapLayerVisibility } from './LayerControl.tsx'
@@ -567,6 +568,7 @@ export function MapView({
           earthquakes={visibleEarthquakes}
           onSelectEarthquake={handleSelectFromList}
         />
+        <EventDetailPanel />
         <Open3DCta />
       </aside>
     </div>
