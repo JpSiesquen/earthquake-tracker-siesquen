@@ -29,7 +29,7 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 ## Estado
 
 Fase 0–4 cerradas. Fase 5 en curso: Capa 2 tiene ruta estable, layout dedicado,
-guardrails y canvas R3F vacio con fondo de laboratorio y carga diferida.
+canvas R3F diferido y camara orbital limitada alrededor del epicentro local.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -41,7 +41,7 @@ guardrails y canvas R3F vacio con fondo de laboratorio y carga diferida.
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#82`, camara y OrbitControls con limites.
+**Siguiente:** `#83`, luces ambiente y direccional minimas.
 
 ## Stack
 
