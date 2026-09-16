@@ -11,7 +11,15 @@ export type {
   PagerProductInfo,
   ShakeMapProductInfo,
 } from './detail.js'
-export type { ShakeMapContoursResponse } from './shakemap.js'
+export type {
+  ShakeMapContoursResponse,
+  ShakeMapContourFeature,
+} from './shakemap.js'
+export {
+  usgsShakeMapContourCollectionSchema,
+  toShakeMapContourFeatures,
+  isAllowedUsgsProductUrl,
+} from './shakemap.js'
 export type { EarthquakeSearchResponse } from './search.js'
 export type { BffErrorBody, BffErrorCode } from './errors.js'
 export {

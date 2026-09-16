@@ -41,5 +41,8 @@ jobs:
       - name: Estado ShakeMap UI
         run: npm run test:shakemap-status
 
+      - name: Contornos ShakeMap schema
+        run: npm run test:shakemap-contours
+
       - name: Compilar
         run: npm run build

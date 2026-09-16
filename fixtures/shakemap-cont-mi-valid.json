@@ -1,0 +1,39 @@
+{
+  "type": "FeatureCollection",
+  "name": "cont_mmi",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "value": 2.5,
+        "units": "mmi",
+        "color": "#afd9ff",
+        "weight": 4
+      },
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [-122.1, 46.2],
+            [-122.0, 46.25],
+            [-121.9, 46.2]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "value": 3,
+        "units": "mmi"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-122.05, 46.15],
+          [-121.95, 46.18]
+        ]
+      }
+    }
+  ]
+}

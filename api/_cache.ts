@@ -1,5 +1,6 @@
 import type { CatalogResponse } from '../shared/catalog.js'
 import type { EarthquakeDetailResponse } from '../shared/detail.js'
+import type { ShakeMapContoursResponse } from '../shared/shakemap.js'
 import type { CatalogWindow } from '../shared/window.js'
 
 /**
@@ -29,6 +30,19 @@ export function detailCacheTtlMs(): number {
   return 60 * 1000
 }
 
+/**
+ * TTL de contornos ShakeMap (ms). Payload más pesado que detail.
+ * Override: `USGS_SHAKEMAP_CACHE_TTL_MS`. Default: 2 min.
+ */
+export function shakeMapCacheTtlMs(): number {
+  const raw = process.env.USGS_SHAKEMAP_CACHE_TTL_MS
+  if (raw) {
+    const n = Number(raw)
+    if (Number.isFinite(n) && n > 0) return n
+  }
+  return 2 * 60 * 1000
+}
+
 type Entry = {
   body: CatalogResponse
   savedAt: number
@@ -39,8 +53,14 @@ type DetailEntry = {
   savedAt: number
 }
 
+type ShakeMapEntry = {
+  body: ShakeMapContoursResponse
+  savedAt: number
+}
+
 const memory = new Map<CatalogWindow, Entry>()
 const detailMemory = new Map<string, DetailEntry>()
+const shakeMapMemory = new Map<string, ShakeMapEntry>()
 
 export function readCache(window: CatalogWindow): CatalogResponse | null {
   const hit = memory.get(window)
@@ -76,4 +96,24 @@ export function writeDetailCache(
   body: EarthquakeDetailResponse,
 ): void {
   detailMemory.set(id, { body, savedAt: Date.now() })
+}
+
+export function readShakeMapCache(id: string): ShakeMapContoursResponse | null {
+  const hit = shakeMapMemory.get(id)
+  if (!hit) return null
+  if (Date.now() - hit.savedAt > shakeMapCacheTtlMs()) return null
+  return hit.body
+}
+
+export function readLastGoodShakeMapCache(
+  id: string,
+): ShakeMapContoursResponse | null {
+  return shakeMapMemory.get(id)?.body ?? null
+}
+
+export function writeShakeMapCache(
+  id: string,
+  body: ShakeMapContoursResponse,
+): void {
+  shakeMapMemory.set(id, { body, savedAt: Date.now() })
 }

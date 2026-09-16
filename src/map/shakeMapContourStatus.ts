@@ -9,6 +9,7 @@ export type ShakeMapContourUiState = {
   /** Mensaje tipado (error) o nota de listo diferido */
   message?: string
   deferred?: boolean
+  featureCount?: number
 }
 
 type ContourQuerySlice = {
@@ -52,6 +53,7 @@ export function deriveShakeMapContourUiState(
     return {
       kind: 'ready',
       deferred: query.data.deferred,
+      featureCount: query.data.features.length,
     }
   }
 
