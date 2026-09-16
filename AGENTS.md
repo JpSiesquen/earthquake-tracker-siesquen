@@ -46,10 +46,10 @@ DEM en producción: N/A (ADR).
 | 6 | Productos USGS (Capa 3) | En curso |
 | 7 | Cierre y README portfolio | Pendiente |
 
-**Siguiente:** `#102`, pintar contornos MMI en MapLibre.
+**Siguiente:** `#103`, PAGER en ficha.
 
-Fase 6 parcial: DTO products (#99); estados UI ShakeMap (#100); BFF descarga
-y valida `cont_mi.json` con Zod + cache propia (#101).
+Fase 6 parcial: products DTO (#99); estados UI (#100); BFF contornos (#101);
+pintado MapLibre MMI (#102).
 
 ## Stack
 
