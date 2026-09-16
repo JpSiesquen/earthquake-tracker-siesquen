@@ -66,6 +66,8 @@ export type ShakeMapContourFeature = {
 
 export type ShakeMapContoursResponse = {
   fetchedAt: number
+  /** Id del evento al que pertenecen los contornos */
+  eventId: string
   contourMiUrl: string
   /**
    * true solo en stubs previos (#100). Tras #101 la descarga ya corrió:

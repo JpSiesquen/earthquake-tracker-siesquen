@@ -75,3 +75,26 @@ export function contoursToFeatureCollection(
     features: [...features],
   }
 }
+
+/**
+ * Qué GeoJSON debe quedar en el source al cambiar de evento (#105).
+ * Vacío si no hay selección, error, o el dato no corresponde al id actual.
+ */
+export function resolveShakeMapSourceData(args: {
+  selectedId: string | null
+  contoursEventId: string | null | undefined
+  features: readonly ShakeMapContourFeature[] | undefined
+  isError: boolean
+}): {
+  type: 'FeatureCollection'
+  features: ShakeMapContourFeature[]
+} {
+  const { selectedId, contoursEventId, features, isError } = args
+  if (selectedId === null || isError) {
+    return EMPTY_SHAKEMAP_FEATURE_COLLECTION
+  }
+  if (contoursEventId !== selectedId) {
+    return EMPTY_SHAKEMAP_FEATURE_COLLECTION
+  }
+  return contoursToFeatureCollection(features)
+}
