@@ -18,6 +18,7 @@ No crear `CLAUDE.md` en este repo.
 | `docs/00-maplibre-basico.md` | Modelo style/source/layer (sandbox) | Si |
 | `docs/01-maplibre-xss-ghsa.md` | Registro GHSA MapLibre (XSS attribution) | Si |
 | `docs/02-mapa-producto-capa-1.md` | Mapa 2D de producto (Capa 1) | Si |
+| `docs/03-detalle-fdsn-dem.md` | Detalle, FDSN, ficha, stub 3D (Fase 4) | Si |
 | `docs/dem-spike.md` | Spike DEM coste cero (Fase 4) | Si |
 | `docs/adr-dem.md` | ADR: plano honesto vs DEM (Capa 2) | Si |
 | `PLAN.md` | Plan interno | No (gitignore) |
@@ -27,8 +28,8 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 
 ## Estado
 
-Fase 0–3 cerradas. Capa 1 (mapa 2D de producto) entregable: MapLibre multicapa,
-filtros, lista, presets, deep link `?event=`, CTA 3D honesto.
+Fase 0–4 cerradas. Capa 1 usable; Fase 4: detail/search BFF, ficha, chips,
+CTA → stub `/event/:id/3d`, ADR plano honesto.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -36,15 +37,16 @@ filtros, lista, presets, deep link `?event=`, CTA 3D honesto.
 | 1 | Andamiaje + README semilla | Hecha |
 | 2 | BFF + catalogo vivo | Hecha |
 | 3 | Mapa 2D producto (Capa 1, corte natural) | Hecha |
-| 4-7 | Detail/FDSN/DEM, 3D, productos USGS, cierre | Pendiente |
+| 4 | Detalle, FDSN y spike DEM | Hecha |
+| 5-7 | Escena 3D, productos USGS, cierre | Pendiente |
 
-**Siguiente:** Fase 4 (`#67+`), detalle USGS, FDSN y spike DEM.
+**Siguiente:** Fase 5 (`#79+`), escena R3F local (plano honesto).
 
 ## Stack
 
 - Front: Vite, React 19, TypeScript, MapLibre 6 (`MapView`, ESM, WebGL2,
   worker Vite explicito); R3F en Capa 2
-- Datos (hoy): BFF serverless (`/api/earthquakes`, `/api/earthquakes/:id`), Zod,
+- Datos (hoy): BFF serverless (`/api/earthquakes`, `/:id`, `/search`), Zod,
   TanStack Query
 - Estado UI: Zustand (`selectedId` + deep link `?event=`; catalogo en TanStack Query);
   React Router (`/`, `/event/:id/3d` stub)

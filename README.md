@@ -8,10 +8,10 @@ magnitud y profundidad, con datos USGS atraves de un BFF propio.
 
 ## Stack
 
-- Vite, React 19, TypeScript
+- Vite, React 19, TypeScript, React Router
 - MapLibre 6 (mapa 2D de producto), Zustand (seleccion UI)
-- React Three Fiber (escena 3D: fases posteriores; CTA visible pero deshabilitado)
-- BFF serverless, Zod, TanStack Query
+- React Three Fiber (escena 3D: Fase 5; hay ruta stub `/event/:id/3d`)
+- BFF serverless (catalogo, detail, search FDSN), Zod, TanStack Query
 - oxlint, Prettier, Husky, GitHub Actions (`verificar`)
 - Vercel
 
@@ -21,13 +21,12 @@ https://earthquake-tracker-siesquen.vercel.app
 
 ## Estado del proyecto
 
-**Capa 1 (mapa 2D) usable:** catalogo USGS via BFF, circulos por magnitud, color
-por profundidad, placas tectonicas, heatmap, filtros (magnitud / profundidad /
-ventana day|week), lista lateral, presets de camara (Global, LATAM, Anillo de
-Fuego), deep link `?event=` y CTA «Abrir 3D» honesto (sin escena falsa).
+**Capa 1 usable** + **Fase 4 cerrada:** ficha con detail USGS, chips de products
+(disponibilidad), vecinos via FDSN en BFF, CTA «Abrir 3D» a stub de ruta, ADR de
+suelo = plano honesto.
 
-**Falta:** ficha/detalle USGS, vecinos FDSN, escena 3D (R3F) y productos
-(ShakeMap / PAGER / DYFI). Sin GIF ni capturas inventadas aqui (eso es Fase 7).
+**Falta:** escena R3F real (Fase 5), capas de productos en mapa (Fase 6), media
+README (Fase 7).
 
 ## Desarrollo
 
