@@ -47,6 +47,8 @@ Un overlay HTML sobre el viewport muestra mag/lugar del foco y un CTA para
 volver al mapa (`/?event=:id`) sin bloquear OrbitControls (pointer-events).
 Loading/error de detail y neighbors son visibles: detail fatal ofrece
 reintentar o volver; fallo de vecinos deja escena parcial con el foco.
+El deep link 3D usa `/event/:id/3d` como fuente de verdad: refresh rehidrata
+desde el BFF y alinea `selectedId` para el retorno al mapa.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -58,7 +60,7 @@ reintentar o volver; fallo de vecinos deja escena parcial con el foco.
 | 5 | Escena 3D local (Capa 2) | En curso |
 | 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** `#96`, deep link 3D compartible.
+**Siguiente:** `#97`, test numerico lat/lon y profundidad.
 
 ## Stack
 
