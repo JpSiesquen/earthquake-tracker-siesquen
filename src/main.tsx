@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { queryClient } from './api/queryClient.ts'
 import App from './App.tsx'
-import { Event3DStubPage } from './map/Event3DStubPage.tsx'
+import { Event3DPage } from './scene/Event3DPage.tsx'
 import '@fontsource/ibm-plex-sans/400.css'
 import '@fontsource/ibm-plex-sans/600.css'
 import '@fontsource/ibm-plex-sans/700.css'
@@ -18,7 +18,8 @@ createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="/event/:id/3d" element={<Event3DStubPage />} />
+          <Route path="/event/:id/3d" element={<Event3DPage />} />
+          <Route path="/event/*" element={<Event3DPage />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

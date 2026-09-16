@@ -5,8 +5,8 @@ import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
 import './Open3DCta.css'
 
 /**
- * CTA 2D → 3D: navega a la ruta stub `/event/:id/3d`.
- * La escena R3F llega en Fase 5; aqui solo hay navegacion honesta.
+ * CTA 2D → 3D: navega al layout dedicado `/event/:id/3d`.
+ * El renderer R3F llega en las siguientes iteraciones de Fase 5.
  */
 export function Open3DCta() {
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
@@ -17,8 +17,7 @@ export function Open3DCta() {
     <section className="open-3d-cta" aria-labelledby="open-3d-cta-title">
       <h2 id="open-3d-cta-title">Profundidad 3D</h2>
       <p>
-        Abre la ruta de la escena local. Por ahora es un stub de laboratorio
-        (sin Three.js).
+        Abre el espacio de análisis local para leer la profundidad del evento.
       </p>
       <Link
         className="open-3d-cta__action"

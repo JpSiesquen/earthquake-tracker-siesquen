@@ -28,8 +28,8 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 
 ## Estado
 
-Fase 0–4 cerradas. Capa 1 usable; Fase 4: detail/search BFF, ficha, chips,
-CTA → stub `/event/:id/3d`, ADR plano honesto.
+Fase 0–4 cerradas. Fase 5 en curso: Capa 2 ya tiene ruta estable,
+layout dedicado y guardrails para `/event/:id/3d`.
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -38,9 +38,10 @@ CTA → stub `/event/:id/3d`, ADR plano honesto.
 | 2 | BFF + catalogo vivo | Hecha |
 | 3 | Mapa 2D producto (Capa 1, corte natural) | Hecha |
 | 4 | Detalle, FDSN y spike DEM | Hecha |
-| 5-7 | Escena 3D, productos USGS, cierre | Pendiente |
+| 5 | Escena 3D local (Capa 2) | En curso |
+| 6-7 | Productos USGS y cierre | Pendiente |
 
-**Siguiente:** Fase 5 (`#79+`), escena R3F local (plano honesto).
+**Siguiente:** `#80`, instalar Three.js, R3F y Drei con versiones exactas.
 
 ## Stack
 
@@ -49,7 +50,7 @@ CTA → stub `/event/:id/3d`, ADR plano honesto.
 - Datos (hoy): BFF serverless (`/api/earthquakes`, `/:id`, `/search`), Zod,
   TanStack Query
 - Estado UI: Zustand (`selectedId` + deep link `?event=`; catalogo en TanStack Query);
-  React Router (`/`, `/event/:id/3d` stub)
+  React Router (`/`, `/event/:id/3d` con shell propia y retorno al deep link 2D)
 - Calidad: oxlint, Prettier, Husky, GitHub Actions (`verificar`)
 - Hosting: Vercel (Production + Preview en PRs)
 
