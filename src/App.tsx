@@ -7,7 +7,7 @@ import { MapView } from './map/MapView.tsx'
 import './App.css'
 
 function App() {
-  const [window, setWindow] = useState<CatalogWindow>('day')
+  const [window, setWindow] = useState<CatalogWindow>('week')
   const { data, error, isLoading, isFetching } = useEarthquakes(window)
   const currentCatalog = data?.window === window ? data : undefined
 

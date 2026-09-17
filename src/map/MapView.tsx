@@ -64,8 +64,20 @@ const TECTONIC_PLATES_DATA_URL =
 const DEFAULT_LAYER_VISIBILITY: MapLayerVisibility = {
   earthquakes: true,
   plates: true,
-  heatmap: false,
+  heatmap: true,
   shakemap: true,
+}
+
+/** MapLibre starts compact attribution expanded (`maplibregl-compact-show`); collapse to the `i` only. */
+function collapseAttributionControl(map: maplibregl.Map): boolean {
+  const attrib = map
+    .getContainer()
+    .querySelector(
+      '.maplibregl-ctrl-attrib.maplibregl-compact:not(.maplibregl-attrib-empty)',
+    )
+  if (!(attrib instanceof HTMLElement)) return false
+  attrib.classList.remove('maplibregl-compact-show')
+  return true
 }
 function numericProperty(value: unknown): number | null {
   return typeof value === 'number' && Number.isFinite(value) ? value : null
@@ -321,6 +333,7 @@ export function MapView({
       style: BASEMAP_STYLE_URL,
       center: INITIAL_CENTER,
       zoom: INITIAL_ZOOM,
+      attributionControl: { compact: true },
     })
 
     mapRef.current = map
@@ -331,6 +344,19 @@ export function MapView({
       pendingDeepLinkFlyRef.current = null
       flyMapToEarthquake(map, pending)
     }
+
+    // Compact attribution re-expands when style/source credits arrive; collapse once then stop.
+    const collapseAttributionWhenReady = () => {
+      if (!collapseAttributionControl(map)) return
+      map.off('load', collapseAttributionWhenReady)
+      map.off('idle', collapseAttributionWhenReady)
+      map.off('sourcedata', collapseAttributionWhenReady)
+      map.off('styledata', collapseAttributionWhenReady)
+    }
+    map.on('load', collapseAttributionWhenReady)
+    map.on('idle', collapseAttributionWhenReady)
+    map.on('sourcedata', collapseAttributionWhenReady)
+    map.on('styledata', collapseAttributionWhenReady)
 
     flushPendingDeepLinkFly()
     map.once('load', flushPendingDeepLinkFly)
@@ -583,6 +609,10 @@ export function MapView({
     globalThis.addEventListener('resize', handleWindowResize)
 
     return () => {
+      map.off('load', collapseAttributionWhenReady)
+      map.off('idle', collapseAttributionWhenReady)
+      map.off('sourcedata', collapseAttributionWhenReady)
+      map.off('styledata', collapseAttributionWhenReady)
       globalThis.removeEventListener('resize', handleWindowResize)
       popup.remove()
       map.remove()
