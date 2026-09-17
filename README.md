@@ -15,33 +15,29 @@ de datos e ingeniería detrás.
 
 | Capa | Qué entrega |
 | --- | --- |
-| **1 · Mapa** | MapLibre: círculos por magnitud, color por profundidad, heatmap, placas, filtros, lista, deep link `?event=` |
-| **2 · Escena** | R3F en `/event/:id/3d`: plano honesto, epicentro vs hipocentro, vecinos FDSN |
-| **3 · Products** | ShakeMap MMI en mapa, PAGER y DYFI en ficha, con degradación limpia |
+| **Mapa** | MapLibre: magnitud, profundidad, heatmap, placas, filtros, lista, `?event=` |
+| **Escena** | R3F `/event/:id/3d`: plano honesto, epicentro vs hipocentro, vecinos FDSN |
+| **Products** | ShakeMap MMI, PAGER, DYFI; degradación limpia si USGS no trae dato |
 
-El navegador **no** habla con `earthquake.usgs.gov`. Todo pasa por el BFF
-(`/api/earthquakes`, `/:id`, `/:id/shakemap`, `/search`) con validación Zod y caché.
+El navegador no llama a USGS: solo al BFF (`/api/earthquakes`, `/:id`,
+`/:id/shakemap`, `/search`) con Zod y caché.
 
-## Lo difícil (a propósito)
+## Lo difícil
 
-- **Frontera USGS:** products incompletos, URLs que faltan, contornos vacíos. La UI
-  muestra ausencia / carga / error / listo; no inventa geometría.
-- **DTO de products:** el BFF normaliza flags y metadatos útiles; no expone el árbol
-  crudo de `properties.products`.
-- **Plano honesto:** sin DEM de producción (ADR). La escena explica profundidad sin
-  fingir relieve.
-- **Anti-prediccion:** el M–t de vecinos es exploratorio, con disclaimer visible.
+- Products incompletos → estados ausencia / carga / error / listo; sin geometría inventada
+- DTO normalizado en servidor; sin árbol crudo de `properties.products`
+- Sin DEM en producción ([ADR](./docs/adr-dem.md)); la escena explica profundidad
+- M-t de vecinos exploratorio, con disclaimer (no predicción)
 
 ## Stack
 
 Vite · React 19 · TypeScript · MapLibre 6 · Three / R3F / Drei · Zustand · TanStack
-Query · React Router · BFF serverless (Vercel) · oxlint · Prettier · Husky · Actions
-(`verificar`)
+Query · React Router · BFF Vercel · oxlint · Prettier · Husky · Actions (`verificar`)
 
 ## Estado
 
-Capas 1–3 usables en demo. Fase 7: README/docs en curso; capturas/GIF de portfolio
-al final (#112–#114), cuando el pulido UI esté cerrado.
+Capas 1-3 usables en demo. Pendiente de cierre: media de portfolio (capturas/GIF) y
+README bilingüe.
 
 ## Desarrollo
 
@@ -51,25 +47,14 @@ npm run hooks
 npm run dev
 ```
 
-Usa `npm ci` (no `npm install` al clonar). Luego `npm run hooks`: el repo tiene
-`ignore-scripts=true` en `.npmrc`. Detalle en
+`npm ci` + `npm run hooks` (Husky no corre solo: `ignore-scripts=true`). Ver
 [`CONTRIBUTING.md`](./CONTRIBUTING.md#seguridad-de-dependencias).
 
-```bash
-npm run build
-npm run lint
-npm run format:check
-npm run test:local-coordinates
-npm run test:usgs-schema
-```
-
-Sandbox MapLibre (Fase 0): `python -m http.server 4173` → `/sandbox/maplibre/`.
+También: `npm run build` · `lint` · `format:check` · `test:local-coordinates` ·
+`test:usgs-schema`.
 
 ## Docs
 
-- [`PRODUCT.md`](./PRODUCT.md) · tesis y voz
-- [`CONTRIBUTING.md`](./CONTRIBUTING.md) · issue → PR → CI
-- [`AGENTS.md`](./AGENTS.md) · estado para agentes
-- [`docs/02-mapa-producto-capa-1.md`](./docs/02-mapa-producto-capa-1.md) · mapa 2D
-- [`docs/04-escena-3d.md`](./docs/04-escena-3d.md) · unidades y exageración 3D
-- [`docs/adr-dem.md`](./docs/adr-dem.md) · por qué no hay DEM en producción
+[`PRODUCT.md`](./PRODUCT.md) · [`CONTRIBUTING.md`](./CONTRIBUTING.md) ·
+[`AGENTS.md`](./AGENTS.md) · [`docs/02-mapa-producto-capa-1.md`](./docs/02-mapa-producto-capa-1.md) ·
+[`docs/04-escena-3d.md`](./docs/04-escena-3d.md) · [`docs/adr-dem.md`](./docs/adr-dem.md)
