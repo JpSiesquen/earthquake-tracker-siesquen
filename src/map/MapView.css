@@ -47,7 +47,7 @@
 
   .map-shell__map,
   .map-stage {
-    min-height: 18rem;
+    min-height: 20rem;
   }
 
   .map-shell__panel {
@@ -55,15 +55,17 @@
   }
 
   .map-view {
-    height: min(52vh, 22rem);
-    min-height: 18rem;
+    /* Un poco mas de mapa util en el primer pantallazo movil (#255). */
+    height: clamp(20rem, 58vh, 28rem);
+    min-height: 20rem;
   }
 
   .layer-control {
     top: 0.5rem;
     right: 0.5rem;
     width: min(14rem, calc(100% - 1rem));
-    max-height: calc(100% - 1rem);
+    /* Reserva aire inferior para leyenda + attribution. */
+    max-height: calc(100% - 7.25rem);
     overflow: auto;
   }
 
@@ -431,10 +433,10 @@
   position: static;
   min-width: 7.5rem;
   padding: 0.65rem 0.75rem;
-  border: 1px solid rgb(148 163 184 / 55%);
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius);
-  background: rgb(248 250 252 / 92%);
-  box-shadow: 0 0.2rem 0.7rem rgb(15 23 42 / 12%);
+  background: var(--color-surface-raised);
+  box-shadow: 0 0.15rem 0.45rem rgb(15 23 42 / 10%);
   color: var(--color-ink);
   text-align: left;
 }
@@ -492,7 +494,8 @@
     left: 0.5rem;
     flex-direction: column-reverse;
     align-items: stretch;
-    max-width: min(12rem, calc(100% - 1rem));
+    /* Deja el boton `i` de attribution libre a la derecha. */
+    max-width: min(11.5rem, calc(100% - 3.25rem));
   }
 
   .depth-legend,
@@ -509,6 +512,40 @@
   .depth-legend__list,
   .mmi-legend__list {
     font-size: 0.68rem;
+  }
+
+  /* Densidad visual: descripciones solo para lectores de pantalla (#255). */
+  .layer-control {
+    width: min(11.75rem, calc(100% - 1rem));
+    padding: 0.45rem 0.5rem 0.5rem;
+  }
+
+  .layer-control__copy {
+    position: relative;
+  }
+
+  .layer-control__copy small {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .layer-control__option {
+    min-height: 2.5rem;
+    gap: 0.35rem;
+    padding: 0.2rem 0.15rem;
+  }
+
+  .map-view .maplibregl-ctrl-bottom-right {
+    right: 0;
+    bottom: 0;
+    z-index: 2;
   }
 }
 
