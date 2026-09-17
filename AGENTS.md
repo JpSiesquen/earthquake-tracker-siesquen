@@ -30,10 +30,12 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 
 ## Estado
 
-Fase 0–6 cerradas. Capas 1–3 usables: mapa, escena 3D local y productos USGS
-(ShakeMap MMI, PAGER, DYFI) con degradación limpia vía BFF.
+Fase 0-6 cerradas en GitHub. Capas 1-3 usables: mapa, escena 3D local y productos
+USGS (ShakeMap MMI, PAGER, DYFI) con degradacion limpia via BFF.
 Unidades escena: [`docs/04-escena-3d.md`](./docs/04-escena-3d.md).
-DEM en producción: N/A (ADR).
+Bundle: [`docs/05-bundle.md`](./docs/05-bundle.md).
+DEM en produccion: N/A (ADR).
+README publico ES+EN compacto (sin bitacora de fases).
 
 | Fase | Foco | Estado |
 | --- | --- | --- |
@@ -44,16 +46,15 @@ DEM en producción: N/A (ADR).
 | 4 | Detalle, FDSN y spike DEM | Hecha |
 | 5 | Escena 3D local (Capa 2) | Hecha |
 | 6 | Productos USGS (Capa 3) | Hecha |
-| 7 | Cierre y README portfolio | Pendiente |
+| 7 | Cierre y README portfolio | En curso (falta media) |
 
-**Siguiente:** [#112](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/112)
-(capturas/GIF) → README [#115](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/115) /
-[#215](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/215); cierre
-[#118](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/118).
-Auditoría UX Capa 3 ejecutada (#228); paralelo #110–#111 / #230–#231 cerrado.
-
-Fase 6 parcial: products DTO (#99); estados UI (#100); BFF contornos (#101);
-pintado MapLibre MMI (#102).
+**Siguiente:** media de portfolio al final del pulido:
+[#112](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/112)
+(hero) → [#113](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/113)
+(GIF); [#114](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/114)
+opcional. Luego cerrar el milestone Fase 7 a mano.
+Auditoria UX Capa 3 (#228) y pase a11y/movil (#110-#111) ya cerrados; si reaparecen
+bugs de UI, van como issues nuevas, no como "Falta Fase 4".
 
 ## Stack
 
