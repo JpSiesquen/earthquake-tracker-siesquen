@@ -1,0 +1,59 @@
+.map-shakemap-banner {
+  position: absolute;
+  z-index: 2;
+  top: 0.5rem;
+  left: 0.5rem;
+  max-width: min(16rem, calc(100% - 14rem));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.55rem;
+  margin: 0;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid rgb(148 163 184 / 65%);
+  border-radius: var(--radius);
+  background: rgb(248 250 252 / 94%);
+  box-shadow: 0 0.15rem 0.5rem rgb(15 23 42 / 10%);
+  color: var(--color-ink);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.map-shakemap-banner--error {
+  border-color: color-mix(
+    in srgb,
+    var(--color-danger) 40%,
+    var(--color-border)
+  );
+  color: var(--color-danger);
+}
+
+.map-shakemap-banner__retry {
+  padding: 0.15rem 0.4rem;
+  border: 1px solid currentColor;
+  border-radius: var(--radius);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.map-shakemap-banner__retry:hover {
+  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+}
+
+.map-shakemap-banner__retry:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 40rem) {
+  .map-shakemap-banner {
+    max-width: calc(100% - 1rem);
+    right: 0.5rem;
+  }
+}
