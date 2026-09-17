@@ -214,6 +214,7 @@
 .map-filter__heading,
 .map-filters__meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.5rem;
@@ -232,6 +233,8 @@
 }
 
 .map-filters__header button {
+  flex: 0 1 auto;
+  max-width: 100%;
   padding: 0.25rem 0.45rem;
   border: 1px solid #9ba8b7;
   border-radius: 0.2rem;
@@ -240,6 +243,9 @@
   font: inherit;
   font-size: 0.68rem;
   font-weight: 650;
+  line-height: 1.25;
+  white-space: normal;
+  text-align: right;
   cursor: pointer;
 }
 
@@ -332,13 +338,37 @@
 }
 
 .map-filters__meta {
+  align-items: flex-start;
   color: var(--color-ink-soft);
   font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.map-filters__meta > span {
+  flex: 1 1 10rem;
+  min-width: 0;
 }
 
 .map-filters__meta strong {
   color: var(--color-ink);
   font-variant-numeric: tabular-nums;
+}
+
+/* Panel apilado (tablet): meta en columna, sin pelear por ancho. */
+@media (max-width: 56rem) {
+  .map-filters__header {
+    align-items: flex-start;
+  }
+
+  .map-filters__meta {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .map-filters__meta > span {
+    flex: 0 0 auto;
+    width: 100%;
+  }
 }
 
 /* Rail desktop (~20rem): 1 columna. Panel apilado ancho: 2 o 3 columnas. */
@@ -367,6 +397,11 @@
     align-items: flex-start;
     flex-direction: column;
     gap: 0.2rem;
+  }
+
+  .map-filters__meta > span {
+    flex: none;
+    width: 100%;
   }
 }
 
