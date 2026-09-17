@@ -9,7 +9,8 @@ de datos e ingeniería detrás.
 [![Demo](https://img.shields.io/badge/demo-vercel-black?style=flat-square)](https://earthquake-tracker-siesquen.vercel.app)
 [![CI](https://img.shields.io/github/actions/workflow/status/JpSiesquen/earthquake-tracker-siesquen/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/JpSiesquen/earthquake-tracker-siesquen/actions/workflows/ci.yml)
 
-**Demo:** https://earthquake-tracker-siesquen.vercel.app
+**Demo:** https://earthquake-tracker-siesquen.vercel.app  
+**English:** [README.en.md](./README.en.md)
 
 ## Producto
 
@@ -36,8 +37,7 @@ Query · React Router · BFF Vercel · oxlint · Prettier · Husky · Actions (`
 
 ## Estado
 
-Capas 1-3 usables en demo. Pendiente de cierre: media de portfolio (capturas/GIF) y
-README bilingüe.
+Capas 1-3 usables en demo. Pendiente de cierre: media de portfolio (capturas/GIF).
 
 ## Desarrollo
 
