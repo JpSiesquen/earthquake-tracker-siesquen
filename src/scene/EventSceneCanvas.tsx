@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 
@@ -40,6 +41,17 @@ export default function EventSceneCanvas({
   focusCoordinates,
   neighbors,
 }: EventSceneCanvasProps) {
+  const [reduceMotion, setReduceMotion] = useState(
+    () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  )
+
+  useEffect(() => {
+    const media = globalThis.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = () => setReduceMotion(media.matches)
+    media.addEventListener('change', onChange)
+    return () => media.removeEventListener('change', onChange)
+  }, [])
+
   return (
     <div className="event-scene-canvas" aria-label="Viewport 3D del evento">
       <SceneOverlay
@@ -80,7 +92,7 @@ export default function EventSceneCanvas({
           maxDistance={SCENE_CONTROLS.maxDistance}
           minPolarAngle={SCENE_CONTROLS.minPolarAngle}
           maxPolarAngle={SCENE_CONTROLS.maxPolarAngle}
-          enableDamping
+          enableDamping={!reduceMotion}
           dampingFactor={0.08}
           enablePan={false}
         />
