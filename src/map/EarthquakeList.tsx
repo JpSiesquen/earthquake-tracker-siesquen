@@ -13,6 +13,12 @@ const timeFormatter = new Intl.DateTimeFormat('es-CL', {
 
 type EarthquakeListProps = {
   earthquakes: readonly EarthquakeSummary[]
+  /** Total del catálogo antes de filtros de vista */
+  catalogTotal: number | null
+  isCatalogLoading: boolean
+  isCatalogStale: boolean
+  catalogError: string | null
+  hasActiveFilters: boolean
   onSelectEarthquake: (earthquake: EarthquakeSummary) => void
 }
 
@@ -32,12 +38,56 @@ function prefersReducedMotion(): boolean {
   return globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
+function emptyMessage({
+  catalogError,
+  isCatalogLoading,
+  catalogTotal,
+  hasActiveFilters,
+}: {
+  catalogError: string | null
+  isCatalogLoading: boolean
+  catalogTotal: number | null
+  hasActiveFilters: boolean
+}): { tone: 'error' | 'status'; text: string } {
+  if (catalogError && catalogTotal === null) {
+    return {
+      tone: 'error',
+      text: `Error de catálogo: ${catalogError}`,
+    }
+  }
+
+  if (isCatalogLoading && catalogTotal === null) {
+    return { tone: 'status', text: 'Cargando eventos…' }
+  }
+
+  if (catalogTotal === 0) {
+    return {
+      tone: 'status',
+      text: 'Sin eventos en esta ventana del catálogo.',
+    }
+  }
+
+  if (hasActiveFilters) {
+    return {
+      tone: 'status',
+      text: 'Ningún evento con los filtros actuales.',
+    }
+  }
+
+  return { tone: 'status', text: 'Sin eventos visibles.' }
+}
+
 /**
  * Lista operable del catalogo filtrado (misma vista que el mapa).
  * Seleccion compartida con el mapa via Zustand + callbacks de sync.
  */
 export function EarthquakeList({
   earthquakes,
+  catalogTotal,
+  isCatalogLoading,
+  isCatalogStale,
+  catalogError,
+  hasActiveFilters,
   onSelectEarthquake,
 }: EarthquakeListProps) {
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
@@ -57,21 +107,39 @@ export function EarthquakeList({
     })
   }, [selectedId])
 
+  const empty = emptyMessage({
+    catalogError,
+    isCatalogLoading,
+    catalogTotal,
+    hasActiveFilters,
+  })
+
   return (
     <section
       className="earthquake-list"
       aria-labelledby="earthquake-list-title"
+      aria-busy={isCatalogLoading && catalogTotal === null}
     >
       <div className="earthquake-list__header">
         <h2 id="earthquake-list-title">Eventos</h2>
         <p className="earthquake-list__count" aria-live="polite">
           {earthquakes.length} en vista
+          {isCatalogStale ? (
+            <span className="earthquake-list__stale"> · stale</span>
+          ) : null}
         </p>
       </div>
 
       {earthquakes.length === 0 ? (
-        <p className="earthquake-list__empty" role="status">
-          Ningun evento con los filtros actuales.
+        <p
+          className={
+            empty.tone === 'error'
+              ? 'earthquake-list__empty earthquake-list__empty--error'
+              : 'earthquake-list__empty'
+          }
+          role={empty.tone === 'error' ? 'alert' : 'status'}
+        >
+          {empty.text}
         </p>
       ) : (
         <ul className="earthquake-list__items" ref={itemsRef}>

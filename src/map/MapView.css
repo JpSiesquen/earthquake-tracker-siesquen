@@ -299,6 +299,11 @@
   color: var(--color-danger);
 }
 
+.map-filter__status[data-status='stale'] {
+  color: var(--color-ink-muted);
+  font-weight: 650;
+}
+
 .map-filter__heading output {
   min-width: 4.2rem;
   color: var(--color-accent);

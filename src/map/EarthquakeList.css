@@ -32,6 +32,11 @@
   font-size: 0.78rem;
 }
 
+.earthquake-list__stale {
+  color: var(--color-ink-soft);
+  font-weight: 650;
+}
+
 .earthquake-list__empty {
   margin: 0;
   padding: 0.85rem 0.75rem;
@@ -40,6 +45,16 @@
   background: var(--color-surface-raised);
   color: var(--color-ink-muted);
   font-size: 0.85rem;
+}
+
+.earthquake-list__empty--error {
+  border-style: solid;
+  border-color: color-mix(
+    in srgb,
+    var(--color-danger) 35%,
+    var(--color-border)
+  );
+  color: var(--color-danger);
 }
 
 .earthquake-list__items {

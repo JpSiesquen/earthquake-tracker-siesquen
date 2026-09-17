@@ -602,6 +602,10 @@ export function MapView({
     setMaxDepthKm(DEFAULT_MAX_DEPTH_KM)
   }
 
+  const hasActiveFilters =
+    minMagnitude !== DEFAULT_MIN_MAGNITUDE ||
+    maxDepthKm !== DEFAULT_MAX_DEPTH_KM
+
   const handleSelectFromList = (earthquake: EarthquakeSummary) => {
     select(earthquake.id)
 
@@ -712,6 +716,11 @@ export function MapView({
         <EventDetailPanel />
         <EarthquakeList
           earthquakes={visibleEarthquakes}
+          catalogTotal={earthquakes === undefined ? null : earthquakes.length}
+          isCatalogLoading={isCatalogLoading}
+          isCatalogStale={isCatalogStale}
+          catalogError={catalogError}
+          hasActiveFilters={hasActiveFilters}
           onSelectEarthquake={handleSelectFromList}
         />
         <Open3DCta />
