@@ -20,6 +20,7 @@ import { EventDetailPanel } from './EventDetailPanel.tsx'
 import { summariesToGeoJSON } from './earthquakesGeoJSON.ts'
 import { filterEarthquakes } from './filterEarthquakes.ts'
 import { LayerControl, type MapLayerVisibility } from './LayerControl.tsx'
+import { MapShakeMapBanner } from './MapShakeMapBanner.tsx'
 import {
   DEFAULT_MAX_DEPTH_KM,
   DEFAULT_MIN_MAGNITUDE,
@@ -644,6 +645,16 @@ export function MapView({
             visibility={layerVisibility}
             onVisibilityChange={handleLayerVisibilityChange}
             shakemapToggle={shakemapToggle}
+          />
+          <MapShakeMapBanner
+            state={contourState}
+            onRetry={
+              contourState?.kind === 'error'
+                ? () => {
+                    void contoursQuery.refetch()
+                  }
+                : undefined
+            }
           />
           <div className="map-legends">
             <aside className="depth-legend" aria-label="Leyenda de profundidad">
