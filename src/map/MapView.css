@@ -355,12 +355,27 @@
   }
 }
 
-.depth-legend {
+.map-legends {
   position: absolute;
   z-index: 1;
   bottom: 0.75rem;
   left: 0.75rem;
-  min-width: 9.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.5rem;
+  max-width: calc(100% - 1.5rem);
+  pointer-events: none;
+}
+
+.map-legends > * {
+  pointer-events: auto;
+}
+
+.depth-legend,
+.mmi-legend {
+  position: static;
+  min-width: 7.5rem;
   padding: 0.65rem 0.75rem;
   border: 1px solid rgb(148 163 184 / 55%);
   border-radius: var(--radius);
@@ -370,7 +385,12 @@
   text-align: left;
 }
 
-.depth-legend__title {
+.depth-legend {
+  min-width: 9.5rem;
+}
+
+.depth-legend__title,
+.mmi-legend__title {
   margin: 0 0 0.35rem;
   color: var(--color-ink);
   font-size: 0.75rem;
@@ -379,7 +399,8 @@
   text-transform: uppercase;
 }
 
-.depth-legend__list {
+.depth-legend__list,
+.mmi-legend__list {
   display: grid;
   gap: 0.25rem;
   margin: 0;
@@ -388,7 +409,8 @@
   font-size: 0.72rem;
 }
 
-.depth-legend__list li {
+.depth-legend__list li,
+.mmi-legend__list li {
   display: flex;
   align-items: center;
   gap: 0.45rem;
@@ -402,51 +424,38 @@
   border-radius: 50%;
 }
 
-.mmi-legend {
-  position: absolute;
-  z-index: 1;
-  bottom: 0.75rem;
-  left: 11rem;
-  min-width: 7.5rem;
-  padding: 0.65rem 0.75rem;
-  border: 1px solid rgb(148 163 184 / 55%);
-  border-radius: var(--radius);
-  background: rgb(248 250 252 / 92%);
-  box-shadow: 0 0.2rem 0.7rem rgb(15 23 42 / 12%);
-  color: var(--color-ink);
-  text-align: left;
-}
-
-.mmi-legend__title {
-  margin: 0 0 0.35rem;
-  color: var(--color-ink);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.mmi-legend__list {
-  display: grid;
-  gap: 0.25rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.72rem;
-}
-
-.mmi-legend__list li {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-}
-
 .mmi-legend__swatch {
   width: 0.7rem;
   height: 0.35rem;
   flex: 0 0 auto;
   border: 1px solid rgb(15 23 42 / 22%);
   border-radius: 1px;
+}
+
+@media (max-width: 40rem) {
+  .map-legends {
+    bottom: 0.5rem;
+    left: 0.5rem;
+    flex-direction: column-reverse;
+    align-items: stretch;
+    max-width: min(12rem, calc(100% - 1rem));
+  }
+
+  .depth-legend,
+  .mmi-legend {
+    min-width: 0;
+    padding: 0.45rem 0.55rem;
+  }
+
+  .depth-legend__title,
+  .mmi-legend__title {
+    font-size: 0.7rem;
+  }
+
+  .depth-legend__list,
+  .mmi-legend__list {
+    font-size: 0.68rem;
+  }
 }
 
 .map-view .maplibregl-popup-content {

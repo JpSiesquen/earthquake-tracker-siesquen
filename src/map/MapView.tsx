@@ -626,29 +626,14 @@ export function MapView({
             onVisibilityChange={handleLayerVisibilityChange}
             shakemapToggle={shakemapToggle}
           />
-          <aside className="depth-legend" aria-label="Leyenda de profundidad">
-            <p className="depth-legend__title">Profundidad</p>
-            <ul className="depth-legend__list">
-              {DEPTH_LEGEND_ITEMS.map((item) => (
-                <li key={item.label}>
-                  <span
-                    className="depth-legend__swatch"
-                    style={{ backgroundColor: item.color }}
-                    aria-hidden="true"
-                  />
-                  {item.label}
-                </li>
-              ))}
-            </ul>
-          </aside>
-          {shakemapVisible ? (
-            <aside className="mmi-legend" aria-label="Leyenda MMI ShakeMap">
-              <p className="mmi-legend__title">MMI</p>
-              <ul className="mmi-legend__list">
-                {MMI_LEGEND_ITEMS.map((item) => (
+          <div className="map-legends">
+            <aside className="depth-legend" aria-label="Leyenda de profundidad">
+              <p className="depth-legend__title">Profundidad</p>
+              <ul className="depth-legend__list">
+                {DEPTH_LEGEND_ITEMS.map((item) => (
                   <li key={item.label}>
                     <span
-                      className="mmi-legend__swatch"
+                      className="depth-legend__swatch"
                       style={{ backgroundColor: item.color }}
                       aria-hidden="true"
                     />
@@ -657,7 +642,24 @@ export function MapView({
                 ))}
               </ul>
             </aside>
-          ) : null}
+            {shakemapVisible ? (
+              <aside className="mmi-legend" aria-label="Leyenda MMI ShakeMap">
+                <p className="mmi-legend__title">MMI</p>
+                <ul className="mmi-legend__list">
+                  {MMI_LEGEND_ITEMS.map((item) => (
+                    <li key={item.label}>
+                      <span
+                        className="mmi-legend__swatch"
+                        style={{ backgroundColor: item.color }}
+                        aria-hidden="true"
+                      />
+                      {item.label}
+                    </li>
+                  ))}
+                </ul>
+              </aside>
+            ) : null}
+          </div>
         </div>
       </div>
       <aside className="map-shell__panel" aria-label="Panel de control">
