@@ -74,7 +74,7 @@ function formatDyfiCdi(cdi: number): string {
  */
 export function EventDetailPanel() {
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
-  const { data, error, isLoading, isFetching } = useEarthquakeDetail(selectedId)
+  const { data, error, isLoading } = useEarthquakeDetail(selectedId)
 
   const contourMiUrl = data?.products.shakemap.contourMiUrl
   const contoursQuery = useShakeMapContours(selectedId, contourMiUrl)
@@ -114,7 +114,7 @@ export function EventDetailPanel() {
     <section
       className="event-detail-panel"
       aria-labelledby="event-detail-panel-title"
-      aria-busy={isLoading || isFetching}
+      aria-busy={isLoading && !data}
     >
       <h2 id="event-detail-panel-title">Ficha</h2>
 
@@ -124,9 +124,15 @@ export function EventDetailPanel() {
         </p>
       ) : null}
 
-      {error ? (
+      {error && !data ? (
         <p className="event-detail-panel__error" role="alert">
           {error.message}
+        </p>
+      ) : null}
+
+      {error && data ? (
+        <p className="event-detail-panel__stale" role="status">
+          No se pudo refrescar; se muestra el último detalle válido.
         </p>
       ) : null}
 

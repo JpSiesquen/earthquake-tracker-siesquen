@@ -45,13 +45,23 @@ export function MapFilters({
     maxDepthKm !== DEFAULT_MAX_DEPTH_KM
   const catalogStatus = catalogError
     ? `Error al cargar: ${catalogError}`
-    : isCatalogLoading
+    : isCatalogLoading && totalCount === 0
       ? 'Cargando catálogo…'
       : isCatalogStale
         ? 'Datos de respaldo (stale)'
-        : isCatalogFetching
+        : isCatalogFetching && totalCount > 0
           ? 'Actualizando catálogo…'
-          : 'Catálogo actualizado'
+          : isCatalogLoading
+            ? 'Cargando catálogo…'
+            : totalCount === 0
+              ? 'Catálogo vacío en esta ventana'
+              : 'Catálogo actualizado'
+
+  const catalogStatusKind = catalogError
+    ? 'error'
+    : isCatalogStale
+      ? 'stale'
+      : 'ok'
 
   return (
     <section className="map-filters" aria-labelledby="map-filters-title">
@@ -80,7 +90,7 @@ export function MapFilters({
           </select>
           <p
             className="map-filter__status"
-            data-status={catalogError ? 'error' : 'ok'}
+            data-status={catalogStatusKind}
             role={catalogError ? 'alert' : 'status'}
           >
             {catalogStatus}
@@ -129,8 +139,15 @@ export function MapFilters({
       <div className="map-filters__meta" aria-live="polite">
         <span>
           <strong>{visibleCount}</strong> visibles de {totalCount}
+          {visibleCount === 0 && totalCount > 0 && hasActiveFilters
+            ? ' (filtros activos)'
+            : null}
         </span>
-        <span>Sin magnitud o profundidad conocida se excluyen</span>
+        <span>
+          {totalCount === 0 && !catalogError && !isCatalogLoading
+            ? 'Sin eventos en esta ventana del catálogo'
+            : 'Sin magnitud o profundidad conocida se excluyen'}
+        </span>
       </div>
     </section>
   )
