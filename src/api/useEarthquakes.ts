@@ -15,7 +15,7 @@ export function earthquakesQueryKey(window: CatalogWindow) {
 /**
  * Catalogo USGS via BFF (`/api/earthquakes`).
  */
-export function useEarthquakes(window: CatalogWindow = 'day') {
+export function useEarthquakes(window: CatalogWindow = 'week') {
   return useQuery({
     queryKey: earthquakesQueryKey(window),
     queryFn: () => fetchEarthquakes(window),
