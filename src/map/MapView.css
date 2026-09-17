@@ -62,7 +62,7 @@
   .layer-control {
     top: 0.5rem;
     right: 0.5rem;
-    width: min(13rem, calc(100% - 1rem));
+    width: min(14rem, calc(100% - 1rem));
     max-height: calc(100% - 1rem);
     overflow: auto;
   }
@@ -87,13 +87,14 @@
   z-index: 1;
   top: 0.75rem;
   right: 0.75rem;
-  width: 12.5rem;
+  width: 13.75rem;
   margin: 0;
   padding: 0.55rem 0.65rem 0.65rem;
-  border: 1px solid rgb(148 163 184 / 65%);
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius);
-  background: rgb(248 250 252 / 94%);
-  box-shadow: 0 0.2rem 0.7rem rgb(15 23 42 / 12%);
+  /* Solido: el basemap no debe leerse a traves del chrome (#254). */
+  background: var(--color-surface-raised);
+  box-shadow: 0 0.15rem 0.45rem rgb(15 23 42 / 10%);
   color: var(--color-ink);
 }
 
@@ -113,7 +114,7 @@
 
 .layer-control__option {
   display: grid;
-  grid-template-columns: auto 1.2rem 1fr;
+  grid-template-columns: auto 1.2rem minmax(0, 1fr);
   align-items: center;
   gap: 0.45rem;
   min-height: 2.2rem;
@@ -123,7 +124,7 @@
 }
 
 .layer-control__option:hover {
-  background: rgb(226 232 240 / 65%);
+  background: var(--color-surface);
 }
 
 .layer-control__option--disabled {
@@ -181,19 +182,22 @@
 
 .layer-control__copy {
   display: grid;
-  line-height: 1.15;
+  min-width: 0;
+  line-height: 1.2;
 }
 
 .layer-control__copy strong {
   color: var(--color-ink);
   font-size: 0.73rem;
   font-weight: 680;
+  overflow-wrap: anywhere;
 }
 
 .layer-control__copy small {
   margin-top: 0.12rem;
   color: var(--color-ink-soft);
   font-size: 0.64rem;
+  overflow-wrap: anywhere;
 }
 
 .map-filters {
