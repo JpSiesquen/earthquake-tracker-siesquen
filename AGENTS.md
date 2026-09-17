@@ -20,6 +20,7 @@ No crear `CLAUDE.md` en este repo.
 | `docs/02-mapa-producto-capa-1.md` | Mapa 2D de producto (Capa 1) | Si |
 | `docs/03-detalle-fdsn-dem.md` | Detalle, FDSN, ficha, stub 3D (Fase 4) | Si |
 | `docs/04-escena-3d.md` | Escena 3D: ejes, unidades, exageracion (Fase 5) | Si |
+| `docs/05-bundle.md` | Bundle: MapLibre vs escena 3D lazy (Fase 7) | Si |
 | `docs/dem-spike.md` | Spike DEM coste cero (Fase 4) | Si |
 | `docs/adr-dem.md` | ADR: plano honesto vs DEM (Capa 2) | Si |
 | `PLAN.md` | Plan interno | No (gitignore) |
