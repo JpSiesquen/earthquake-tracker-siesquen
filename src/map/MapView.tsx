@@ -262,6 +262,25 @@ export function MapView({
   }, [clear, earthquakes, selectedId, visibleEarthquakes])
 
   useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape' || selectedId === null) return
+      const target = event.target
+      if (
+        target instanceof HTMLElement &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'SELECT' ||
+          target.tagName === 'TEXTAREA')
+      ) {
+        return
+      }
+      clear()
+    }
+
+    globalThis.addEventListener('keydown', onKeyDown)
+    return () => globalThis.removeEventListener('keydown', onKeyDown)
+  }, [clear, selectedId])
+
+  useEffect(() => {
     const map = mapRef.current
     const previousId = selectedIdRef.current
     selectedIdRef.current = selectedId
