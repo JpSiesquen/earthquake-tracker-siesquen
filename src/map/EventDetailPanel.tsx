@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+
 import { useEarthquakeDetail } from '../api/useEarthquakeDetail.ts'
 import { useShakeMapContours } from '../api/useShakeMapContours.ts'
 import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
@@ -73,11 +75,23 @@ function formatDyfiCdi(cdi: number): string {
  * Instrumento de panel; no card de marketing.
  */
 export function EventDetailPanel() {
+  const panelRef = useRef<HTMLElement | null>(null)
   const selectedId = useEarthquakeSelection((state) => state.selectedId)
   const { data, error, isLoading } = useEarthquakeDetail(selectedId)
 
   const contourMiUrl = data?.products.shakemap.contourMiUrl
   const contoursQuery = useShakeMapContours(selectedId, contourMiUrl)
+
+  useEffect(() => {
+    if (selectedId === null) return
+    const reduceMotion = globalThis.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+    panelRef.current?.scrollIntoView({
+      block: 'nearest',
+      behavior: reduceMotion ? 'auto' : 'smooth',
+    })
+  }, [selectedId])
 
   if (selectedId === null) return null
 
@@ -112,6 +126,7 @@ export function EventDetailPanel() {
 
   return (
     <section
+      ref={panelRef}
       className="event-detail-panel"
       aria-labelledby="event-detail-panel-title"
       aria-busy={isLoading && !data}

@@ -728,6 +728,7 @@ export function MapView({
       </div>
       <aside className="map-shell__panel" aria-label="Panel de control">
         <MapPresets onApplyPreset={applyCameraPreset} />
+        <EventDetailPanel />
         <MapFilters
           minMagnitude={minMagnitude}
           maxDepthKm={maxDepthKm}
@@ -743,7 +744,6 @@ export function MapView({
           onWindowChange={onWindowChange}
           onReset={resetFilters}
         />
-        <EventDetailPanel />
         <EarthquakeList
           earthquakes={visibleEarthquakes}
           catalogTotal={earthquakes === undefined ? null : earthquakes.length}

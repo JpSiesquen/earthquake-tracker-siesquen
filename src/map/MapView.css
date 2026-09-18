@@ -18,8 +18,11 @@
   gap: var(--space-3);
   min-width: 0;
   max-height: calc(100vh - 7.5rem);
-  overflow: auto;
+  /* Un solo eje de scroll en el rail (#256); ficha/lista no anidan overflow. */
+  overflow-x: hidden;
+  overflow-y: auto;
   text-align: left;
+  overscroll-behavior: contain;
 }
 
 .map-stage {
