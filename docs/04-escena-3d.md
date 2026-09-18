@@ -1,6 +1,6 @@
 # Escena 3D local (Capa 2)
 
-Convenio de unidades y exageración para interpretar la escena R3F sin leer todo el código. ADR de suelo: [`adr-dem.md`](./adr-dem.md).
+Convenio de unidades y exageración para interpretar la escena R3F sin leer todo el código. ADR de suelo: [`adr-dem.md`](./adr-dem.md) (plano default; DEM opcional con fallback en addendum Fase 9).
 
 ## Modelo
 
@@ -37,7 +37,11 @@ Cap de vecinos en escena: 50 (`NEIGHBOR_LIMIT`).
 
 ## Límites del modelo
 
-- Sin DEM en producción (ADR).
+- Suelo default: plano honesto en Y=0 (ADR). DEM es **opcional** (addendum
+  Fase 9 en [`adr-dem.md`](./adr-dem.md)): si el fetch falla, se mantiene el
+  plano; el deep link 3D no depende de elevación.
+- Formato de referencia para un futuro mesh: [`dem-spike.md`](./dem-spike.md)
+  (Terrarium); el spike no fija host.
 - Sin pan de cámara; órbita limitada para no cruzar el plano.
 - Deep link: `/event/:id/3d` rehidrata detail/neighbors vía BFF.
 
