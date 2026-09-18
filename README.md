@@ -12,7 +12,7 @@ de datos e ingeniería detrás.
 **Demo:** https://earthquake-tracker-siesquen.vercel.app  
 **English:** [README.en.md](./README.en.md)
 
-![Mapa de producto: capas, ficha USGS y panel en desktop](./docs/assets/hero-desktop.png)
+![Mapa global con catálogo USGS, capas y panel de filtros](./docs/assets/hero-desktop.png)
 
 ## Producto
 

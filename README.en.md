@@ -12,7 +12,7 @@ data boundary and engineering behind it.
 **Demo:** https://earthquake-tracker-siesquen.vercel.app  
 **Español:** [README.md](./README.md)
 
-![Product map: layers, USGS event sheet, and desktop panel](./docs/assets/hero-desktop.png)
+![Global map with USGS catalog, layers, and filter panel](./docs/assets/hero-desktop.png)
 
 ## Product
 
