@@ -38,8 +38,9 @@ Y = -depthKm × 1.5
 Cap de vecinos en escena: 50 (`NEIGHBOR_LIMIT`).
 
 Al montar `/event/:id/3d`, una intro breve acerca la cámara y crece el conector
-hasta el hipocentro (si hay `depthKm`). Con `prefers-reduced-motion: reduce` se
-salta a la pose final.
+hasta el hipocentro (si hay `depthKm`). El destino de la intro es un encuadre
+calculado según profundidad y dispersión de vecinos. Con
+`prefers-reduced-motion: reduce` se salta a la pose final.
 
 ## Límites del modelo
 

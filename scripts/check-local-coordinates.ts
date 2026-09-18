@@ -22,6 +22,7 @@ import {
   projectLatLonToLocalXZ,
 } from '../src/geo/localCoordinates.ts'
 import { depthTickMarksKm } from '../src/scene/sceneScaleMarks.ts'
+import { computeSceneFraming } from '../src/scene/sceneFraming.ts'
 import {
   buildDemGridIndices,
   terrariumRgbToMeters,
@@ -187,6 +188,27 @@ assertEqual(
   buildDemGridIndices(2).length,
   6,
 )
+
+function framingDistance(depthKm: number | null): number {
+  const { position } = computeSceneFraming({
+    depthKm,
+    focusId: 'focus',
+    focusCoordinates: [0, 0],
+    neighbors: [],
+  })
+  return Math.hypot(position[0], position[1], position[2])
+}
+
+const shallowDist = framingDistance(12)
+const deepDist = framingDistance(180)
+if (!(deepDist > shallowDist * 1.15)) {
+  failed += 1
+  console.error(
+    `fail - encuadre profundo mas lejos: shallow=${shallowDist} deep=${deepDist}`,
+  )
+} else {
+  console.log('ok - encuadre profundo aleja la camara vs somero')
+}
 
 if (failed > 0) {
   process.exitCode = 1

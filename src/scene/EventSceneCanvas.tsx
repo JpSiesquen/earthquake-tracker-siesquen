@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 
@@ -10,13 +10,8 @@ import { DemandAutoOrbit } from './DemandAutoOrbit.tsx'
 import { EpicenterMarker } from './EpicenterMarker.tsx'
 import { HypocenterMarker } from './HypocenterMarker.tsx'
 import { NeighborMarkers } from './NeighborMarkers.tsx'
-import {
-  SCENE_CAMERA,
-  SCENE_CAMERA_INTRO_POSITION,
-  SCENE_CAMERA_POSITION,
-  SCENE_CONTROLS,
-  SCENE_ORIGIN,
-} from './sceneCamera.ts'
+import { SCENE_CAMERA, SCENE_CONTROLS } from './sceneCamera.ts'
+import { computeSceneFraming } from './sceneFraming.ts'
 import { ReferenceDistanceRings } from './ReferenceDistanceRings.tsx'
 import {
   ReferenceTerrain,
@@ -108,9 +103,20 @@ export default function EventSceneCanvas({
     setOrbitHintVisible(false)
   }, [])
 
-  const cameraPosition = reduceMotion
-    ? SCENE_CAMERA_POSITION
-    : SCENE_CAMERA_INTRO_POSITION
+  const framing = useMemo(
+    () =>
+      computeSceneFraming({
+        depthKm,
+        focusId,
+        focusCoordinates,
+        neighbors,
+      }),
+    [depthKm, focusCoordinates, focusId, neighbors],
+  )
+
+  const initialCameraPosition = reduceMotion
+    ? framing.position
+    : framing.introPosition
 
   return (
     <div className="event-scene-canvas" aria-label="Viewport 3D del evento">
@@ -132,7 +138,7 @@ export default function EventSceneCanvas({
         </button>
       ) : null}
       <Canvas
-        camera={{ ...SCENE_CAMERA, position: cameraPosition }}
+        camera={{ ...SCENE_CAMERA, position: initialCameraPosition }}
         className="event-scene-canvas__renderer"
         dpr={[1, 1.5]}
         frameloop="demand"
@@ -147,6 +153,9 @@ export default function EventSceneCanvas({
           reduceMotion={reduceMotion}
           revealRef={revealRef}
           onDone={onIntroDone}
+          cameraPosition={framing.position}
+          introPosition={framing.introPosition}
+          lookAtTarget={framing.target}
         />
         <DemandAutoOrbit active={autoOrbit} />
         <SceneLighting />
@@ -171,7 +180,7 @@ export default function EventSceneCanvas({
         <OrbitControls
           makeDefault
           enabled={introDone}
-          target={SCENE_ORIGIN}
+          target={framing.target}
           minDistance={SCENE_CONTROLS.minDistance}
           maxDistance={SCENE_CONTROLS.maxDistance}
           minPolarAngle={SCENE_CONTROLS.minPolarAngle}
