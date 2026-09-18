@@ -117,7 +117,7 @@ export default function EventSceneCanvas({
         ) : null}
         <DepthConnector depthKm={depthKm} revealRef={revealRef} />
         <DepthScaleTicks depthKm={depthKm} />
-        <EpicenterMarker />
+        <EpicenterMarker reduceMotion={reduceMotion} />
         <HypocenterMarker depthKm={depthKm} revealRef={revealRef} />
         <SceneDebugHelpers />
         <OrbitControls
