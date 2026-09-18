@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
 
-import type { DemSurfaceStatus } from './dem/ReferenceTerrain.tsx'
+import type {
+  DemSurfaceKind,
+  DemSurfaceStatus,
+} from './dem/ReferenceTerrain.tsx'
 import { DEM_ATTRIBUTION } from './dem/terrariumMath.ts'
 import './SceneOverlay.css'
 
@@ -10,6 +13,7 @@ type SceneOverlayProps = {
   place: string | null | undefined
   backTo: string
   demStatus: DemSurfaceStatus
+  demSurfaceKind: DemSurfaceKind
 }
 
 function formatMagnitude(magnitude: number | null | undefined): string {
@@ -23,8 +27,17 @@ function formatPlace(place: string | null | undefined): string {
   return trimmed ? trimmed : 'Ubicación sin dato'
 }
 
-function demStatusNote(status: DemSurfaceStatus): string {
+function demStatusNote(
+  status: DemSurfaceStatus,
+  surfaceKind: DemSurfaceKind,
+): string {
   if (status === 'ready') {
+    if (surfaceKind === 'water') {
+      return `Superficie marina · ${DEM_ATTRIBUTION} · sin fingir tierra`
+    }
+    if (surfaceKind === 'mixed') {
+      return `Costa / mixto · ${DEM_ATTRIBUTION} · agua en azul, tierra en relieve`
+    }
     return `Relieve local · ${DEM_ATTRIBUTION} · anillos 50 / 100 / 200 km`
   }
   if (status === 'loading') {
@@ -43,6 +56,7 @@ export function SceneOverlay({
   place,
   backTo,
   demStatus,
+  demSurfaceKind,
 }: SceneOverlayProps) {
   return (
     <div className="scene-overlay" aria-label="Datos del evento en escena">
@@ -55,7 +69,9 @@ export function SceneOverlay({
         <p className="scene-overlay__id">
           <code>{eventId}</code>
         </p>
-        <p className="scene-overlay__plane-note">{demStatusNote(demStatus)}</p>
+        <p className="scene-overlay__plane-note">
+          {demStatusNote(demStatus, demSurfaceKind)}
+        </p>
       </div>
 
       <Link className="scene-overlay__action" to={backTo}>

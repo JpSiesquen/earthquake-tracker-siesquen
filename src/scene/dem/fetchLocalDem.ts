@@ -1,5 +1,7 @@
 import {
   buildDemGridIndices,
+  DEM_LAND_COLOR,
+  DEM_WATER_COLOR,
   localKmToLonLat,
   lonLatToTile,
   lonLatToTileUv,
@@ -11,7 +13,7 @@ import {
 export const DEM_EXTENT_KM = 220
 export const DEM_RESOLUTION = 49
 export const DEM_ZOOM = 9
-/** Exageracion solo del relieve (independiente del 1.5x de profundidad). */
+/** Exageracion solo del relieve terrestre (independiente del 1.5x de profundidad). */
 export const DEM_TERRAIN_EXAGGERATION = 2.2
 export const DEM_FETCH_TIMEOUT_MS = 8_000
 
@@ -79,22 +81,22 @@ async function decodeTile(
   }
 }
 
+/** Elevacion bruta Terrarium (metros). Negativo = agua / batimetria. */
 function sampleElevationMeters(tile: TilePixels, u: number, v: number): number {
   const px = Math.min(tile.width - 1, Math.max(0, Math.floor(u * tile.width)))
   const py = Math.min(tile.height - 1, Math.max(0, Math.floor(v * tile.height)))
   const i = (py * tile.width + px) * 4
-  const meters = terrariumRgbToMeters(
+  return terrariumRgbToMeters(
     tile.data[i]!,
     tile.data[i + 1]!,
     tile.data[i + 2]!,
   )
-  // Oceanos / batimetria: plano de costa (lab), no fosa.
-  return Math.max(0, meters)
 }
 
 /**
  * Descarga tiles Terrarium y arma una malla local en km.
- * Lanza si timeout, HTTP error o decode falla → el caller cae al plano.
+ * Agua: superficie en Y=0 con color marino (no se finge relieve terrestre).
+ * Tierra: relieve exagerado. Lanza si falla → caller cae al plano.
  */
 export async function fetchLocalDemGrid({
   originLon,
@@ -136,7 +138,12 @@ export async function fetchLocalDemGrid({
   )
 
   const positions = new Float32Array(DEM_RESOLUTION * DEM_RESOLUTION * 3)
-  let cursor = 0
+  const colors = new Float32Array(DEM_RESOLUTION * DEM_RESOLUTION * 3)
+  let posCursor = 0
+  let colorCursor = 0
+  let waterCount = 0
+  let originIsWater = false
+
   for (const sample of samples) {
     const tileId = lonLatToTile(sample.lon, sample.lat, DEM_ZOOM)
     const key = `${tileId.z}/${tileId.x}/${tileId.y}`
@@ -151,17 +158,36 @@ export async function fetchLocalDemGrid({
       tileId.x,
       tileId.y,
     )
-    const elevKm =
-      (sampleElevationMeters(tile, u, v) / 1000) * DEM_TERRAIN_EXAGGERATION
-    positions[cursor++] = sample.x
-    positions[cursor++] = elevKm
-    positions[cursor++] = sample.z
+    const meters = sampleElevationMeters(tile, u, v)
+    const isWater = meters <= 0
+    if (isWater) {
+      waterCount += 1
+    }
+    if (sample.x === 0 && sample.z === 0) {
+      originIsWater = isWater
+    }
+
+    // Agua = superficie marina en Y=0 (no batimetria profunda: eso es tesis del hipocentro).
+    // Tierra = relieve positivo exagerado.
+    const elevKm = isWater ? 0 : (meters / 1000) * DEM_TERRAIN_EXAGGERATION
+
+    positions[posCursor++] = sample.x
+    positions[posCursor++] = elevKm
+    positions[posCursor++] = sample.z
+
+    const tint = isWater ? DEM_WATER_COLOR : DEM_LAND_COLOR
+    colors[colorCursor++] = tint.r
+    colors[colorCursor++] = tint.g
+    colors[colorCursor++] = tint.b
   }
 
   return {
     positions,
+    colors,
     indices: buildDemGridIndices(DEM_RESOLUTION),
     resolution: DEM_RESOLUTION,
     extentKm: DEM_EXTENT_KM,
+    originIsWater,
+    waterFraction: waterCount / samples.length,
   }
 }

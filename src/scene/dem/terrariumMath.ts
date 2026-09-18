@@ -16,12 +16,21 @@ const EARTH_MEAN_RADIUS_KM = 6_371.0088
 const DEG = Math.PI / 180
 
 export type DemGrid = {
-  /** Vertices en km locales: +X este, -Z norte, Y elevacion (km, >= 0). */
+  /** Vertices en km locales: +X este, -Z norte, Y elevacion (km, >= 0 en tierra). */
   positions: Float32Array
+  /** RGB 0..1 por vertice (tierra vs agua). */
+  colors: Float32Array
   indices: Uint32Array
   resolution: number
   extentKm: number
+  /** Epicentro sobre agua (elevacion Terrarium <= 0). */
+  originIsWater: boolean
+  /** Fraccion de vertices clasificados como agua. */
+  waterFraction: number
 }
+
+export const DEM_LAND_COLOR = { r: 0.773, g: 0.816, b: 0.847 } as const
+export const DEM_WATER_COLOR = { r: 0.42, g: 0.58, b: 0.68 } as const
 
 export function terrariumRgbToMeters(r: number, g: number, b: number): number {
   return r * 256 + g + b / 256 - 32768

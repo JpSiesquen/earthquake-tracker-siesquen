@@ -20,6 +20,7 @@ import {
 import { ReferenceDistanceRings } from './ReferenceDistanceRings.tsx'
 import {
   ReferenceTerrain,
+  type DemSurfaceKind,
   type DemSurfaceStatus,
 } from './dem/ReferenceTerrain.tsx'
 import { SceneDebugHelpers } from './SceneDebugHelpers.tsx'
@@ -83,8 +84,12 @@ export default function EventSceneCanvas({
   const [demStatus, setDemStatus] = useState<DemSurfaceStatus>(
     focusCoordinates ? 'loading' : 'fallback',
   )
+  const [demSurfaceKind, setDemSurfaceKind] = useState<DemSurfaceKind>(null)
   const onDemStatusChange = useCallback((status: DemSurfaceStatus) => {
     setDemStatus(status)
+  }, [])
+  const onDemSurfaceKindChange = useCallback((kind: DemSurfaceKind) => {
+    setDemSurfaceKind(kind)
   }, [])
 
   const [userTookControl, setUserTookControl] = useState(false)
@@ -115,6 +120,7 @@ export default function EventSceneCanvas({
         place={place}
         backTo={backTo}
         demStatus={demStatus}
+        demSurfaceKind={demSurfaceKind}
       />
       {orbitHintVisible && introDone ? (
         <button
@@ -147,6 +153,7 @@ export default function EventSceneCanvas({
         <ReferenceTerrain
           focusCoordinates={focusCoordinates}
           onStatusChange={onDemStatusChange}
+          onSurfaceKindChange={onDemSurfaceKindChange}
         />
         <ReferenceDistanceRings />
         {focusCoordinates ? (
