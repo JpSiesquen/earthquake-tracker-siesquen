@@ -17,7 +17,10 @@ import {
   SCENE_ORIGIN,
 } from './sceneCamera.ts'
 import { ReferenceDistanceRings } from './ReferenceDistanceRings.tsx'
-import { ReferenceSurface } from './ReferenceSurface.tsx'
+import {
+  ReferenceTerrain,
+  type DemSurfaceStatus,
+} from './dem/ReferenceTerrain.tsx'
 import { SceneDebugHelpers } from './SceneDebugHelpers.tsx'
 import { SceneIntro, type SceneRevealProgress } from './SceneIntro.tsx'
 import { SceneLighting } from './SceneLighting.tsx'
@@ -76,6 +79,13 @@ export default function EventSceneCanvas({
     setIntroDone(true)
   }, [])
 
+  const [demStatus, setDemStatus] = useState<DemSurfaceStatus>(
+    focusCoordinates ? 'loading' : 'fallback',
+  )
+  const onDemStatusChange = useCallback((status: DemSurfaceStatus) => {
+    setDemStatus(status)
+  }, [])
+
   const cameraPosition = reduceMotion
     ? SCENE_CAMERA_POSITION
     : SCENE_CAMERA_INTRO_POSITION
@@ -87,6 +97,7 @@ export default function EventSceneCanvas({
         magnitude={magnitude}
         place={place}
         backTo={backTo}
+        demStatus={demStatus}
       />
       <Canvas
         camera={{ ...SCENE_CAMERA, position: cameraPosition }}
@@ -106,7 +117,10 @@ export default function EventSceneCanvas({
           onDone={onIntroDone}
         />
         <SceneLighting />
-        <ReferenceSurface />
+        <ReferenceTerrain
+          focusCoordinates={focusCoordinates}
+          onStatusChange={onDemStatusChange}
+        />
         <ReferenceDistanceRings />
         {focusCoordinates ? (
           <NeighborMarkers
