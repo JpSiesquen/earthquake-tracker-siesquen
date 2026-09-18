@@ -6,6 +6,7 @@ import type { EarthquakeSummary, LonLat } from '../../shared/earthquake.ts'
 
 import { DepthConnector } from './DepthConnector.tsx'
 import { DepthScaleTicks } from './DepthScaleTicks.tsx'
+import { DemandAutoOrbit } from './DemandAutoOrbit.tsx'
 import { EpicenterMarker } from './EpicenterMarker.tsx'
 import { HypocenterMarker } from './HypocenterMarker.tsx'
 import { NeighborMarkers } from './NeighborMarkers.tsx'
@@ -86,6 +87,22 @@ export default function EventSceneCanvas({
     setDemStatus(status)
   }, [])
 
+  const [userTookControl, setUserTookControl] = useState(false)
+  const [orbitHintVisible, setOrbitHintVisible] = useState(
+    () => !globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  )
+
+  const autoOrbit = introDone && !reduceMotion && !userTookControl
+
+  const onOrbitInteractionStart = useCallback(() => {
+    setUserTookControl(true)
+    setOrbitHintVisible(false)
+  }, [])
+
+  const dismissOrbitHint = useCallback(() => {
+    setOrbitHintVisible(false)
+  }, [])
+
   const cameraPosition = reduceMotion
     ? SCENE_CAMERA_POSITION
     : SCENE_CAMERA_INTRO_POSITION
@@ -99,6 +116,15 @@ export default function EventSceneCanvas({
         backTo={backTo}
         demStatus={demStatus}
       />
+      {orbitHintVisible && introDone ? (
+        <button
+          type="button"
+          className="event-scene-canvas__orbit-hint"
+          onClick={dismissOrbitHint}
+        >
+          Arrastra para orbitar
+        </button>
+      ) : null}
       <Canvas
         camera={{ ...SCENE_CAMERA, position: cameraPosition }}
         className="event-scene-canvas__renderer"
@@ -116,6 +142,7 @@ export default function EventSceneCanvas({
           revealRef={revealRef}
           onDone={onIntroDone}
         />
+        <DemandAutoOrbit active={autoOrbit} />
         <SceneLighting />
         <ReferenceTerrain
           focusCoordinates={focusCoordinates}
@@ -145,6 +172,9 @@ export default function EventSceneCanvas({
           enableDamping={!reduceMotion}
           dampingFactor={0.08}
           enablePan={false}
+          autoRotate={autoOrbit}
+          autoRotateSpeed={0.35}
+          onStart={onOrbitInteractionStart}
         />
       </Canvas>
     </div>
