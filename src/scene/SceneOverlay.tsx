@@ -41,6 +41,9 @@ export function SceneOverlay({
         <p className="scene-overlay__id">
           <code>{eventId}</code>
         </p>
+        <p className="scene-overlay__plane-note">
+          Plano de referencia · no topografía · anillos 50 / 100 / 200 km
+        </p>
       </div>
 
       <Link className="scene-overlay__action" to={backTo}>

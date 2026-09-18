@@ -5,6 +5,7 @@ import { Canvas } from '@react-three/fiber'
 import type { EarthquakeSummary, LonLat } from '../../shared/earthquake.ts'
 
 import { DepthConnector } from './DepthConnector.tsx'
+import { DepthScaleTicks } from './DepthScaleTicks.tsx'
 import { EpicenterMarker } from './EpicenterMarker.tsx'
 import { HypocenterMarker } from './HypocenterMarker.tsx'
 import { NeighborMarkers } from './NeighborMarkers.tsx'
@@ -15,6 +16,7 @@ import {
   SCENE_CONTROLS,
   SCENE_ORIGIN,
 } from './sceneCamera.ts'
+import { ReferenceDistanceRings } from './ReferenceDistanceRings.tsx'
 import { ReferenceSurface } from './ReferenceSurface.tsx'
 import { SceneDebugHelpers } from './SceneDebugHelpers.tsx'
 import { SceneIntro, type SceneRevealProgress } from './SceneIntro.tsx'
@@ -105,6 +107,7 @@ export default function EventSceneCanvas({
         />
         <SceneLighting />
         <ReferenceSurface />
+        <ReferenceDistanceRings />
         {focusCoordinates ? (
           <NeighborMarkers
             focusId={focusId}
@@ -113,6 +116,7 @@ export default function EventSceneCanvas({
           />
         ) : null}
         <DepthConnector depthKm={depthKm} revealRef={revealRef} />
+        <DepthScaleTicks depthKm={depthKm} />
         <EpicenterMarker />
         <HypocenterMarker depthKm={depthKm} revealRef={revealRef} />
         <SceneDebugHelpers />
