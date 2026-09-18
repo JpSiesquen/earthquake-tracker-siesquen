@@ -57,8 +57,46 @@ terreno fotorealista”.
 2. Licencia / atribucion / fiabilidad de terceros.
 3. Impacto real en la historia que contamos (profundidad > relieve).
 
-## Nota
+## Nota (historica)
 
-Si en una iteracion posterior se anade DEM, debe ser un PR optativo con
-atribucion explicita y degradacion a plano si el fetch falla — nunca como
-requisito del deep link 3D.
+La nota original dejaba DEM para una iteracion posterior. Fase 9 (#265) lo
+formaliza abajo sin invalidar el plano como default.
+
+## Addendum Fase 9: DEM opcional (#265)
+
+- **Estado del addendum:** Aceptado
+- **Fecha:** 2026-09-18
+- **Issue:** #265 (implementacion de mesh: #273)
+
+### Decision adicional
+
+El **plano honesto sigue siendo el default** y el unico suelo garantizado en el
+deep link `/event/:id/3d`.
+
+DEM (relieve local) queda **optativo** en Fase 9:
+
+- Se puede anadir un mesh de elevacion bajo el bbox del evento si el fetch y el
+  decode funcionan.
+- Formato de referencia: Terrarium / tiles free descritos en
+  [`dem-spike.md`](./dem-spike.md). El spike documenta el formato; **no** fija
+  un host concreto ni un compromiso de disponibilidad.
+- Si el fetch falla (timeout, 4xx/5xx, decode, CORS, host caido), la escena
+  **degrada al plano honesto** sin romper hipocentro, vecinos ni deep link.
+- DEM **no** es requisito del deep link 3D: la ruta debe renderizar utiles con
+  plano aunque el CDN de elevacion no responda.
+- Atribucion de la fuente DEM visible en UI o en docs de escena cuando el relieve
+  este activo.
+
+### Orden de implementacion
+
+1. Este addendum y AGENTS (#265) — solo docs.
+2. Presencia de escena (intro, escala, jerarquia) puede ir en paralelo.
+3. Mesh DEM (#273) solo despues de este addendum; siempre con fallback a plano.
+
+### Consecuencias del addendum
+
+| Area | Efecto |
+| --- | --- |
+| Deep link 3D | Nunca depende de elevacion para existir |
+| Demo / portfolio | Relieve es bonus; fallo DEM no es fallo de producto |
+| Licencia | Cualquier host elegido debe ir con atribucion explicita |

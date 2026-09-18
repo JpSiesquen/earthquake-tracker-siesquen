@@ -30,11 +30,12 @@ Al cerrar una issue que cambie estado o arquitectura, actualiza `AGENTS.md` en e
 
 ## Estado
 
-Fase 0-6 cerradas en GitHub. Capas 1-3 usables: mapa, escena 3D local y productos
-USGS (ShakeMap MMI, PAGER, DYFI) con degradacion limpia via BFF.
+Fase 0-6 y 8 cerradas en GitHub. Capas 1-3 usables: mapa, escena 3D local y
+productos USGS (ShakeMap MMI, PAGER, DYFI) con degradacion limpia via BFF.
 Unidades escena: [`docs/04-escena-3d.md`](./docs/04-escena-3d.md).
 Bundle: [`docs/05-bundle.md`](./docs/05-bundle.md).
-DEM en produccion: N/A (ADR).
+DEM: plano honesto en produccion (ADR); relieve **opcional** en Fase 9 con
+fallback a plano ([`docs/adr-dem.md`](./docs/adr-dem.md) addendum).
 README publico ES+EN compacto (sin bitacora de fases).
 
 | Fase | Foco | Estado |
@@ -48,12 +49,16 @@ README publico ES+EN compacto (sin bitacora de fases).
 | 6 | Productos USGS (Capa 3) | Hecha |
 | 7 | Cierre y README portfolio | En curso (falta GIF) |
 | 8 | Pulido visual responsive | Hecha |
+| 9 | Escena 3D: terreno opcional y presencia | En curso |
 
-**Siguiente:** media de portfolio:
+**Siguiente:** Fase 9
+([milestone](https://github.com/JpSiesquen/earthquake-tracker-siesquen/milestone/10)):
+ADR (#265) → presencia (#266–#268) → DEM mesh (#273) → pulido → docs.
+En paralelo, media de portfolio:
 [#113](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/113)
 (GIF); [#114](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/114)
 opcional. Hero desktop (#112) ya en `docs/assets/hero-desktop.png`.
-Luego cerrar el milestone Fase 7 a mano.
+Fase 9 no bloquea el GIF ni el cierre manual del milestone Fase 7.
 Auditoria UX Capa 3 (#228) y pase a11y/movil (#110-#111) ya cerrados; si reaparecen
 bugs de UI, van como issues nuevas, no como "Falta Fase 4".
 
