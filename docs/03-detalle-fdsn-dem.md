@@ -21,8 +21,8 @@ selectedId
 
 | Ruta | Rol |
 | --- | --- |
-| `GET /api/earthquakes` | Catalogo day/week (Fase 2) |
-| `GET /api/earthquakes/:id` | Detail USGS → DTO propio |
+| `GET /api/earthquakes` | Catalogo day/week USGS + complemento EMSC |
+| `GET /api/earthquakes/:id` | Detail USGS o EMSC (`emsc.*`) → DTO propio |
 | `GET /api/earthquakes/search` | Proxy FDSN (bbox, time, minmag, limit) |
 
 Helpers: `api/_detail.ts`, `api/_fdsn.ts`. Errores tipados incluyen `not_found`.

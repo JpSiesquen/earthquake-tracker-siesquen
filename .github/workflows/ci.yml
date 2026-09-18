@@ -35,6 +35,9 @@ jobs:
       - name: Schema USGS
         run: npm run test:usgs-schema
 
+      - name: Merge EMSC
+        run: npm run test:emsc-merge
+
       - name: Coordenadas locales
         run: npm run test:local-coordinates
 

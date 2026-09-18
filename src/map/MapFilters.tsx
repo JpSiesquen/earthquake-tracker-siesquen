@@ -95,6 +95,10 @@ export function MapFilters({
           >
             {catalogStatus}
           </p>
+          <p className="map-filter__source-note">
+            Fuentes: USGS + EMSC (regionales). Puede haber desfase vs
+            CSN/Google.
+          </p>
         </div>
 
         <div className="map-filter">

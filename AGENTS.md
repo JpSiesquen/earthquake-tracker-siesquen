@@ -1,7 +1,7 @@
 # earthquake-tracker-siesquen
 
-Visualizacion sismica 2D/3D: catalogo USGS via BFF, mapa MapLibre multicapa y escena
-local (R3F) con profundidad al seleccionar un evento.
+Visualizacion sismica 2D/3D: catalogo USGS (+ complemento EMSC) via BFF, mapa
+MapLibre multicapa y escena local (R3F) con profundidad al seleccionar un evento.
 
 **Demo:** https://earthquake-tracker-siesquen.vercel.app
 
@@ -67,7 +67,7 @@ bugs de UI, van como issues nuevas, no como "Falta Fase 4".
 - Front: Vite, React 19, TypeScript, MapLibre 6 (`MapView`, ESM, WebGL2,
   worker Vite explicito); Three 0.186, R3F 9 y Drei 10 en Capa 2
 - Datos (hoy): BFF serverless (`/api/earthquakes`, `/:id`, `/:id/shakemap`,
-  `/search`), Zod, TanStack Query
+  `/search`), Zod, TanStack Query; catalogo USGS + EMSC (dedup, ids `emsc.*`)
 - Estado UI: Zustand (`selectedId` + deep link `?event=`; catalogo en TanStack Query);
   React Router (`/`, `/event/:id/3d` con shell propia y retorno al deep link 2D)
 - Calidad: oxlint, Prettier, Husky, GitHub Actions (`verificar`)

@@ -32,3 +32,13 @@ export {
   type UsgsDetailFeature,
   type FdsnFeatureCollection,
 } from './usgs.js'
+export {
+  emscFeatureSchema,
+  emscFeatureCollectionSchema,
+  EMSC_ID_PREFIX,
+  toEmscCatalogId,
+  isEmscEventId,
+  emscUnidFromCatalogId,
+  type EmscFeature,
+  type EmscFeatureCollection,
+} from './emsc.js'

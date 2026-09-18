@@ -4,6 +4,7 @@
  * Fetch USGS solo en servidor. Shape provisional (#67); Zod detail en #68.
  */
 import { getEarthquakeDetail } from '../_detail.js'
+import { isEmscEventId } from '../_emsc.js'
 import { BffError, jsonError } from '../_errors.js'
 import { isUsgsEventId } from '../_usgs.js'
 
@@ -20,10 +21,14 @@ function readIdFromRequest(request: Request): string | null {
   }
 }
 
+function isAllowedDetailId(id: string): boolean {
+  return isUsgsEventId(id) || isEmscEventId(id)
+}
+
 export async function GET(request: Request): Promise<Response> {
   try {
     const id = readIdFromRequest(request)
-    if (id === null || id === 'search' || !isUsgsEventId(id)) {
+    if (id === null || id === 'search' || !isAllowedDetailId(id)) {
       throw new BffError(400, 'bad_request', 'Invalid earthquake id')
     }
 
