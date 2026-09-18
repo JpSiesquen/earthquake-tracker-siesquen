@@ -119,7 +119,14 @@ export default function EventSceneCanvas({
     : framing.introPosition
 
   return (
-    <div className="event-scene-canvas" aria-label="Viewport 3D del evento">
+    <div
+      className={
+        reduceMotion
+          ? 'event-scene-canvas'
+          : 'event-scene-canvas event-scene-canvas--enter'
+      }
+      aria-label="Viewport 3D del evento"
+    >
       <SceneOverlay
         eventId={eventId}
         magnitude={magnitude}
@@ -170,6 +177,7 @@ export default function EventSceneCanvas({
             focusId={focusId}
             focusCoordinates={focusCoordinates}
             neighbors={neighbors}
+            reduceMotion={reduceMotion}
           />
         ) : null}
         <DepthConnector depthKm={depthKm} revealRef={revealRef} />

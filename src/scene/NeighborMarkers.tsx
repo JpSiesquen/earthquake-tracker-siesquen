@@ -19,6 +19,7 @@ type NeighborMarkersProps = {
   focusId: string
   focusCoordinates: LonLat
   neighbors: readonly EarthquakeSummary[]
+  reduceMotion: boolean
 }
 
 function toGeographic([longitude, latitude]: LonLat): GeographicPoint {
@@ -50,6 +51,8 @@ type NeighborSphereProps = {
   position: [number, number, number]
   radius: number
   depthKm: number
+  staggerIndex: number
+  reduceMotion: boolean
 }
 
 function NeighborSphere({
@@ -57,8 +60,11 @@ function NeighborSphere({
   position,
   radius,
   depthKm,
+  staggerIndex,
+  reduceMotion,
 }: NeighborSphereProps) {
   const [hovered, setHovered] = useState(false)
+  const [revealed, setRevealed] = useState(reduceMotion)
   const invalidate = useThree((s) => s.invalidate)
 
   useEffect(() => {
@@ -67,11 +73,32 @@ function NeighborSphere({
     }
   }, [])
 
+  useEffect(() => {
+    if (reduceMotion) {
+      return
+    }
+    const delayMs = Math.min(staggerIndex, 40) * 28
+    const timer = globalThis.setTimeout(() => {
+      setRevealed(true)
+      invalidate()
+    }, delayMs)
+    return () => {
+      globalThis.clearTimeout(timer)
+    }
+  }, [invalidate, reduceMotion, staggerIndex])
+
+  const baseOpacity = revealed ? 0.42 : 0
+  const opacity = hovered ? Math.max(baseOpacity, 0.72) : baseOpacity
+
   return (
     <mesh
       name={`neighbor-${neighbor.id}`}
       position={position}
+      scale={revealed ? 1 : 0.001}
       onPointerOver={(event) => {
+        if (!revealed) {
+          return
+        }
         event.stopPropagation()
         setHovered(true)
         document.body.style.cursor = 'pointer'
@@ -87,12 +114,12 @@ function NeighborSphere({
       <meshStandardMaterial
         color={depthKmToColor(depthKm)}
         metalness={0}
-        opacity={hovered ? 0.72 : 0.42}
+        opacity={opacity}
         roughness={0.82}
         transparent
         depthWrite={false}
       />
-      {hovered ? (
+      {hovered && revealed ? (
         <Html
           position={[radius + 6, radius + 4, 0]}
           center={false}
@@ -126,6 +153,7 @@ export function NeighborMarkers({
   focusId,
   focusCoordinates,
   neighbors,
+  reduceMotion,
 }: NeighborMarkersProps) {
   const origin = toGeographic(focusCoordinates)
 
@@ -149,6 +177,7 @@ export function NeighborMarkers({
       origin,
     )
     const radius = magnitudeToNeighborRadiusKm(neighbor.magnitude)
+    const staggerIndex = markers.length
 
     markers.push(
       <NeighborSphere
@@ -157,6 +186,8 @@ export function NeighborMarkers({
         position={[x, y, z]}
         radius={radius}
         depthKm={neighbor.depthKm}
+        staggerIndex={staggerIndex}
+        reduceMotion={reduceMotion}
       />,
     )
   }
