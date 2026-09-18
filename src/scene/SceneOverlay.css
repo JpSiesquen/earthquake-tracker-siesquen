@@ -60,6 +60,13 @@
   color: var(--color-ink);
 }
 
+.scene-overlay__plane-note {
+  margin: var(--space-2) 0 0;
+  color: var(--color-ink-soft);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
 .scene-overlay__action {
   flex: 0 0 auto;
   padding: var(--space-2) var(--space-3);

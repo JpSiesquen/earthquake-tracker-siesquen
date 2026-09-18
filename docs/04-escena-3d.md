@@ -23,6 +23,8 @@ Y = -depthKm × 1.5
 - Exageración vertical fija: **1.5×** (`DEFAULT_VERTICAL_EXAGGERATION`).
 - `depthKm === null` → no se dibuja hipocentro ni conector (no se finge Y=0).
 - El plano de referencia está en Y=0 (500 km de lado); no es topografía real.
+- Anillos de distancia en 50 / 100 / 200 km; ticks de profundidad real junto al
+  conector cuando hay `depthKm`.
 
 ## Lectura visual
 

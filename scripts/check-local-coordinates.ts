@@ -21,6 +21,7 @@ import {
   depthKmToY,
   projectLatLonToLocalXZ,
 } from '../src/geo/localCoordinates.ts'
+import { depthTickMarksKm } from '../src/scene/sceneScaleMarks.ts'
 
 const KILOMETRES_PER_EQUATORIAL_DEGREE = 111.195
 
@@ -148,6 +149,28 @@ assertEqual(
 )
 assertEqual('banda unknown sin dato', depthKmToBand(null), 'unknown')
 assertEqual('color shallow alineado al mapa', DEPTH_COLORS.shallow, '#b86b25')
+
+// --- marcas de escala en escena (#267) ---
+assertEqual(
+  'ticks profundidad 30 km incluyen foco y paso 10',
+  depthTickMarksKm(30).join(','),
+  '10,20,30',
+)
+assertEqual(
+  'ticks profundidad 100 km usan paso 25',
+  depthTickMarksKm(100).join(','),
+  '25,50,75,100',
+)
+assertEqual(
+  'ticks profundidad 200 km usan paso 50',
+  depthTickMarksKm(200).join(','),
+  '50,100,150,200',
+)
+assertEqual(
+  'ticks sin profundidad positiva vacios',
+  depthTickMarksKm(0).join(','),
+  '',
+)
 
 if (failed > 0) {
   process.exitCode = 1
