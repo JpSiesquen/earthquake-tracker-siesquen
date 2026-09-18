@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 
@@ -8,9 +8,16 @@ import { DepthConnector } from './DepthConnector.tsx'
 import { EpicenterMarker } from './EpicenterMarker.tsx'
 import { HypocenterMarker } from './HypocenterMarker.tsx'
 import { NeighborMarkers } from './NeighborMarkers.tsx'
-import { SCENE_CAMERA, SCENE_CONTROLS, SCENE_ORIGIN } from './sceneCamera.ts'
+import {
+  SCENE_CAMERA,
+  SCENE_CAMERA_INTRO_POSITION,
+  SCENE_CAMERA_POSITION,
+  SCENE_CONTROLS,
+  SCENE_ORIGIN,
+} from './sceneCamera.ts'
 import { ReferenceSurface } from './ReferenceSurface.tsx'
 import { SceneDebugHelpers } from './SceneDebugHelpers.tsx'
+import { SceneIntro, type SceneRevealProgress } from './SceneIntro.tsx'
 import { SceneLighting } from './SceneLighting.tsx'
 import { SceneOverlay } from './SceneOverlay.tsx'
 import './EventSceneCanvas.css'
@@ -44,13 +51,32 @@ export default function EventSceneCanvas({
   const [reduceMotion, setReduceMotion] = useState(
     () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches,
   )
+  const [introDone, setIntroDone] = useState(reduceMotion)
+  const revealRef = useRef<SceneRevealProgress>({
+    connector: reduceMotion ? 1 : 0,
+    hypocenter: reduceMotion ? 1 : 0,
+  })
 
   useEffect(() => {
     const media = globalThis.matchMedia('(prefers-reduced-motion: reduce)')
-    const onChange = () => setReduceMotion(media.matches)
+    const onChange = () => {
+      setReduceMotion(media.matches)
+      if (media.matches) {
+        revealRef.current = { connector: 1, hypocenter: 1 }
+        setIntroDone(true)
+      }
+    }
     media.addEventListener('change', onChange)
     return () => media.removeEventListener('change', onChange)
   }, [])
+
+  const onIntroDone = useCallback(() => {
+    setIntroDone(true)
+  }, [])
+
+  const cameraPosition = reduceMotion
+    ? SCENE_CAMERA_POSITION
+    : SCENE_CAMERA_INTRO_POSITION
 
   return (
     <div className="event-scene-canvas" aria-label="Viewport 3D del evento">
@@ -61,7 +87,7 @@ export default function EventSceneCanvas({
         backTo={backTo}
       />
       <Canvas
-        camera={SCENE_CAMERA}
+        camera={{ ...SCENE_CAMERA, position: cameraPosition }}
         className="event-scene-canvas__renderer"
         dpr={[1, 1.5]}
         frameloop="demand"
@@ -72,6 +98,11 @@ export default function EventSceneCanvas({
           </p>
         }
       >
+        <SceneIntro
+          reduceMotion={reduceMotion}
+          revealRef={revealRef}
+          onDone={onIntroDone}
+        />
         <SceneLighting />
         <ReferenceSurface />
         {focusCoordinates ? (
@@ -81,12 +112,13 @@ export default function EventSceneCanvas({
             neighbors={neighbors}
           />
         ) : null}
-        <DepthConnector depthKm={depthKm} />
+        <DepthConnector depthKm={depthKm} revealRef={revealRef} />
         <EpicenterMarker />
-        <HypocenterMarker depthKm={depthKm} />
+        <HypocenterMarker depthKm={depthKm} revealRef={revealRef} />
         <SceneDebugHelpers />
         <OrbitControls
           makeDefault
+          enabled={introDone}
           target={SCENE_ORIGIN}
           minDistance={SCENE_CONTROLS.minDistance}
           maxDistance={SCENE_CONTROLS.maxDistance}

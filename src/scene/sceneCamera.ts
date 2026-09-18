@@ -12,6 +12,14 @@ export const SCENE_CAMERA_POSITION: Vector3Tuple = [
   REFERENCE_SURFACE_SIZE_KM * 0.48,
   REFERENCE_SURFACE_SIZE_KM * 0.72,
 ]
+
+/** Vista inicial de la intro: mas alta y lejos; aterriza en SCENE_CAMERA_POSITION. */
+export const SCENE_CAMERA_INTRO_POSITION: Vector3Tuple = [
+  SCENE_CAMERA_POSITION[0] * 1.38,
+  SCENE_CAMERA_POSITION[1] * 1.55,
+  SCENE_CAMERA_POSITION[2] * 1.38,
+]
+
 export const SCENE_ORIGIN: Vector3Tuple = [0, 0, 0]
 
 export const SCENE_CAMERA = {
@@ -20,6 +28,9 @@ export const SCENE_CAMERA = {
   near: 0.1,
   far: 2_500,
 } as const
+
+/** Duracion de la intro de presencia (camara + conector). */
+export const SCENE_INTRO_DURATION_S = 1.55
 
 export const SCENE_CONTROLS = {
   minDistance: 80,

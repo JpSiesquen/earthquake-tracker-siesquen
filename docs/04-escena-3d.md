@@ -35,6 +35,10 @@ Y = -depthKm × 1.5
 
 Cap de vecinos en escena: 50 (`NEIGHBOR_LIMIT`).
 
+Al montar `/event/:id/3d`, una intro breve acerca la cámara y crece el conector
+hasta el hipocentro (si hay `depthKm`). Con `prefers-reduced-motion: reduce` se
+salta a la pose final.
+
 ## Límites del modelo
 
 - Suelo default: plano honesto en Y=0 (ADR). DEM es **opcional** (addendum
