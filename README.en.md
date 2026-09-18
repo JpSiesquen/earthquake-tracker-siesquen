@@ -12,6 +12,8 @@ data boundary and engineering behind it.
 **Demo:** https://earthquake-tracker-siesquen.vercel.app  
 **Español:** [README.md](./README.md)
 
+![Global map with USGS catalog, layers, and filter panel](./docs/assets/hero-desktop.png)
+
 ## Product
 
 | Layer | What you get |
@@ -37,8 +39,8 @@ Query · React Router · Vercel BFF · oxlint · Prettier · Husky · Actions (`
 
 ## Status
 
-Layers 1-3 usable in the live demo. Still open for portfolio close: screenshots/GIF
-media.
+Layers 1-3 usable in the live demo. Desktop hero at `docs/assets/hero-desktop.png`.
+Still open for portfolio close: short flow GIF (#113); optional sheet capture (#114).
 
 ## Development
 
