@@ -33,7 +33,7 @@ Y = -depthKm × 1.5
 | Diana azul en Y=0 | Epicentro (pulso único; estático con reduced-motion) |
 | Octaedro cálido en Y&lt;0 | Hipocentro del foco (más presente que los vecinos) |
 | Segmento vertical | Relación epicentro–hipocentro |
-| Esferas | Vecinos FDSN atenuados; radio ∝ magnitud; color = banda de profundidad (mismas que el mapa 2D: &lt;70 / 70–300 / ≥300 km) |
+| Esferas | Vecinos FDSN atenuados; radio ∝ magnitud; color = banda de profundidad (mismas que el mapa 2D: &lt;70 / 70–300 / ≥300 km). Hover (puntero): tooltip mag / lugar / profundidad. |
 
 Cap de vecinos en escena: 50 (`NEIGHBOR_LIMIT`).
 
@@ -53,6 +53,8 @@ salta a la pose final.
   **2.2×** (independiente del 1.5× de profundidad). Sin garantía de uptime del CDN.
 - Sin pan de cámara; órbita limitada para no cruzar el plano.
 - Deep link: `/event/:id/3d` rehidrata detail/neighbors vía BFF.
+- Tooltip de vecinos: interacción por puntero (hover); no hay lista teclado
+  dedicada en esta capa.
 
 ## Verificación
 

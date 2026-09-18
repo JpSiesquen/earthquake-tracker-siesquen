@@ -82,3 +82,34 @@
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
+
+.neighbor-tooltip {
+  min-width: 7rem;
+  max-width: 14rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--color-border-strong, rgb(90 110 125 / 40%));
+  border-radius: 2px;
+  background: rgb(247 244 239 / 94%);
+  color: #3d4a55;
+  box-shadow: 0 0.25rem 0.75rem rgb(40 50 60 / 12%);
+}
+
+.neighbor-tooltip__mag {
+  margin: 0;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.neighbor-tooltip__place,
+.neighbor-tooltip__depth {
+  margin: 0.15rem 0 0;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: #5a6a78;
+}
+
+.neighbor-tooltip__depth {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-weight: 600;
+}
