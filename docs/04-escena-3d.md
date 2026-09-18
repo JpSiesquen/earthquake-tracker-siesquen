@@ -30,10 +30,10 @@ Y = -depthKm × 1.5
 
 | Elemento | Qué representa |
 | --- | --- |
-| Diana azul en Y=0 | Epicentro |
-| Octaedro cálido en Y&lt;0 | Hipocentro del foco |
+| Diana azul en Y=0 | Epicentro (pulso único; estático con reduced-motion) |
+| Octaedro cálido en Y&lt;0 | Hipocentro del foco (más presente que los vecinos) |
 | Segmento vertical | Relación epicentro–hipocentro |
-| Esferas | Vecinos FDSN; radio ∝ magnitud; color = banda de profundidad (mismas que el mapa 2D: &lt;70 / 70–300 / ≥300 km) |
+| Esferas | Vecinos FDSN atenuados; radio ∝ magnitud; color = banda de profundidad (mismas que el mapa 2D: &lt;70 / 70–300 / ≥300 km) |
 
 Cap de vecinos en escena: 50 (`NEIGHBOR_LIMIT`).
 

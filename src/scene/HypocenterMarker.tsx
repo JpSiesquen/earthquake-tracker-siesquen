@@ -58,10 +58,10 @@ export function HypocenterMarker({
       <octahedronGeometry args={[HYPOCENTER_RADIUS_KM, 0]} />
       <meshStandardMaterial
         color="#c66f2b"
-        emissive="#5f2708"
-        emissiveIntensity={0.18}
+        emissive="#7a3510"
+        emissiveIntensity={0.32}
         metalness={0}
-        roughness={0.58}
+        roughness={0.5}
       />
     </mesh>
   )

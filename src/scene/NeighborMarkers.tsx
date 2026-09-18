@@ -66,7 +66,10 @@ export function NeighborMarkers({
         <meshStandardMaterial
           color={depthKmToColor(neighbor.depthKm)}
           metalness={0}
-          roughness={0.72}
+          opacity={0.42}
+          roughness={0.82}
+          transparent
+          depthWrite={false}
         />
       </mesh>,
     )
