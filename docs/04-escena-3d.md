@@ -53,6 +53,7 @@ calculado según profundidad y dispersión de vecinos. Con
   terrestre ni batimetría profunda); **tierra** usa exageración de relieve
   **2.2×** (independiente del 1.5× de profundidad). Sin garantía de uptime del CDN.
 - Sin pan de cámara; órbita limitada para no cruzar el plano.
+- Iluminación: hemisferio + key/fill; fog ligera; sin sombras ni bloom.
 - Deep link: `/event/:id/3d` rehidrata detail/neighbors vía BFF.
 - Tooltip de vecinos: interacción por puntero (hover); no hay lista teclado
   dedicada en esta capa.
