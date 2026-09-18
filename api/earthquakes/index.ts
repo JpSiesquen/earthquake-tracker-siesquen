@@ -1,7 +1,7 @@
 /**
  * Catalogo sismico: `GET /api/earthquakes?window=day|week`.
  *
- * Orquesta fetch USGS (servidor), Zod, DTO, cache TTL y errores tipados.
+ * Orquesta fetch USGS + EMSC (servidor), Zod, DTO, cache TTL y errores tipados.
  * Vive en `api/earthquakes/index.ts` para coexistir con `GET .../:id`.
  */
 import { isCatalogWindow } from '../../shared/window.js'

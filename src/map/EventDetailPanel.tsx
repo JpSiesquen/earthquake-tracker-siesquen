@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 
+import { isEmscEventId } from '../../shared/emsc.ts'
 import { useEarthquakeDetail } from '../api/useEarthquakeDetail.ts'
 import { useShakeMapContours } from '../api/useShakeMapContours.ts'
 import { useEarthquakeSelection } from '../store/earthquakeSelection.ts'
@@ -258,6 +259,12 @@ export function EventDetailPanel() {
           <a href={usgsUrl} target="_blank" rel="noreferrer">
             Ver en USGS
           </a>
+        </p>
+      ) : null}
+
+      {!usgsUrl && isEmscEventId(selectedId) ? (
+        <p className="event-detail-panel__link" role="note">
+          Fuente EMSC (sin productos USGS).
         </p>
       ) : null}
 

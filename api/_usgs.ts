@@ -25,9 +25,10 @@ const TIMEOUT_MS = 10_000
 
 /**
  * Ids USGS tipicos: `us7000pn9s`, `ci39818991`.
- * Rechaza vacio, path traversal y caracteres raros antes de pegar la URL.
+ * Rechaza vacio, path traversal, caracteres raros y el prefijo EMSC (`emsc.`).
  */
 export function isUsgsEventId(raw: string): boolean {
+  if (raw.startsWith('emsc.')) return false
   return /^[a-z0-9][a-z0-9._-]{0,63}$/i.test(raw)
 }
 

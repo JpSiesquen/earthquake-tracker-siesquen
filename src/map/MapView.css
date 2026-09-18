@@ -325,6 +325,14 @@
   font-weight: 650;
 }
 
+.map-filter__source-note {
+  margin: 0.15rem 0 0;
+  color: var(--color-ink-muted);
+  font-size: 0.58rem;
+  line-height: 1.35;
+  text-align: left;
+}
+
 .map-filter__heading output {
   flex: 0 0 auto;
   color: var(--color-accent);
