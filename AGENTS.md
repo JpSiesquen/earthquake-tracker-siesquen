@@ -46,13 +46,14 @@ README publico ES+EN compacto (sin bitacora de fases).
 | 4 | Detalle, FDSN y spike DEM | Hecha |
 | 5 | Escena 3D local (Capa 2) | Hecha |
 | 6 | Productos USGS (Capa 3) | Hecha |
-| 7 | Cierre y README portfolio | En curso (falta media) |
+| 7 | Cierre y README portfolio | En curso (falta GIF) |
+| 8 | Pulido visual responsive | Hecha |
 
-**Siguiente:** media de portfolio al final del pulido:
-[#112](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/112)
-(hero) → [#113](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/113)
+**Siguiente:** media de portfolio:
+[#113](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/113)
 (GIF); [#114](https://github.com/JpSiesquen/earthquake-tracker-siesquen/issues/114)
-opcional. Luego cerrar el milestone Fase 7 a mano.
+opcional. Hero desktop (#112) ya en `docs/assets/hero-desktop.png`.
+Luego cerrar el milestone Fase 7 a mano.
 Auditoria UX Capa 3 (#228) y pase a11y/movil (#110-#111) ya cerrados; si reaparecen
 bugs de UI, van como issues nuevas, no como "Falta Fase 4".
 

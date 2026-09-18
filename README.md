@@ -12,6 +12,8 @@ de datos e ingeniería detrás.
 **Demo:** https://earthquake-tracker-siesquen.vercel.app  
 **English:** [README.en.md](./README.en.md)
 
+![Mapa de producto: capas, ficha USGS y panel en desktop](./docs/assets/hero-desktop.png)
+
 ## Producto
 
 | Capa | Qué entrega |
@@ -37,7 +39,8 @@ Query · React Router · BFF Vercel · oxlint · Prettier · Husky · Actions (`
 
 ## Estado
 
-Capas 1-3 usables en demo. Pendiente de cierre: media de portfolio (capturas/GIF).
+Capas 1-3 usables en demo. Hero desktop en `docs/assets/hero-desktop.png`.
+Pendiente de cierre: GIF corto del flujo (#113); captura opcional de ficha (#114).
 
 ## Desarrollo
 
