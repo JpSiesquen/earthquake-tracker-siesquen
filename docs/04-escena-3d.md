@@ -47,9 +47,10 @@ salta a la pose final.
   Fase 9 en [`adr-dem.md`](./adr-dem.md)): si el fetch falla, se mantiene el
   plano; el deep link 3D no depende de elevación.
 - Formato / host de referencia: Terrarium en AWS `elevation-tiles-prod`
-  ([`dem-spike.md`](./dem-spike.md)). Malla local ~220 km, zoom 9, batimetría
-  aplastada a 0; exageración de relieve **2.2×** (independiente del 1.5× de
-  profundidad). Sin garantía de uptime del CDN.
+  ([`dem-spike.md`](./dem-spike.md)). Malla local ~220 km, zoom 9; **agua**
+  (elevación ≤ 0) se pinta como superficie marina en Y=0 (sin fingir relieve
+  terrestre ni batimetría profunda); **tierra** usa exageración de relieve
+  **2.2×** (independiente del 1.5× de profundidad). Sin garantía de uptime del CDN.
 - Sin pan de cámara; órbita limitada para no cruzar el plano.
 - Deep link: `/event/:id/3d` rehidrata detail/neighbors vía BFF.
 

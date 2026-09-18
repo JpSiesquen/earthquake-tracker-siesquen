@@ -9,26 +9,49 @@ import { fetchLocalDemGrid } from './fetchLocalDem.ts'
 
 export type DemSurfaceStatus = 'loading' | 'ready' | 'fallback'
 
+/** Clasificacion del suelo cuando el DEM esta listo. */
+export type DemSurfaceKind = 'land' | 'water' | 'mixed' | null
+
 type ReferenceTerrainProps = {
   focusCoordinates: LonLat | null
   onStatusChange?: (status: DemSurfaceStatus) => void
+  onSurfaceKindChange?: (kind: DemSurfaceKind) => void
 }
 
 type DemLoadResult =
-  | { kind: 'ready'; originKey: string; geometry: BufferGeometry }
+  | {
+      kind: 'ready'
+      originKey: string
+      geometry: BufferGeometry
+      surfaceKind: Exclude<DemSurfaceKind, null>
+    }
   | { kind: 'error'; originKey: string }
 
 function originKeyOf(coords: LonLat): string {
   return `${coords[0]},${coords[1]}`
 }
 
+function classifySurface(
+  originIsWater: boolean,
+  waterFraction: number,
+): Exclude<DemSurfaceKind, null> {
+  if (originIsWater && waterFraction >= 0.7) {
+    return 'water'
+  }
+  if (!originIsWater && waterFraction <= 0.25) {
+    return 'land'
+  }
+  return 'mixed'
+}
+
 /**
- * Relieve Terrarium opcional. Si falla el fetch/decode, degrada al plano
- * honesto sin tocar hipocentro ni vecinos.
+ * Relieve Terrarium opcional. Tierra con relieve; agua como superficie marina
+ * (color distinto, Y=0). Si falla el fetch/decode, degrada al plano honesto.
  */
 export function ReferenceTerrain({
   focusCoordinates,
   onStatusChange,
+  onSurfaceKindChange,
 }: ReferenceTerrainProps) {
   const invalidate = useThree((s) => s.invalidate)
   const originKey = focusCoordinates ? originKeyOf(focusCoordinates) : null
@@ -42,9 +65,16 @@ export function ReferenceTerrain({
         ? 'fallback'
         : 'loading'
 
+  const surfaceKind: DemSurfaceKind =
+    status === 'ready' && result?.kind === 'ready' ? result.surfaceKind : null
+
   useEffect(() => {
     onStatusChange?.(status)
   }, [onStatusChange, status])
+
+  useEffect(() => {
+    onSurfaceKindChange?.(surfaceKind)
+  }, [onSurfaceKindChange, surfaceKind])
 
   useEffect(() => {
     if (!focusCoordinates || !originKey) {
@@ -68,9 +98,15 @@ export function ReferenceTerrain({
           'position',
           new BufferAttribute(grid.positions, 3),
         )
+        geometry.setAttribute('color', new BufferAttribute(grid.colors, 3))
         geometry.setIndex(new BufferAttribute(grid.indices, 1))
         geometry.computeVertexNormals()
-        setResult({ kind: 'ready', originKey, geometry })
+        setResult({
+          kind: 'ready',
+          originKey,
+          geometry,
+          surfaceKind: classifySurface(grid.originIsWater, grid.waterFraction),
+        })
         invalidate()
       })
       .catch(() => {
@@ -105,11 +141,11 @@ export function ReferenceTerrain({
     return (
       <mesh name="reference-terrain" geometry={result.geometry}>
         <meshStandardMaterial
-          color="#c5d0d8"
+          vertexColors
           flatShading
           metalness={0}
-          opacity={0.88}
-          roughness={0.92}
+          opacity={0.9}
+          roughness={0.9}
           transparent
         />
       </mesh>
