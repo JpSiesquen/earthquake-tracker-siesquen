@@ -22,6 +22,10 @@ import {
   projectLatLonToLocalXZ,
 } from '../src/geo/localCoordinates.ts'
 import { depthTickMarksKm } from '../src/scene/sceneScaleMarks.ts'
+import {
+  buildDemGridIndices,
+  terrariumRgbToMeters,
+} from '../src/scene/dem/terrariumMath.ts'
 
 const KILOMETRES_PER_EQUATORIAL_DEGREE = 111.195
 
@@ -170,6 +174,18 @@ assertEqual(
   'ticks sin profundidad positiva vacios',
   depthTickMarksKm(0).join(','),
   '',
+)
+
+// --- DEM Terrarium (#273) ---
+assertEqual(
+  'Terrarium RGB known sample → metros',
+  terrariumRgbToMeters(128, 0, 0),
+  0,
+)
+assertEqual(
+  'indices DEM 2x2 = dos triangulos',
+  buildDemGridIndices(2).length,
+  6,
 )
 
 if (failed > 0) {

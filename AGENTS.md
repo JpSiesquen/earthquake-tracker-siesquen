@@ -34,8 +34,8 @@ Fase 0-6 y 8 cerradas en GitHub. Capas 1-3 usables: mapa, escena 3D local y
 productos USGS (ShakeMap MMI, PAGER, DYFI) con degradacion limpia via BFF.
 Unidades escena: [`docs/04-escena-3d.md`](./docs/04-escena-3d.md).
 Bundle: [`docs/05-bundle.md`](./docs/05-bundle.md).
-DEM: plano honesto en produccion (ADR); relieve **opcional** en Fase 9 con
-fallback a plano ([`docs/adr-dem.md`](./docs/adr-dem.md) addendum).
+DEM: plano honesto como default (ADR); relieve Terrarium **opcional** con
+fallback a plano ([`docs/adr-dem.md`](./docs/adr-dem.md) addendum; #273).
 README publico ES+EN compacto (sin bitacora de fases).
 
 | Fase | Foco | Estado |

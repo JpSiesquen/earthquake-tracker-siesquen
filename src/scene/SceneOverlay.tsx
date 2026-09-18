@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
 
+import type { DemSurfaceStatus } from './dem/ReferenceTerrain.tsx'
+import { DEM_ATTRIBUTION } from './dem/terrariumMath.ts'
 import './SceneOverlay.css'
 
 type SceneOverlayProps = {
@@ -7,6 +9,7 @@ type SceneOverlayProps = {
   magnitude: number | null | undefined
   place: string | null | undefined
   backTo: string
+  demStatus: DemSurfaceStatus
 }
 
 function formatMagnitude(magnitude: number | null | undefined): string {
@@ -20,6 +23,16 @@ function formatPlace(place: string | null | undefined): string {
   return trimmed ? trimmed : 'Ubicación sin dato'
 }
 
+function demStatusNote(status: DemSurfaceStatus): string {
+  if (status === 'ready') {
+    return `Relieve local · ${DEM_ATTRIBUTION} · anillos 50 / 100 / 200 km`
+  }
+  if (status === 'loading') {
+    return 'Plano de referencia · cargando relieve opcional…'
+  }
+  return 'Plano de referencia · no topografía · anillos 50 / 100 / 200 km'
+}
+
 /**
  * Overlay HTML sobre el viewport 3D. El contenedor no captura puntero; solo
  * la ficha y el CTA usan pointer-events para no bloquear OrbitControls.
@@ -29,6 +42,7 @@ export function SceneOverlay({
   magnitude,
   place,
   backTo,
+  demStatus,
 }: SceneOverlayProps) {
   return (
     <div className="scene-overlay" aria-label="Datos del evento en escena">
@@ -41,9 +55,7 @@ export function SceneOverlay({
         <p className="scene-overlay__id">
           <code>{eventId}</code>
         </p>
-        <p className="scene-overlay__plane-note">
-          Plano de referencia · no topografía · anillos 50 / 100 / 200 km
-        </p>
+        <p className="scene-overlay__plane-note">{demStatusNote(demStatus)}</p>
       </div>
 
       <Link className="scene-overlay__action" to={backTo}>
